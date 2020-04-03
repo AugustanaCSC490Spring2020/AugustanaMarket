@@ -3,12 +3,19 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import {BrowerRouter} from 'react-router-dom';
+import {BrowserRouter} from 'react-router-dom';
+import {createStore} from 'redux';
+import {Provider} from 'react-redux';
+import allReducers from './reducers';
+
+const appStore = createStore(allReducers)
 
 ReactDOM.render(
-  <BrowerRouter>
-    <App />
-  </BrowerRouter>,
+  <Provider store={appStore}>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </Provider>,
   document.getElementById('root')
 );
 
