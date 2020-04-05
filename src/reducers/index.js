@@ -1,8 +1,12 @@
 import {combineReducers} from 'redux';
-import logReducer from './isLogged';
+import {firebaseReducer} from 'react-redux-firebase';
+import {firestoreReducer} from 'redux-firestore';
+import authReducer from './authReducer';
 
 const allReducers = combineReducers({
-    isLogged: logReducer
+    auth: authReducer,
+    firebase: firebaseReducer,
+    firestore: firestoreReducer,
 });
 
 export default allReducers;

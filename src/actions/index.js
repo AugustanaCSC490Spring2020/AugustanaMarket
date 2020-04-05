@@ -1,5 +1,3 @@
-export const login = () =>{
-    return {
-        type: 'SIGN_IN'
-    };
-};
+export {signIn} from './authActions'
+
+

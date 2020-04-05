@@ -1,17 +1,16 @@
 import React from 'react';
-import {useSelector, useDispatch} from 'react-redux';
-import {login} from '../actions'
+import {useDispatch} from 'react-redux';
+import {signIn} from '../actions'
 
 const Login = () => {
-    const isLogged = useSelector(state => state.isLogged);
     const dispatch = useDispatch();
     const handleSignIn = () => {
-        dispatch(login());
+        dispatch(signIn());
     }
 
     return (
         <div>
-            <button onClick={handleSignIn}>{isLogged ? "True" : "False"}</button>
+            <button onClick={handleSignIn}>Login</button>
         </div>
     )
 }
