@@ -1,16 +1,26 @@
 import React from 'react';
-import {useDispatch} from 'react-redux';
-import {signIn} from '../actions'
+import {useFirebase} from 'react-redux-firebase'
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 
-const Login = () => {
-    const dispatch = useDispatch();
-    const handleSignIn = () => {
-        dispatch(signIn());
-    }
+const Login = ({history}) => {
 
+    const firebase = useFirebase();
     return (
         <div>
-            <button onClick={handleSignIn}>Login</button>
+            <StyledFirebaseAuth
+                uiConfig={{
+                    signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
+                    callbacks: {
+                        signInSuccessWithAuthResult: (authResult) => {
+                            firebase.handleRedirectResult(authResult).then(() => {
+                                history.push('/');  
+                            });
+                        return false;
+                        },
+                    },
+                }}
+                firebaseAuth={firebase.auth()}
+            />
         </div>
     )
 }

@@ -9,9 +9,9 @@ import {Provider} from 'react-redux';
 import allReducers from './reducers';
 import thunk from 'redux-thunk';
 import firebase from './Firebase';
-import {firebaseConfig} from './Firebase'
-//createFirestoreInstance needed?
-import {getFirestore, reduxFirestore} from 'redux-firestore';
+import {persistStore, persistReducer} from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+import {PersistGate} from 'redux-persist/integration/react';
 import {ReactReduxFirebaseProvider, getFirebase} from 'react-redux-firebase';
 
 // Assistance:
@@ -19,12 +19,23 @@ import {ReactReduxFirebaseProvider, getFirebase} from 'react-redux-firebase';
 // https://www.youtube.com/watch?v=UAMzKRPPWTk -incorporate thunk
 // https://github.com/iamshaunjp/React-Redux-Firebase-App/issues/11 -using newer versions
 
+const persistConfig = {
+  key: 'root',
+  storage,
+  whitelist: [],
+  blacklist: ['firebase', 'firestore']
+}
+
+const persistedReducer = persistReducer(persistConfig, allReducers)
+
 const store = createStore(
-  allReducers,
+  persistedReducer,
   compose(
-    applyMiddleware(thunk.withExtraArgument({getFirebase, getFirestore})),
-    reduxFirestore(firebaseConfig)
+    applyMiddleware(thunk.withExtraArgument({getFirebase})),
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
   ));
+
+const persistor = persistStore(store);
 
 const rrfConfig = {
   userProfile: 'users',
@@ -42,7 +53,9 @@ ReactDOM.render(
   <Provider store={store}>
     <ReactReduxFirebaseProvider {...rrfProps}>
       <BrowserRouter>
-        <App />
+        <PersistGate persistor={persistor}>
+          <App />
+        </PersistGate>
       </BrowserRouter>
     </ReactReduxFirebaseProvider>
   </Provider>,
