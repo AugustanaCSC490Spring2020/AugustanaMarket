@@ -1,0 +1,43 @@
+body{
+    background: url("../assets/login/books1.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    color: #262626;
+}
+
+#login-div{
+    background-color: white;
+    margin:10% 10% 20% 50%;
+    border-radius:5px;
+    padding: 1% 5% 3% 5%;
+    text-align:center;
+    background-color: #f2f2f2;
+}
+
+#login-title{
+
+}
+
+#login-subtitle{
+    font-weight:300;
+}
+
+.mdl-button{
+    border-radius:20px !important;
+    padding-left:10% !important;
+    box-shadow:
+            8px 8px 12px 0 rgba(0, 0, 0, 0.25),
+            -8px -8px 12px 0 rgba(255, 255, 255, 0.5) !important;
+}
+
+.mdl-button:hover{
+    background: linear-gradient(-45deg, rgba(0,0,0,0.05), rgba(255,255,255,0.1)) !important;
+    transition: 0.5s all ease-out !important;
+}
+
+.mdl-button span {
+    color: #505050 !important;
+}
+
+.mdl-button span:hover {
+}
