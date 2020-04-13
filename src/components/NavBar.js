@@ -1,6 +1,6 @@
 import React from 'react';
 import {useFirebase} from 'react-redux-firebase';
-import './NavBar.css';
+import './styles/NavBar.css';
 
 const NavBar = ({history}) => {
     const firebase = useFirebase();
