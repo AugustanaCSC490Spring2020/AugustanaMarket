@@ -1,8 +1,8 @@
 import React from 'react';
-import './Login.css';
+import './styles/Login.css';
 import {useFirebase} from 'react-redux-firebase';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
-import styled from 'styled-components';
+//import styled from 'styled-components';
 
 
 
