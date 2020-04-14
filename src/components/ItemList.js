@@ -1,7 +1,8 @@
 import React from 'react';
 import NavBar from './NavBar'
 import {populate} from '../actions'
-import {useSelector, useDispatch} from 'react-redux' 
+import {useSelector, useDispatch} from 'react-redux'
+import {Link} from 'react-router-dom'; 
 
 
 const ItemList = () => {
@@ -25,9 +26,9 @@ const ItemList = () => {
                     {itemList.isLoaded ? itemList.items.map((item) => {
                       return (
                         <li key={item.id}>
-                          <h3 key={item.title}>{item.title}</h3>
-                          <p key={item.author}>Author: {item.author}
-                            <button key={"button:" + item.id}>See item details</button>
+                          <h3>{item.title}</h3>
+                          <p>Author: {item.author}
+                            <Link to={`/view/${item.id}`}><button>See item details</button></Link>
                           </p>
                         </li>
                       )

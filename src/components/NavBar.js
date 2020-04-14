@@ -9,11 +9,11 @@ const NavBar = () => {
         firebase.logout();
     }
     return (
-        <body id={"navbar-body"}>
+        // <body id={"navbar-body"}>
             <div id={"navbar-div"}>
                 <Link to='/login'><button id="signout-btn" onClick={handleSignout}>Sign Out</button></Link>
             </div>
-        </body>
+        /* </body> */
     )
 }
 

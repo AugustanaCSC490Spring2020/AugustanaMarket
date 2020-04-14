@@ -5,6 +5,7 @@ import {isLoaded, isEmpty} from 'react-redux-firebase';
 import NavBar from './components/NavBar';
 import Login from './components/Login';
 import ItemList from './components/ItemList';
+import Item from './components/Item'
 
 const PrivateRoute = ({ component: RouteComponent, ...rest }) => {
     const auth = useSelector(state => state.firebase.auth)
@@ -33,6 +34,7 @@ const Router = () => {
             <PrivateRoute exact path="/" component={NavBar}/>
             <Route exact path='/login' component={Login}/>
             <PrivateRoute exact path="/list" component={ItemList}/>
+            <PrivateRoute path='/view/:item' component={Item}/>
             {isEmpty(auth) ? <Redirect to='/login'/> : <Route component={pageNotFound} />}
         </Switch>
     </div>
