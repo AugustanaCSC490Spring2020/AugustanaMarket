@@ -1,1 +1,1 @@
-export {populate, add} from './listActions'
+export * from './listActions'

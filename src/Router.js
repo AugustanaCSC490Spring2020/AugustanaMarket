@@ -4,7 +4,7 @@ import {useSelector} from 'react-redux';
 import {isLoaded, isEmpty} from 'react-redux-firebase';
 import NavBar from './components/NavBar';
 import Login from './components/Login';
-import ItemList from './components/itemList';
+import ItemList from './components/ItemList';
 
 const PrivateRoute = ({ component: RouteComponent, ...rest }) => {
     const auth = useSelector(state => state.firebase.auth)

@@ -6,7 +6,7 @@ import listReducer from './listReducer'
 const allReducers = combineReducers({
     firebase: firebaseReducer,
     firestore: firestoreReducer,
-    listReducer: listReducer,
+    list: listReducer,
 });
 
 export default allReducers;

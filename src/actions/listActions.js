@@ -1,6 +1,3 @@
-
-
-
 export const populate = () => (
     dispatch, 
     getState, 
@@ -17,13 +14,5 @@ export const populate = () => (
         }).then(items => dispatch({type: 'POPULATE-LIST', payload: items}))
         
     }
-    
 
-
-export const add = (item) => {
-    return {
-        type: 'ADD-ITEM',
-        payload: item
-    }
-}
 
