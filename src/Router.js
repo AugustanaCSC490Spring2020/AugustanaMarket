@@ -4,7 +4,8 @@ import { useSelector } from 'react-redux';
 import { isLoaded, isEmpty } from 'react-redux-firebase';
 import NavBar from './components/NavBar';
 import Login from './components/Login';
-import CreateItem from './components/CreateItem';
+import CreateSellItem from './components/CreateSellItem';
+import HomePage from './components/HomePage';
 
 const PrivateRoute = ({ component: RouteComponent, ...rest }) => {
     const auth = useSelector((state) => state.firebase.auth);
@@ -22,14 +23,16 @@ const PrivateRoute = ({ component: RouteComponent, ...rest }) => {
 const pageNotFound = () => {
     return <div>404 Page not found</div>;
 };
+
 const Router = () => {
     const auth = useSelector((state) => state.firebase.auth);
     return (
-        <div className='appDisplay'>
+      <div className='appDisplay'>
+            {/* <NavBar /> */}
             <Switch>
                 <PrivateRoute exact path='/' component={NavBar} />
                 <Route exact path='/login' component={Login} />
-                <PrivateRoute exact path='/createItem' component={CreateItem} />
+                <PrivateRoute exact path='/sellItem' component={CreateSellItem} />
                 {
                     isEmpty(auth) ? <Redirect to='/login' /> :
                     <Route component={pageNotFound} />}
