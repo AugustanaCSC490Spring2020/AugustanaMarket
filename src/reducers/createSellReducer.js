@@ -1,4 +1,6 @@
 const initialState = {
+    buyOrSell     : '',
+    itemType      : '',
     classCategory : '',
     condition     : '',
     courseNum     : '',
@@ -7,16 +9,23 @@ const initialState = {
     price         : '',
     description   : '',
     isbn          : '',
-    sellerID      : ''
 };
 
 const createSellReducer = (state = initialState, action) => {
     switch (action.type) {
+        
+        case 'CHANGE_BUY_OR_SELL':
+            return {
+                ...state,
+                itemType : action.payload
+            };
+
         case 'CHANGE_ITEM_TYPE':
             return {
                 ...state,
                 itemType : action.payload
             };
+        
         case 'CHANGE_CLASS_CATEGORY':
             return {
                 ...state,
@@ -63,16 +72,10 @@ const createSellReducer = (state = initialState, action) => {
                 description : action.payload
             };
 
-        case 'CHANGE_SELLER_ID':
-            return {
-                ...state,
-                sellerID : action.payload
-            };
-
         case 'CREATE_SELL_ITEM':
             return {
                 ...initialState
-            }
+            };
 
         default:
             return state;

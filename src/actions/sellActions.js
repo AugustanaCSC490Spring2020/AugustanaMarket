@@ -5,6 +5,13 @@ export const changeItemType = (newItemType) => {
     };
 };
 
+export const changeBuyOrSell = (newBuyOrSell) => {
+    return {
+        type    : 'CHANGE_BUY_OR_SELL',
+        payload : newBuyOrSell
+    };
+};
+
 export const changeClassCategory = (newCategory) => {
     return {
         type    : 'CHANGE_CLASS_CATEGORY',
@@ -57,18 +64,17 @@ export const changeDescription = (newDescription) => {
     };
 };
 
-export const setSellerID = (sellerID) => {
-    return {
-        type    : 'CHANGE_SELLER_ID',
-        payload : sellerID
-    };
-};
 
-export const createSellItem = (itemType) => (dispatch, getState, { getFirebase }) => {
+
+export const createSellItem = () => (dispatch, getState, { getFirebase }) => {
     const firebase = getFirebase();
     const state = getState().createSell;
-
-    firebase.firestore().collection('sell').doc(itemType).collection(itemType + 'Listings').add(state).then((doc) => {
+    const email = firebase.auth().currentUser.email;
+    const displayName = firebase.auth().currentUser.displayName;
+    state['email'] = email;
+    state['displayName'] = displayName;
+    
+    firebase.firestore().collection('sell').add(state).then((doc) => {
         dispatch({ type: 'CREATE_SELL_ITEM' });
     });
 };
