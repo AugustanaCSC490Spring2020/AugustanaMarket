@@ -26,7 +26,7 @@ const Item = ({match}) => {
                 <h2>Creator of post: {selectedItem.item.displayName}</h2>
                 <h2>Contact info: {selectedItem.item.email}</h2>
                 <h2>Price: ${selectedItem.item.price}</h2>
-                <h4>Details: {selectedItem.item.details}</h4>
+                {selectedItem.item.details == '' ? null : <h4>Details: {selectedItem.item.details}</h4>}
                 <h2>Condition: {selectedItem.item.condition}</h2>
 
             </div>) : null}
