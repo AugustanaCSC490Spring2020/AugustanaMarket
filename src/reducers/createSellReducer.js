@@ -14,10 +14,24 @@ const initialState = {
 const createSellReducer = (state = initialState, action) => {
     switch (action.type) {
         
+        case 'RESET':
+            return {
+                buyOrSell     : '',
+                itemType      : '',
+                classCategory : '',
+                condition     : '',
+                courseNum     : '',
+                title         : '',
+                author        : '',
+                price         : '',
+                description   : '',
+                isbn          : '',
+            }
+        
         case 'CHANGE_BUY_OR_SELL':
             return {
                 ...state,
-                itemType : action.payload
+                buyOrSell : action.payload
             };
 
         case 'CHANGE_ITEM_TYPE':
