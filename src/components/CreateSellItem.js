@@ -47,6 +47,7 @@ const SellItem = ({match, history}) => {
 
             case 'changeAuthor':
                 dispatch(sellActions.changeAuthor(val));
+                break;
 
             case 'changeCourseNum':
                 dispatch(sellActions.changeCourseNum(val));
@@ -68,6 +69,7 @@ const SellItem = ({match, history}) => {
         e.preventDefault();
         dispatch(sellActions.createSellItem());
         document.getElementById('sellInfo').reset();
+        history.push('/myListings')
     };
 
     const handleReset = () => {
@@ -75,7 +77,7 @@ const SellItem = ({match, history}) => {
     }
     return (
         <div>
-            <form onLoadStart={handleReset} id='sellInfo' onSubmit={onSubmit}>
+            <form autoComplete='off' onLoadStart={handleReset} id='sellInfo' onSubmit={onSubmit}>
                 <label htmlFor='itemCategory'>Item Category</label>
                 <select
                     id='itemCategory'
