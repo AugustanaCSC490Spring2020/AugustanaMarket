@@ -1,6 +1,6 @@
 import React from 'react';
 import NavBar from './NavBar'
-import {populate} from '../actions'
+import * as listActions from '../actions/listActions'
 import {useSelector, useDispatch} from 'react-redux'
 import {Link} from 'react-router-dom'; 
 
@@ -8,8 +8,11 @@ import {Link} from 'react-router-dom';
 const ItemList = () => {
     const itemList = useSelector(state => state.list);
     const dispatch = useDispatch();
+    React.useEffect(() => {
+        listActions.resetState();
+    }, [])
     if (!itemList.isLoaded) {
-        dispatch(populate());
+        dispatch(listActions.populate());
     }
 
     return( 

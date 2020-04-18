@@ -13,6 +13,12 @@ const listReducer = (state=initialState,action) => {
                 items: action.payload,
                 isLoaded: true,
             }
+        
+        case 'RESET_LIST':
+            return{
+                items: [],
+                isLoaded: false
+            }
 
         default: {
             return state;

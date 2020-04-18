@@ -3,11 +3,11 @@ export const populate = () => (
     getState, 
     {getFirebase}) => {
         const firebase = getFirebase();       
-        const itemsRef = firebase.firestore().collection('sell').doc('book').collection("bookListings");
+        const itemsRef = firebase.firestore().collection('sell');
         itemsRef.get().then(documentSnapshot => {
             let items = [];
             documentSnapshot.forEach(doc => {
-            const item = doc.data();
+            const item = {...doc.data()};
             item['id'] = doc.id;
             items.push(item);            
             })
@@ -15,5 +15,11 @@ export const populate = () => (
         }).then(items => dispatch({type: 'POPULATE_LIST', payload: items}))
         
     }
+
+export const resetState = () => {
+    return {
+        type: 'RESET_LIST'
+    }
+}
 
 
