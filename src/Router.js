@@ -7,6 +7,7 @@ import Login from './components/Login';
 import ItemList from './components/ItemList';
 import CreateSellItem from './components/CreateSellItem';
 import HomePage from './components/HomePage';
+import Item from './components/Item'
 
 const PrivateRoute = ({ component: RouteComponent, ...rest }) => {
     const auth = useSelector((state) => state.firebase.auth);
@@ -40,8 +41,9 @@ const Router = () => {
         <Switch>
             <PrivateRoute exact path="/" component={NavBar}/>
             <Route exact path='/login' component={Login}/>
-            <PrivateRoute exact path="/list" component={ItemList}/>
             <PrivateRoute path='/create/:type' component={CreateSellItem}/>
+            <PrivateRoute path="/list/:type" component={ItemList}/>
+            <PrivateRoute path='/view/:item/:type' component={Item}/>
             {isEmpty(auth) ? <Redirect to='/login'/> : <Route component={pageNotFound} />}
         </Switch>
     </div>

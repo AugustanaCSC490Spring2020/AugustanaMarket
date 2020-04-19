@@ -8,10 +8,16 @@ const initialState = {
 
 const listReducer = (state=initialState,action) => {
     switch (action.type) {
-        case 'POPULATE-LIST':
+        case 'POPULATE_LIST':
             return {   
                 items: action.payload,
                 isLoaded: true,
+            }
+        
+        case 'RESET_LIST':
+            return{
+                items: [],
+                isLoaded: false
             }
 
         default: {

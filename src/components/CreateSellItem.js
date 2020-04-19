@@ -8,11 +8,11 @@ const SellItem = ({match, history}) => {
     const item = useSelector((state) => state.createSell);
     const dispatch = useDispatch();
     const createType = match.params.type;
-    if(!((createType == 'request' && item.buyOrSell == 'buy') || (createType == item.buyOrSell))){
-        if(createType != 'request' && createType != 'sell'){
+    if(!((createType === 'request' && item.buyOrSell === 'buy') || (createType === item.buyOrSell))){
+        if(createType !== 'request' && createType !== 'sell'){
             history.push('/create/sell')
         } else {
-            dispatch(sellActions.changeBuyOrSell(createType == 'sell' ? 'sell' : 'buy'))
+            dispatch(sellActions.changeBuyOrSell(createType === 'sell' ? 'sell' : 'buy'))
         }
     }
     React.useEffect(() => {
@@ -61,6 +61,7 @@ const SellItem = ({match, history}) => {
 
             case 'changeDescription':
                 dispatch(sellActions.changeDescription(val));
+                break;
 
             default:
                 break;
@@ -107,7 +108,7 @@ const SellItem = ({match, history}) => {
                     </div>
                 </div>
                 {
-                    item.itemType == '' ? null :
+                    item.itemType === '' ? null :
                     <React.Fragment>
                         <div className={"form-group row"}>
                             <label htmlFor='title' className={"col-sm-2 col-form-label required"}>Title</label>
@@ -167,7 +168,7 @@ const SellItem = ({match, history}) => {
                     </React.Fragment>}
 
                 {
-                    item.itemType == 'book' ? <React.Fragment>
+                    item.itemType === 'book' ? <React.Fragment>
                         <div className={"form-group row"}>
                             <label htmlFor='classCategory' className={"col-sm-2 col-form-label required"}>Class Category</label>
                             <div class="col-sm-10">
@@ -238,7 +239,7 @@ const SellItem = ({match, history}) => {
                         </div>
                     </React.Fragment> :
                     null}
-                    {item.itemType == '' ? null : (
+                    {item.itemType === '' ? null : (
                         <React.Fragment>
                         {/* Use CSS to make description a bigger box */}
                         <div className={"form-group row"}>

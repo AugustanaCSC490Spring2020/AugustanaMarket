@@ -1,7 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import {useFirebase} from 'react-redux-firebase';
-import {Link} from 'react-router-dom';
 import './styles/NavBar.css';
 
 const NavBar = () => {
@@ -18,9 +17,11 @@ const NavBar = () => {
                 <a className="navbar-brand" id={"navbar-title"}>Augustana Marketplace</a>
                 <a className="form-inline nav-link" href='/create/request'>Request</a>
                 <a className="form-inline nav-link" href='/create/sell'>Sell</a>
+                <a className="form-inline nav-link" href='/list/sell'>Sell Listings</a>
+                <a className="form-inline nav-link" href='/list/request'>Requested Listings</a>
                 <div className={"form-inline ml-5"}>
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"/>
-                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                    <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"/>
+                        <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </div>
                 <button className="" id="signout-btn" onClick={handleSignout}>Sign Out</button>
             </form>

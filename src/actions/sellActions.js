@@ -77,7 +77,7 @@ export const createSellItem = () => (dispatch, getState, { getFirebase }) => {
     const data = {...state}
     
     delete data.buyOrSell
-    if(data.itemType != 'book') {
+    if(data.itemType !== 'book') {
         delete data.isbn
         delete data.author
         delete data.courseNum
@@ -90,7 +90,7 @@ export const createSellItem = () => (dispatch, getState, { getFirebase }) => {
     data['displayName'] = displayName;
     data['timeOfCreation'] = firebase.firestore.Timestamp.now();
     
-    firebase.firestore().collection(state.buyOrSell == 'sell' ? 'sell' : 'buy').add(data).then((doc) => {
+    firebase.firestore().collection(state.buyOrSell === 'sell' ? 'sell' : 'buy').add(data).then((doc) => {
         dispatch({ type: 'CREATE_SELL_ITEM' });
     });
 };
