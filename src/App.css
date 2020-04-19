@@ -36,3 +36,105 @@
     transform: rotate(360deg);
   }
 }
+
+/* styles below are for 404 error page */
+/* glitch effect from https://codepen.io/cybercountess/pen/WNbBxXq credit to cybercountess */
+.error-container {
+  text-align:center;
+  margin-top:6%;
+  white-space:nowrap;
+}
+
+.glitch {
+    color: #1a1a1a;
+    position: relative;
+    font-size: 12vw;
+    margin-left:18%;
+    animation: glitch 5s 5s infinite;
+}
+
+.glitch::before {
+  content: attr(data-text);
+  position: absolute;
+  left: -2px;
+  background: #f2f2f2;
+  overflow: hidden;
+  top: 0;
+  animation: noise-1 3s linear infinite alternate-reverse, glitch 5s 5.05s infinite;
+}
+
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 2px;
+  text-shadow: -5px 0 #db3951;
+  background: #f2f2f2;
+  top: 0;
+  animation: noise-2 3s linear infinite alternate-reverse, glitch 5s 5s infinite;
+}
+
+@keyframes glitch {
+  1%{
+    transform: rotateX(10deg) skewX(90deg);
+  }
+  2%{
+    transform: rotateX(0deg) skewX(0deg);
+  }
+}
+
+@keyframes fudge {
+  from {
+    transform: translate(0px, 0px);
+  }
+  to {
+    transform: translate(0px, 2%);
+  }
+}
+
+.glow {
+@extend .glitch;
+  text-shadow: 0 0 1000px rgb(223, 191, 191);
+  color: transparent;
+  position: absolute;
+  top: 0;
+}
+
+.subtitle {
+  font-family: Helvetica, sans-serif;
+  font-weight: 100;
+  font-size: 3vw;
+  color: #1a1a1a;
+  animation: glitch-2 5s 5.02s infinite;
+}
+
+@keyframes glitch-2 {
+  1%{
+    transform: rotateX(10deg) skewX(70deg);
+  }
+  2%{
+    transform: rotateX(0deg) skewX(0deg);
+  }
+}
+
+#go-home-btn{
+    display:inline-block;
+    margin-left:2%;
+    cursor: pointer;
+    background: transparent;
+    font-size: 30px;
+    border-radius: 50px;
+    color: #db3951;
+    border: 1px solid #db3951;
+    padding: 0.25em 0.75em;
+    transition: 0.5s all ease-out;
+    text-decoration: none;
+}
+
+#go-home-btn:hover {
+  background-color: #db3951;
+  color: white;
+}
+
+
+
+
