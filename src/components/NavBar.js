@@ -11,18 +11,18 @@ const NavBar = () => {
         firebase.logout();
     };
     return (
-        <body id={"navbar-body"}>
-        <nav className="navbar justify-content-end fixed-top navbar-div">
+        <body>
+        <nav className="navbar navbar-expand-lg fixed-top navbar-div">
             <form className="form-inline">
-                <img src={"./textbook_2x.png"} id={"nav-img"}/>
-                <a className="navbar-brand">Augustana Marketplace</a>
-                <div id={"tester"}>
-                    <Link to='/create/request'><h2>Request</h2></Link>
-                    <Link to='/create/sell'><h2>Sell</h2></Link>
-                    <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"/>
-                    <button className="btn btn-outline-info" type="submit">Search</button>
-                    <button className="form-inline" id="signout-btn" onClick={handleSignout}>Sign Out</button>
+                <img src={"../textbook_2x.png"} id={"nav-img"}/>
+                <a className="navbar-brand" id={"navbar-title"}>Augustana Marketplace</a>
+                <a className="form-inline nav-link" href='/create/request'>Request</a>
+                <a className="form-inline nav-link" href='/create/sell'>Sell</a>
+                <div className={"form-inline ml-5"}>
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"/>
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </div>
+                <button className="" id="signout-btn" onClick={handleSignout}>Sign Out</button>
             </form>
         </nav>
         </body>
