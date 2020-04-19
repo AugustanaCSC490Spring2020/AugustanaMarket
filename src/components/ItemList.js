@@ -5,9 +5,13 @@ import {useSelector, useDispatch} from 'react-redux'
 import {Link} from 'react-router-dom'; 
 
 
-const ItemList = () => {
+const ItemList = ({match, history}) => {
     const itemList = useSelector(state => state.list);
     const dispatch = useDispatch();
+    const buyOrSell = match.params.type;
+    if(!((buyOrSell == 'request') || (buyOrSell == 'sell'))){
+      history.push('/list/sell')
+    }
     React.useEffect(() => {
         listActions.resetState();
     }, [])
@@ -30,9 +34,10 @@ const ItemList = () => {
                       return (
                         <li key={item.id}>
                           <h3>{item.title}</h3>
-                          <p>Author: {item.author}
-                            <Link to={`/view/${item.id}`}><button>See item details</button></Link>
-                          </p>
+                          <h4>Condition: {item.condition}</h4>
+                          {item.itemType == 'book' ? <p>Author: {item.author}</p> : null}
+                          <p>Price: ${item.price}</p>
+                          <Link to={`/view/${item.id}/${buyOrSell}`}><button>See item details</button></Link>
                         </li>
                       )
                     }) : null}

@@ -11,6 +11,7 @@ const Item = ({match}) => {
         dispatch(itemActions.resetState());
     }, [])
     const itemID = match.params.item;
+    const buyOrSell = match.params.type;
     if(!selectedItem.isLoaded){
         let contains = false;
         for(let i = 0; i < items.length; i++){
@@ -21,7 +22,7 @@ const Item = ({match}) => {
             }
         }
         if(!contains){
-            dispatch(itemActions.checkFirestore(itemID))
+            dispatch(itemActions.checkFirestore(itemID, buyOrSell))
         }
     }
 
@@ -38,6 +39,14 @@ const Item = ({match}) => {
                         <h2>Price: ${selectedItem.item.price}</h2>
                         {selectedItem.item.description == '' ? null : <h4>Details: {selectedItem.item.description}</h4>}
                         <h2>Condition: {selectedItem.item.condition}</h2>
+                        {selectedItem.item.itemType == 'book' ? (
+                            <React.Fragment>
+                                <h3>Category: {selectedItem.item.classCategory.toUpperCase()}</h3>
+                                <h3>Course #: {selectedItem.item.courseNum}</h3>
+                                <h3>ISBN #: {selectedItem.item.isbn}</h3>
+                            </React.Fragment>
+                        ) : null}
+                        
                     </div>
                 ) : <h1>Item not found</h1>
             ) : null}

@@ -1,9 +1,9 @@
-export const populate = () => (
+export const populate = (buyOrSell) => (
     dispatch, 
     getState, 
     {getFirebase}) => {
         const firebase = getFirebase();       
-        const itemsRef = firebase.firestore().collection('sell');
+        const itemsRef = firebase.firestore().collection(buyOrSell == 'sell' ? 'sell' : 'buy');
         itemsRef.get().then(documentSnapshot => {
             let items = [];
             documentSnapshot.forEach(doc => {
