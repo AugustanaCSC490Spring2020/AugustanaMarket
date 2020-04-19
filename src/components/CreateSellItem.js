@@ -2,6 +2,7 @@ import React from 'react';
 import * as sellActions from '../actions/sellActions';
 import { useSelector, useDispatch } from 'react-redux';
 import NavBar from './NavBar';
+import './styles/CreateSellItem.css';
 
 const SellItem = ({match, history}) => {
     const item = useSelector((state) => state.createSell);
@@ -69,138 +70,198 @@ const SellItem = ({match, history}) => {
     const onSubmit = (e) => {
         e.preventDefault();
         dispatch(sellActions.createSellItem());
-        document.getElementById('sellInfo').reset();
+        document.getElementById('sell-form').reset();
         history.push('/myListings')
     };
 
+    // from https://stackoverflow.com/questions/49443954/how-to-limit-the-text-filed-length-with-input-type-number-in-react-js-and-preven
+    const maxLengthCheck = (e) => {
+        if (e.target.value.length > e.target.maxLength) {
+            e.target.value = e.target.value.slice(0, e.target.maxLength)
+        }
+    };
+
     const handleReset = () => {
-        document.getElementById('sellInfo').reset();
-    }
+        document.getElementById('sell-form').reset();
+    };
     return (
         <div>
             <NavBar/>
-            <form autoComplete='off' onLoadStart={handleReset} id='sellInfo' onSubmit={onSubmit}>
-                <label htmlFor='itemCategory'>Item Category</label>
-                <select
-                    id='itemCategory'
-                    name='changeItemType'
-                    defaultValue=''
-                    onChange={onChange}
-                    required
-                >
-                    <option value='' disabled hidden>
-                        {' '}
-                        -- select a type --{' '}
-                    </option>
-                    <option value='book'>Book</option>
-                    <option value='furniture'>Furniture</option>
-                </select>
+            <form autoComplete='off' onLoadStart={handleReset} id='sell-form' onSubmit={onSubmit}>
+                {/*<div class="form-group row">
+                    <label for="colFormLabel" class="col-sm-2 col-form-label">Email</label>
+                    <div class="col-sm-10">
+                      <input type="email" class="form-control" id="colFormLabel" placeholder="col-form-label">
+                    </div>
+                  </div>*/}
+                <div className={"form-group row"}>
+                    <label htmlFor='itemCategory' className={"col-sm-2 col-form-label"}>Item Category</label>
+                    <div className={"col-sm-10"}>
+                        <select id='itemCategory'
+                            className="form-control"
+                            name='changeItemType'
+                            defaultValue=''
+                            onChange={onChange}
+                            required>
+                            <option value='' disabled hidden>
+                                {' '}
+                                -- select a type --{' '}
+                            </option>
+                            <option value='book'>Book</option>
+                            <option value='furniture'>Furniture</option>
+                        </select>
+                    </div>
+                </div>
                 {
                     item.itemType == '' ? null :
                     <React.Fragment>
-                        <label htmlFor='title'>Title</label>
-                        <input
-                            type='text'
-                            id='title'
-                            value={item.title}
-                            name='changeTitle'
-                            onChange={onChange}
-                            required
-                        />
-                        <label htmlFor='condition'>Condition</label>
-                        <select
-                            id='condition'
-                            name='changeCondition'
-                            defaultValue={item.condition}
-                            onChange={onChange}
-                            required
-                        >
-                            <option value='' disabled hidden>
-                                {' '}
-                                -- select a condition --{' '}
-                            </option>
-                            <option value='likeNew'>Like New</option>
-                            <option value='veryGood'>Very Good</option>
-                            <option value='good'>Good</option>
-                            <option value='decent'>Decent</option>
-                            <option value='poor'>Poor</option>
-                        </select>
-                        <label htmlFor='price'>Price: $</label>
-                        <input
-                            type='number'
-                            id='price'
-                            min='0'
-                            step='0.01'
-                            value={item.price}
-                            name='changePrice'
-                            onChange={onChange}
-                            required
-                        />
+                        <div className={"form-group row"}>
+                            <label htmlFor='title' className={"col-sm-2 col-form-label"}>Title</label>
+                            <div class="col-sm-10">
+                                <input
+                                    type='text'
+                                    id='title'
+                                    className={"form-control"}
+                                    value={item.title}
+                                    name='changeTitle'
+                                    onChange={onChange}
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <div className={"form-group row"}>
+                            <label htmlFor='condition' className={"col-sm-2 col-form-label"}>Condition</label>
+                            <div class="col-sm-10">
+                                <select
+                                    id='condition'
+                                    className={"form-control"}
+                                    name='changeCondition'
+                                    defaultValue={item.condition}
+                                    onChange={onChange}
+                                    required
+                                >
+                                    <option value='' disabled hidden>
+                                        {' '}
+                                        -- select a condition --{' '}
+                                    </option>
+                                    <option value='likeNew'>Like New</option>
+                                    <option value='veryGood'>Very Good</option>
+                                    <option value='good'>Good</option>
+                                    <option value='decent'>Decent</option>
+                                    <option value='poor'>Poor</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div className={"form-group row"}>
+                            <label htmlFor='price' className={"col-sm-2 col-form-label required"}>Price</label>
+                            <div class="col-sm-10 input-group">
+                                <span class="input-group-addon">$</span>
+                                <input
+                                    type='number'
+                                    className={"form-control"}
+                                    id='price'
+                                    min='0'
+                                    step='0.01'
+                                    value={item.price}
+                                    name='changePrice'
+                                    onChange={onChange}
+                                    required
+                                />
+                            </div>
+                        </div>
                         
                     </React.Fragment>}
 
                 {
                     item.itemType == 'book' ? <React.Fragment>
-                        <label htmlFor='classCategory'>Class Category</label>
-                        <select
-                            name='changeClassCategory'
-                            defaultValue={item.classCategory}
-                            onChange={onChange}
-                            required
-                        >
-                            <option value='' disabled hidden>
-                                {' '}
-                                -- select a category --{' '}
-                            </option>
-                            <option value='csc'>CSC</option>
-                            <option value='math'>MATH</option>
-                            <option value='span'>SPAN</option>
-                            <option value='geog'>GEOG</option>
-                        </select>
-                        <label htmlFor='isbn'>ISBN</label>
-                        <input
-                            // minLength='10'
-                            // maxLength='10'
-                            type='number'
-                            id='isbn'
-                            value={item.isbn}
-                            name='changeIsbn'
-                            onChange={onChange}
-                            placeholder='1234567890'
-                            required
-                        />
-                        <label htmlFor='author'>Author</label>
-                        <input
-                            type='text'
-                            id='author'
-                            value={item.author}
-                            name='changeAuthor'
-                            onChange={onChange}
-                            required
-                        />
-                        <label htmlFor='courseNum'>Course #</label>
-                        <input
-                            type='number'
-                            id='courseNum'
-                            value={item.courseNum}
-                            name='changeCourseNum'
-                            onChange={onChange}
-                        />
+                        <div className={"form-group row"}>
+                            <label htmlFor='classCategory' className={"col-sm-2 col-form-label"}>Class Category</label>
+                            <div class="col-sm-10">
+                                <select
+                                    name='changeClassCategory'
+                                    className={"form-control"}
+                                    defaultValue={item.classCategory}
+                                    onChange={onChange}
+                                    required
+                                >
+                                    <option value='' disabled hidden>
+                                        {' '}
+                                        -- select a category --{' '}
+                                    </option>
+                                    <option value='csc'>CSC</option>
+                                    <option value='math'>MATH</option>
+                                    <option value='span'>SPAN</option>
+                                    <option value='geog'>GEOG</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div className={"form-group row"}>
+                            <label htmlFor='isbn' className={"col-sm-2 col-form-label"}>ISBN</label>
+                            <div class="col-sm-10">
+                                <input
+                                    // minLength='10'
+                                    // maxLength='10'
+                                    type='number'
+                                    className={"form-control"}
+                                    id='isbn'
+                                    maxLength="13"
+                                    onInput={maxLengthCheck}
+                                    max={9999999999999}
+                                    value={item.isbn}
+                                    name='changeIsbn'
+                                    onChange={onChange}
+                                    placeholder='1234567890'
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <div className={"form-group row"}>
+                            <label htmlFor='author' className={"col-sm-2 col-form-label"}>Author</label>
+                            <div class="col-sm-10">
+                                <input
+                                    type='text'
+                                    id='author'
+                                    className={"form-control"}
+                                    value={item.author}
+                                    name='changeAuthor'
+                                    onChange={onChange}
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <div className={"form-group row"}>
+                            <label htmlFor='courseNum' className={"col-sm-2 col-form-label"}>Course #</label>
+                            <div class="col-sm-10">
+                                <input
+                                    type='number'
+                                    id='courseNum'
+                                    className={"form-control"}
+                                    value={item.courseNum}
+                                    name='changeCourseNum'
+                                    onChange={onChange}
+                                />
+                            </div>
+                        </div>
                     </React.Fragment> :
                     null}
                     {item.itemType == '' ? null : (
                         <React.Fragment>
                         {/* Use CSS to make description a bigger box */}
-                        <label htmlFor='description'>Description</label>
-                        <input
-                            type='text'
-                            id='description'
-                            value={item.description}
-                            name='changeDescription'
-                            onChange={onChange}
-                            required
-                        />
-                        <input type='submit' disabled={false} value='Submit' />
+                        <div className={"form-group row"}>
+                            <label htmlFor='description' className={"col-sm-2 col-form-label"}>Description</label>
+                            <div class="col-sm-10">
+                                <textarea
+                                    rows={"4"}
+                                    id='description'
+                                    className={"form-control"}
+                                    value={item.description}
+                                    name='changeDescription'
+                                    onChange={onChange}
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <input type='submit' className="btn btn-primary" disabled={false} value='Submit' />
                         </React.Fragment>
                     )}
             </form>
