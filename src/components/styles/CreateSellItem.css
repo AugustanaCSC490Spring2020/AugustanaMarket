@@ -1,15 +1,36 @@
 #sell-form{
-    margin:10% 20% 0% 20%;
+    margin:8% 15% 2% 15%;
+    background-color:white;
+    padding:2% 5% 2% 5%;
+    border-radius:10px;
 }
 
+body{
+    background-color:#f2f2f2;
+}
+
+/* adds red asterisk to required inputs */
+label.required:after {
+    content:"*";
+    color:red;
+}
+
+/* removes up and down arrows to number input fields */
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
-
 /* Firefox */
 input[type=number] {
     -moz-appearance: textfield;
+}
+
+#submit-btn{
+    cursor:pointer;
+}
+
+.col-sm-2, .col-form-label{
+    text-align: left;
 }

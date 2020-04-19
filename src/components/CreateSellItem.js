@@ -88,12 +88,6 @@ const SellItem = ({match, history}) => {
         <div>
             <NavBar/>
             <form autoComplete='off' onLoadStart={handleReset} id='sell-form' onSubmit={onSubmit}>
-                {/*<div class="form-group row">
-                    <label for="colFormLabel" class="col-sm-2 col-form-label">Email</label>
-                    <div class="col-sm-10">
-                      <input type="email" class="form-control" id="colFormLabel" placeholder="col-form-label">
-                    </div>
-                  </div>*/}
                 <div className={"form-group row"}>
                     <label htmlFor='itemCategory' className={"col-sm-2 col-form-label"}>Item Category</label>
                     <div className={"col-sm-10"}>
@@ -116,7 +110,7 @@ const SellItem = ({match, history}) => {
                     item.itemType == '' ? null :
                     <React.Fragment>
                         <div className={"form-group row"}>
-                            <label htmlFor='title' className={"col-sm-2 col-form-label"}>Title</label>
+                            <label htmlFor='title' className={"col-sm-2 col-form-label required"}>Title</label>
                             <div class="col-sm-10">
                                 <input
                                     type='text'
@@ -130,7 +124,7 @@ const SellItem = ({match, history}) => {
                             </div>
                         </div>
                         <div className={"form-group row"}>
-                            <label htmlFor='condition' className={"col-sm-2 col-form-label"}>Condition</label>
+                            <label htmlFor='condition' className={"col-sm-2 col-form-label required"}>Condition</label>
                             <div class="col-sm-10">
                                 <select
                                     id='condition'
@@ -175,7 +169,7 @@ const SellItem = ({match, history}) => {
                 {
                     item.itemType == 'book' ? <React.Fragment>
                         <div className={"form-group row"}>
-                            <label htmlFor='classCategory' className={"col-sm-2 col-form-label"}>Class Category</label>
+                            <label htmlFor='classCategory' className={"col-sm-2 col-form-label required"}>Class Category</label>
                             <div class="col-sm-10">
                                 <select
                                     name='changeClassCategory'
@@ -196,7 +190,7 @@ const SellItem = ({match, history}) => {
                             </div>
                         </div>
                         <div className={"form-group row"}>
-                            <label htmlFor='isbn' className={"col-sm-2 col-form-label"}>ISBN</label>
+                            <label htmlFor='isbn' className={"col-sm-2 col-form-label required"}>ISBN</label>
                             <div class="col-sm-10">
                                 <input
                                     // minLength='10'
@@ -216,7 +210,7 @@ const SellItem = ({match, history}) => {
                             </div>
                         </div>
                         <div className={"form-group row"}>
-                            <label htmlFor='author' className={"col-sm-2 col-form-label"}>Author</label>
+                            <label htmlFor='author' className={"col-sm-2 col-form-label required"}>Author</label>
                             <div class="col-sm-10">
                                 <input
                                     type='text'
@@ -248,7 +242,7 @@ const SellItem = ({match, history}) => {
                         <React.Fragment>
                         {/* Use CSS to make description a bigger box */}
                         <div className={"form-group row"}>
-                            <label htmlFor='description' className={"col-sm-2 col-form-label"}>Description</label>
+                            <label htmlFor='description' className={"col-sm-2 col-form-label required"}>Description</label>
                             <div class="col-sm-10">
                                 <textarea
                                     rows={"4"}
@@ -261,7 +255,7 @@ const SellItem = ({match, history}) => {
                                 />
                             </div>
                         </div>
-                        <input type='submit' className="btn btn-primary" disabled={false} value='Submit' />
+                        <input type='submit' className="btn btn-primary" disabled={false} value='Submit' id={"submit-btn"}/>
                         </React.Fragment>
                     )}
             </form>
