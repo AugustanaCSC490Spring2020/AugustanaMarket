@@ -10,7 +10,7 @@ const Login = ({history}) => {
 
     const firebase = useFirebase();
     return (
-        <div>
+        <div id={"background-img"}>
             <div id={"login-div"}>
                 <h1 id={"login-title"}>Welcome to the Augustana Market!</h1>
                 <h3 id={"login-subtitle"}>Please log in to continue.</h3>

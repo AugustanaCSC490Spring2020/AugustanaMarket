@@ -1,8 +1,12 @@
-body{
+#background-img{
     background: url("../../assets/login/books1.jpg");
     background-size: cover;
-    background-repeat: no-repeat;
     color: #262626;
+    position: absolute;
+    width:100vw;
+    height:100vh;
+    margin: 0;
+    padding: 0;
 }
 
 #login-div{
