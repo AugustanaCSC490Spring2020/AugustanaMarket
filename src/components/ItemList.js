@@ -9,14 +9,15 @@ const ItemList = ({match, history}) => {
     const itemList = useSelector(state => state.list);
     const dispatch = useDispatch();
     const buyOrSell = match.params.type;
-    if(!((buyOrSell == 'request') || (buyOrSell == 'sell'))){
+    if((buyOrSell !== 'request') && (buyOrSell !== 'sell')){
       history.push('/list/sell')
     }
     React.useEffect(() => {
-        listActions.resetState();
+        dispatch(listActions.resetState());
     }, [])
+  
     if (!itemList.isLoaded) {
-        dispatch(listActions.populate());
+        dispatch(listActions.populate(buyOrSell));
     }
 
     return( 
@@ -35,7 +36,7 @@ const ItemList = ({match, history}) => {
                         <li key={item.id}>
                           <h3>{item.title}</h3>
                           <h4>Condition: {item.condition}</h4>
-                          {item.itemType == 'book' ? <p>Author: {item.author}</p> : null}
+                          {item.itemType === 'book' ? <p>Author: {item.author}</p> : null}
                           <p>Price: ${item.price}</p>
                           <Link to={`/view/${item.id}/${buyOrSell}`}><button>See item details</button></Link>
                         </li>

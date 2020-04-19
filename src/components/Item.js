@@ -15,7 +15,7 @@ const Item = ({match}) => {
     if(!selectedItem.isLoaded){
         let contains = false;
         for(let i = 0; i < items.length; i++){
-            if(items[i].id == itemID){
+            if(items[i].id === itemID){
                 contains = true;
                 dispatch(itemActions.loadItemDetails(items[i]))
                 break;
@@ -37,9 +37,9 @@ const Item = ({match}) => {
                         <h2>Creator of post: {selectedItem.item.displayName}</h2>
                         <h2>Contact info: {selectedItem.item.email}</h2>
                         <h2>Price: ${selectedItem.item.price}</h2>
-                        {selectedItem.item.description == '' ? null : <h4>Details: {selectedItem.item.description}</h4>}
+                        {selectedItem.item.description === '' ? null : <h4>Details: {selectedItem.item.description}</h4>}
                         <h2>Condition: {selectedItem.item.condition}</h2>
-                        {selectedItem.item.itemType == 'book' ? (
+                        {selectedItem.item.itemType === 'book' ? (
                             <React.Fragment>
                                 <h3>Category: {selectedItem.item.classCategory.toUpperCase()}</h3>
                                 <h3>Course #: {selectedItem.item.courseNum}</h3>
