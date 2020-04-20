@@ -30,9 +30,9 @@
 #signout-btn {
     cursor: pointer;
     background: transparent;
-    margin-left:5%;
     font-size: 16px;
     border-radius: 50px;
+    margin-left:1%;
     color: white;
     border: 1px solid white;
     padding: 0.25em 1em;
@@ -44,3 +44,9 @@
     color: #2D5775;
 }
 
+form input{
+}
+
+.right-div{
+    margin-left:5%;
+}
