@@ -2,6 +2,7 @@ import React from 'react';
 import NavBar from './NavBar';
 import {useSelector, useDispatch} from 'react-redux';
 import * as itemActions from '../actions/itemActions';
+import './styles/Item.css';
 
 const Item = ({match}) => {
     const items = useSelector(state => state.list.items);
@@ -32,7 +33,7 @@ const Item = ({match}) => {
 
             {selectedItem.isLoaded ? (
                 selectedItem.item ? (
-                    <div>
+                    <div id={"item-div"}>
                         <h1>{selectedItem.item.title}</h1>
                         <h2>Creator of post: {selectedItem.item.displayName}</h2>
                         <h2>Contact info: {selectedItem.item.email}</h2>

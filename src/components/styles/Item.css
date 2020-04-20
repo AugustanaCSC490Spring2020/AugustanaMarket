@@ -1,0 +1,13 @@
+#item-div{
+    margin:10% 5% 0 5%;
+    padding:3%;
+    border-radius:10px;
+    text-align:left;
+    background-color:white;
+}
+
+@media only screen and (max-width: 1150px) {
+    #item-div{
+        margin-top:20%;
+    }
+}

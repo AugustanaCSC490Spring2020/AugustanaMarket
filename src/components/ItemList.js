@@ -3,6 +3,7 @@ import NavBar from './NavBar';
 import * as listActions from '../actions/listActions';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import './styles/ItemList.css';
 
 const ItemList = ({ match, history }) => {
     const itemList = useSelector((state) => state.list);
@@ -23,21 +24,28 @@ const ItemList = ({ match, history }) => {
         <div>
             <NavBar />
 
-            <div>
+            <div id={"item-details-div"}>
                 <ul>
                     {
                         itemList.isLoaded ? itemList.items.map((item) => {
                             return (
                                 <li key={item.id}>
-                                    <h3>{item.title}</h3>
-                                    <h4>Condition: {item.condition}</h4>
-                                    {
-                                        item.itemType === 'book' ? <p>Author: {item.author}</p> :
-                                        null}
-                                    <p>Price: ${item.price}</p>
-                                    <Link to={`/view/${item.id}/${buyOrSell}`}>
-                                        <button>See item details</button>
-                                    </Link>
+                                    <div className="card" id={"card-div"}>
+                                            <div className="card-body">
+                                                <h3 className="card-title">{item.title}</h3>
+                                                {item.itemType === 'book' ? <h5>Author: {item.author}</h5> : null}
+                                                <h5>Description: {item.description}</h5>
+                                            </div>
+                                            <ul className="list-group list-group-flush">
+                                                <li className="list-group-item">Condition: {item.condition}</li>
+                                                <li className="list-group-item">Price: ${item.price}</li>
+                                            </ul>
+                                            <div className="card-body">
+                                                <Link to={`/view/${item.id}/${buyOrSell}`}>
+                                                    <button className={"btn btn-primary"}>See item details</button>
+                                                </Link>
+                                            </div>
+                                    </div>
                                 </li>
                             );
                         }) :
