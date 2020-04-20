@@ -30,7 +30,7 @@ const pageNotFound = () => {
         </i>
         <p class="subtitle">Sorry, the page you were looking for cannot be found.</p>
         <br />
-        <a href='./' id="go-home-btn">GO HOME</a>
+        <a href='/' id="go-home-btn">GO HOME</a>
     </div>;
 };
 
