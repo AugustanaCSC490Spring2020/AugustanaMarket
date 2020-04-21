@@ -243,7 +243,7 @@ const SellItem = ({match, history}) => {
                         <React.Fragment>
                         {/* Use CSS to make description a bigger box */}
                         <div className={"form-group row"}>
-                            <label htmlFor='description' className={"col-sm-2 col-form-label required"}>Description</label>
+                            <label htmlFor='description' className={"col-sm-2 col-form-label"}>Description</label>
                             <div class="col-sm-10">
                                 <textarea
                                     rows={"4"}
@@ -252,7 +252,6 @@ const SellItem = ({match, history}) => {
                                     value={item.description}
                                     name='changeDescription'
                                     onChange={onChange}
-                                    required
                                 />
                             </div>
                         </div>
