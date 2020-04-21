@@ -13,7 +13,7 @@ import { getFirebase } from 'react-redux-firebase';
 const persistConfig = {
     key       : 'root',
     storage,
-    whitelist : [],
+    whitelist : ['list', 'item', 'createSell'],
     blacklist : [ 'firebase', 'firestore' ]
 };
 

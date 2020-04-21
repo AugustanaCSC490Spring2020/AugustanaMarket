@@ -72,7 +72,7 @@ const SellItem = ({match, history}) => {
         e.preventDefault();
         dispatch(sellActions.createSellItem());
         document.getElementById('sell-form').reset();
-        history.push('/myListings')
+        history.push(`/list/${createType}`)
     };
 
     // from https://stackoverflow.com/questions/49443954/how-to-limit-the-text-filed-length-with-input-type-number-in-react-js-and-preven
