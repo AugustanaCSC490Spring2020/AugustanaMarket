@@ -63,6 +63,20 @@ const SellItem = ({match, history}) => {
                 dispatch(sellActions.changeDescription(val));
                 break;
 
+            case 'changeImage':
+                const image = e.target.files[0];
+                if (image) {
+                    const fileType = image["type"];
+                    const validImageTypes = ["image/gif", "image/jpeg", "image/png"];
+                    if (validImageTypes.includes(fileType)) {
+                        dispatch(sellActions.changeImage(image));
+                    } else {
+                        alert('Invalid file type.')
+                        // document.getElementById('exampleFormControlFile1').innerHTML = 'Invalid file type.';
+                    }
+                }
+                break;
+
             default:
                 break;
         }
@@ -112,7 +126,7 @@ const SellItem = ({match, history}) => {
                     <React.Fragment>
                         <div className={"form-group row"}>
                             <label htmlFor='title' className={"col-sm-2 col-form-label required"}>Title</label>
-                            <div class="col-sm-10">
+                            <div className="col-sm-10">
                                 <input
                                     type='text'
                                     id='title'
@@ -126,7 +140,7 @@ const SellItem = ({match, history}) => {
                         </div>
                         <div className={"form-group row"}>
                             <label htmlFor='condition' className={"col-sm-2 col-form-label required"}>Condition</label>
-                            <div class="col-sm-10">
+                            <div className="col-sm-10">
                                 <select
                                     id='condition'
                                     className={"form-control"}
@@ -149,8 +163,8 @@ const SellItem = ({match, history}) => {
                         </div>
                         <div className={"form-group row"}>
                             <label htmlFor='price' className={"col-sm-2 col-form-label required"}>Price</label>
-                            <div class="col-sm-10 input-group">
-                                <span class="input-group-addon">$</span>
+                            <div className="col-sm-10 input-group">
+                                <span className="input-group-addon">$</span>
                                 <input
                                     type='number'
                                     className={"form-control"}
@@ -171,7 +185,7 @@ const SellItem = ({match, history}) => {
                     item.itemType === 'book' ? <React.Fragment>
                         <div className={"form-group row"}>
                             <label htmlFor='classCategory' className={"col-sm-2 col-form-label required"}>Class Category</label>
-                            <div class="col-sm-10">
+                            <div className="col-sm-10">
                                 <select
                                     name='changeClassCategory'
                                     className={"form-control"}
@@ -192,7 +206,7 @@ const SellItem = ({match, history}) => {
                         </div>
                         <div className={"form-group row"}>
                             <label htmlFor='isbn' className={"col-sm-2 col-form-label required"}>ISBN</label>
-                            <div class="col-sm-10">
+                            <div className="col-sm-10">
                                 <input
                                     // minLength='10'
                                     // maxLength='10'
@@ -212,7 +226,7 @@ const SellItem = ({match, history}) => {
                         </div>
                         <div className={"form-group row"}>
                             <label htmlFor='author' className={"col-sm-2 col-form-label required"}>Author</label>
-                            <div class="col-sm-10">
+                            <div className="col-sm-10">
                                 <input
                                     type='text'
                                     id='author'
@@ -226,7 +240,7 @@ const SellItem = ({match, history}) => {
                         </div>
                         <div className={"form-group row"}>
                             <label htmlFor='courseNum' className={"col-sm-2 col-form-label"}>Course #</label>
-                            <div class="col-sm-10">
+                            <div className="col-sm-10">
                                 <input
                                     type='number'
                                     id='courseNum'
@@ -244,7 +258,7 @@ const SellItem = ({match, history}) => {
                         {/* Use CSS to make description a bigger box */}
                         <div className={"form-group row"}>
                             <label htmlFor='description' className={"col-sm-2 col-form-label"}>Description</label>
-                            <div class="col-sm-10">
+                            <div className="col-sm-10">
                                 <textarea
                                     rows={"4"}
                                     id='description'
@@ -255,7 +269,20 @@ const SellItem = ({match, history}) => {
                                 />
                             </div>
                         </div>
-                        <input type='submit' className="btn btn-primary" disabled={false} value='Submit' id={"submit-btn"}/>
+                        <div className="form-group">
+                            <label htmlFor="exampleFormControlFile1">Example file input</label>
+                            <input type="file"
+                                   className="form-control-file"
+                                   id="exampleFormControlFile1"
+                                   name='changeImage'
+                                   multiple
+                                   onChange={onChange}/>
+                        </div>
+                        <input type='submit'
+                               className="btn btn-primary"
+                               disabled={false}
+                               value='Submit'
+                               id={"submit-btn"}/>
                         </React.Fragment>
                     )}
             </form>

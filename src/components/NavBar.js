@@ -10,7 +10,6 @@ const NavBar = () => {
         firebase.logout();
     };
     return (
-        <body>
         <nav className="navbar navbar-expand-lg fixed-top navbar-div">
             <form className="form-inline">
                 <img src={"../textbook_2x.png"} id={"nav-img"}/>
@@ -24,7 +23,6 @@ const NavBar = () => {
                 <button className={""} id="signout-btn" onClick={handleSignout}>Sign Out</button>
             </form>
         </nav>
-        </body>
     )
 };
 

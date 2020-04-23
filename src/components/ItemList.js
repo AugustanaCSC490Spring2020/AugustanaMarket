@@ -30,7 +30,7 @@ const ItemList = ({ match, history }) => {
                         itemList.isLoaded ? itemList.items.map((item) => {
                             return (
                                 <li key={item.id}>
-                                    <div className="card" id={"card-div"}>
+                                    <div className="card card-div">
                                             <div className="card-body">
                                                 <h3 className="card-title">{item.title}</h3>
                                                 {item.itemType === 'book' ? <h5>Author: {item.author}</h5> : null}

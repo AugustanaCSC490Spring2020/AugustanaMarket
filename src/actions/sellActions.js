@@ -61,6 +61,12 @@ export const changeIsbn = (newIsbn) => {
         payload : newIsbn
     };
 };
+export const changeImage = (newImage) => {
+    return {
+        type    : 'CHANGE_IMAGE',
+        payload : newImage
+    };
+};
 
 export const changeDescription = (newDescription) => {
     return {
