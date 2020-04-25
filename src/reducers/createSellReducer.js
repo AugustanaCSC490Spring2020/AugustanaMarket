@@ -30,6 +30,12 @@ const createSellReducer = (state = initialState, action) => {
                 image         : '',
             };
         
+        case 'RESET_IMAGE':
+            return {
+                ...state,
+                image : ''
+            };
+            
         case 'CHANGE_BUY_OR_SELL':
             return {
                 ...state,

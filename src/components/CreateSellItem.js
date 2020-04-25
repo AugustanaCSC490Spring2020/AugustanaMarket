@@ -64,16 +64,24 @@ const SellItem = ({match, history}) => {
                 break;
 
             case 'changeImage':
-                const image = e.target.files[0];
-                if (image) {
-                    const fileType = image["type"];
-                    const validImageTypes = ["image/gif", "image/jpeg", "image/png"];
-                    if (validImageTypes.includes(fileType)) {
-                        dispatch(sellActions.changeImage(image));
-                    } else {
-                        alert('Invalid file type.')
-                        // document.getElementById('exampleFormControlFile1').innerHTML = 'Invalid file type.';
+                const images = e.target.files;
+                let allImages = true;
+                const validImageTypes = ["image/gif", "image/jpeg", "image/png"];
+                for(let i = 0; i < images.length; i++){
+                    let image = images[i];
+                    let imageType = image['type'];
+                    if(!validImageTypes.includes(imageType)){
+                        allImages = false;
+                        break;
                     }
+                }
+
+                if(allImages) {
+                    dispatch(sellActions.changeImage(images))
+                } else {
+                    dispatch(sellActions.resetImage());
+                    alert('One of the selected files was not a vaild file type')
+                    // document.getElementById('exampleFormControlFile1').innerHTML = 'Invalid file type.';
                 }
                 break;
 
