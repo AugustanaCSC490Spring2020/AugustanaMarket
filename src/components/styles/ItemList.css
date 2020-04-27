@@ -1,5 +1,5 @@
 body{
-    background-color:#f2f2f2;
+    background-color:#fafafa !important;
 }
 
 .card-body{
@@ -7,21 +7,25 @@ body{
 }
 
 #item-details-div{
-    margin:10% 5% 0 5%;
+    /*margin:10% 5% 0 5%;*/
     padding:2%;
-    border-radius:10px;
-    text-align:left;
-    background-color:white;
+    /*border-radius:10px;*/
+    /*text-align:left;*/
+    /*background-color:white;*/
 }
 
-@media only screen and (max-width: 1150px) {
-    #item-details-div{
-        margin-top:15%;
-    }
+.center-text{
+    text-align:center;
+}
+
+.center{
+    margin-left:33%;
 }
 
 #card-div{
-    width:20rem;
+    /*max-width:20rem;*/
+    margin-bottom:10%;
+    text-align:left;
 }
 
 ul{
