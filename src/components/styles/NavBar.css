@@ -19,12 +19,26 @@
     color:#ccc;
 }
 
+.dropdown{
+    cursor: pointer;
+}
+
 #navbar-title{
     user-select:none;
     text-decoration:none;
+    display:inline-block;
     color:white;
     font-size:24px;
     padding:0 0 5px 5px;
+}
+
+.nav-container{
+    margin:0;
+    max-width:100%;
+}
+
+.nav-item{
+    margin-left:10px;
 }
 
 #signout-btn {
