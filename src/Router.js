@@ -8,6 +8,7 @@ import ItemList from './components/ItemList';
 import CreateSellItem from './components/CreateSellItem';
 import HomePage from './components/HomePage';
 import Item from './components/Item'
+import Search from './components/Search';
 
 const PrivateRoute = ({ component: RouteComponent, ...rest }) => {
     const auth = useSelector((state) => state.firebase.auth);
@@ -39,7 +40,7 @@ const Router = () => {
     return (
     <div className="appDisplay">
         <Switch>
-            <PrivateRoute exact path="/" component={NavBar}/>
+            <PrivateRoute exact path="/" component={Search}/>
             <Route exact path='/login' component={Login}/>
             <PrivateRoute path='/create/:type' component={CreateSellItem}/>
             <PrivateRoute path="/list/:type" component={ItemList}/>
