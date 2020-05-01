@@ -61,6 +61,12 @@ export const changeIsbn = (newIsbn) => {
         payload : newIsbn
     };
 };
+export const changeImage = (newImage) => {
+    return {
+        type    : 'CHANGE_IMAGE',
+        payload : newImage
+    };
+};
 
 export const changeDescription = (newDescription) => {
     return {
@@ -69,7 +75,11 @@ export const changeDescription = (newDescription) => {
     };
 };
 
-
+export const resetImage = () => {
+    return {
+        type    : 'RESET_IMAGE'
+    };
+};
 
 export const createSellItem = () => (dispatch, getState, { getFirebase }) => {
     const firebase = getFirebase();
@@ -77,13 +87,16 @@ export const createSellItem = () => (dispatch, getState, { getFirebase }) => {
     const data = {...state}
     
     delete data.buyOrSell
+    delete data.image
     if(data.itemType !== 'book') {
         delete data.isbn
         delete data.author
         delete data.courseNum
         delete data.classCategory
     }
-    
+    if(state.image !== '') {
+        data['numImages'] = state.image.length;
+    }
     const email = firebase.auth().currentUser.email;
     const displayName = firebase.auth().currentUser.displayName;
     data['email'] = email;
@@ -91,6 +104,13 @@ export const createSellItem = () => (dispatch, getState, { getFirebase }) => {
     data['timeOfCreation'] = firebase.firestore.Timestamp.now();
     
     firebase.firestore().collection(state.buyOrSell === 'sell' ? 'sell' : 'buy').add(data).then((doc) => {
+        /*if(state.image !== ''){
+            for(let i = 0; i < state.image.length; i++){
+                const imageType = state.image[i]['type'].substring(6);
+                firebase.storage().ref(`images/${doc.id + i + '.' + imageType}`).put(state.image[i])
+            }
+        }
+        */
         dispatch({ type: 'CREATE_SELL_ITEM' });
     });
 };

@@ -7,7 +7,7 @@ body{
 }
 
 #item-details-div{
-    /*margin:10% 5% 0 5%;*/
+    margin:10% 5% 5% 5%;
     padding:2%;
     /*border-radius:10px;*/
     /*text-align:left;*/
@@ -22,10 +22,10 @@ body{
     margin-left:33%;
 }
 
-#card-div{
-    /*max-width:20rem;*/
-    margin-bottom:10%;
-    text-align:left;
+.card-div{
+    display:inline-block !important;
+    width:20rem;
+    margin:2%;
 }
 
 ul{

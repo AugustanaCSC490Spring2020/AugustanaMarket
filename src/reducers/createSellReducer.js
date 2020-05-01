@@ -9,6 +9,7 @@ const initialState = {
     price         : '',
     description   : '',
     isbn          : '',
+    image         : '',
 };
 
 const createSellReducer = (state = initialState, action) => {
@@ -26,8 +27,15 @@ const createSellReducer = (state = initialState, action) => {
                 price         : '',
                 description   : '',
                 isbn          : '',
-            }
+                image         : '',
+            };
         
+        case 'RESET_IMAGE':
+            return {
+                ...state,
+                image : ''
+            };
+            
         case 'CHANGE_BUY_OR_SELL':
             return {
                 ...state,
@@ -89,6 +97,12 @@ const createSellReducer = (state = initialState, action) => {
         case 'CREATE_SELL_ITEM':
             return {
                 ...initialState
+            };
+
+        case 'CHANGE_IMAGE':
+            return {
+                ...state,
+                image : action.payload
             };
 
         default:
