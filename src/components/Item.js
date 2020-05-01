@@ -1,7 +1,7 @@
 import React from 'react';
 import NavBar from './NavBar';
 import {useSelector, useDispatch} from 'react-redux';
-import * as itemActions from '../actions/itemActions';
+import * as itemActions from '../redux/actions/itemActions';
 import './styles/Item.css';
 
 const Item = ({match}) => {

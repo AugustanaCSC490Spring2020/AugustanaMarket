@@ -8,7 +8,7 @@ import { Provider } from 'react-redux';
 import firebase from './Firebase';
 import { PersistGate } from 'redux-persist/integration/react';
 import { ReactReduxFirebaseProvider } from 'react-redux-firebase';
-import store, { persistor } from './store';
+import store, { persistor } from './redux/store';
 
 
 const rrfConfig = {
