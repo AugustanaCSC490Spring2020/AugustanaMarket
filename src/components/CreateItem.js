@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import * as categoryActions from '../redux/actions/categoryActions';
+import * as itemActions from '../redux/actions/itemActions';
 import { useSelector, useDispatch } from 'react-redux';
 import NavBar from './NavBar';
-import firebase from '../Firebase';
+import {useFirebase} from 'react-redux-firebase';
 import './styles/CreateSellItem.css';
 import PageNotFound from './PageNotFound';
 
@@ -18,16 +19,48 @@ const CreateItem = ({ match, history }) => {
     const [ isbn, setIsbn ] = useState('');
     const [ images, setImages] = useState('');
     const [ isValidCategory, setIsValidCategory ] = useState(false);
+    const firebase = useFirebase();
+    const selectedItem = useSelector((state) => state.item);
+    const items = useSelector((state) => state.list.items);
     const categories = useSelector((state) => state.categories);
     const dispatch = useDispatch();
+    const production = match.params.production;
     const createType = match.params.type;
-    console.log(isValidCategory)
-
+    const item = match.params.item;
+    console.log(itemType)
     React.useEffect(() => {
         if(!categories.loaded){
             dispatch(categoryActions.loadClassCategories());
         }
         resetState();
+        dispatch(itemActions.resetState())
+        if(production === 'edit'){
+            let contains = false;
+            for(let i = 0; i < items.length; i++){
+                if(items[i].id === item){
+                    contains = true;
+                    dispatch(itemActions.loadItemDetails(items[i]))
+                    break;
+                }
+            }
+            if(!contains){
+                dispatch(itemActions.checkFirestore(item, createType))
+            }
+            if(selectedItem.item){
+                const actualItem = selectedItem.item
+                const isBook = actualItem.itemType === 'book'
+                setItemType(actualItem.itemType)
+                setDescription(actualItem.description)
+                setPrice(actualItem.price)
+                setTitle(actualItem.title)
+                setCondition(actualItem.condition)
+                setClassCategory(isBook ? actualItem.classCategory : '')
+                setIsbn(isBook ? actualItem.isbn : '')
+                setAuthor(isBook ? actualItem.author : '')
+                setCourseNum(isBook ? actualItem.courseNum : '')
+                setIsValidCategory(isBook ? true : false);
+            }
+        }
     }, []);
 
     const resetState = () => {
@@ -147,17 +180,31 @@ const CreateItem = ({ match, history }) => {
         const displayName = firebase.auth().currentUser.displayName;
         data['email'] = email;
         data['displayName'] = displayName;
+        data['uid'] = firebase.auth().currentUser.uid;
         data['timeOfCreation'] = firebase.firestore.Timestamp.now();
         
-        firebase.firestore().collection(createType === 'sell' ? 'sell' : 'buy').add(data).then((doc) => {
-            if (images !== '') {
-                for (let i = 0; i < images.length; i++){
-                    const imageType = images[i]['type'].substring(6);
-                    firebase.storage().ref(`images/${doc.id + i + '.' + imageType}`).put(images[i])
+        if(production === 'create'){
+            firebase.firestore().collection(createType === 'sell' ? 'sell' : 'buy').add(data).then((doc) => {
+                if (images !== '') {
+                    for (let i = 0; i < images.length; i++){
+                        const imageType = images[i]['type'].substring(6);
+                        firebase.storage().ref(`images/${doc.id + i + '.' + imageType}`).put(images[i])
+                    }
                 }
-            }
-            resetState();
-        });
+                resetState();
+            });
+        } else {
+            firebase.firestore().collection(createType === 'sell' ? 'sell' : 'buy').update(data).then((doc) => {
+                if (images !== '') {
+                    for (let i = 0; i < images.length; i++){
+                        const imageType = images[i]['type'].substring(6);
+                        firebase.storage().ref(`images/${doc.id + i + '.' + imageType}`).put(images[i])
+                    }
+                }
+                resetState();
+            });
+        }
+        
     };
 
     // from https://stackoverflow.com/questions/49443954/how-to-limit-the-text-filed-length-with-input-type-number-in-react-js-and-preven
@@ -170,10 +217,12 @@ const CreateItem = ({ match, history }) => {
     const handleReset = () => {
         document.getElementById('sell-form').reset();
     };
+    
     return (
         <div>
-            {(createType === 'request' || createType === 'sell') ? (
-                <React.Fragment>
+            {((createType === 'request' || createType === 'sell') && (production === 'edit' || production === 'create')) ? (
+                ((selectedItem.item && selectedItem.item.uid === firebase.auth().currentUser.uid) || production === 'create') ? (
+                    <React.Fragment>
                     <NavBar />
                     <form autoComplete='off' onLoadStart={handleReset} id='sell-form' onSubmit={onSubmit}>
                         <div className={'form-group row'}>
@@ -185,7 +234,7 @@ const CreateItem = ({ match, history }) => {
                                     id='itemCategory'
                                     className='form-control'
                                     name='changeItemType'
-                                    defaultValue=''
+                                    value={itemType}
                                     onChange={onChange}
                                     required
                                 >
@@ -386,6 +435,11 @@ const CreateItem = ({ match, history }) => {
                             </React.Fragment>}
                     </form>
                 </React.Fragment>
+                ) : (
+                <React.Fragment>
+                    <NavBar/>
+                    <div>Item Not Found</div>
+                </React.Fragment>)    
             ) : (<PageNotFound/>)}
             
         </div>

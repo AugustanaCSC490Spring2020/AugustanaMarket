@@ -2,20 +2,23 @@ import React from 'react';
 import NavBar from './NavBar';
 import * as listActions from '../redux/actions/listActions';
 import { useSelector, useDispatch } from 'react-redux';
+import {useFirebase} from 'react-redux-firebase';
 import { Link } from 'react-router-dom';
 import './styles/ItemList.css';
 import PageNotFound from './PageNotFound'
 
 const ItemList = ({ match }) => {
     const itemList = useSelector((state) => state.list);
+    const firebase = useFirebase();
     const dispatch = useDispatch();
     const requestOrSell = match.params.type;
+    const uid = match.params.uid;
     React.useEffect(() => {
         dispatch(listActions.resetState());
     }, []);
 
     if (!itemList.isLoaded) {
-        dispatch(listActions.populate(requestOrSell));
+        dispatch(listActions.populate(requestOrSell, uid));
     }
 
     return (
@@ -44,6 +47,13 @@ const ItemList = ({ match }) => {
                                                     <Link to={`/view/${item.id}/${requestOrSell}`}>
                                                         <button className={"btn btn-primary"}>See item details</button>
                                                     </Link>
+                                                    {uid === firebase.auth().currentUser.uid ? (
+                                                        <React.Fragment>
+                                                            <Link to={`/edit/${requestOrSell}/${item.id}`}>
+                                                                <button className={"btn btn-primary"}>Edit</button>
+                                                            </Link>
+                                                        </React.Fragment>
+                                                    ) : null}
                                                 </div>
                                             </div>
                                         </li>

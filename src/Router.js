@@ -32,9 +32,10 @@ const Router = () => {
         <Switch>
             <PrivateRoute exact path="/" component={NavBar}/>
             <Route exact path='/login' component={Login}/>
-            <PrivateRoute path='/create/:type' component={CreateItem}/>
-            <PrivateRoute path="/list/:type" component={ItemList}/>
+            <PrivateRoute path="/list/:type/:uid" component={ItemList}/>
             <PrivateRoute path='/view/:item/:type' component={Item}/>
+            <PrivateRoute path='/:production/:type/:item' component={CreateItem}/>
+            
             {isEmpty(auth) ? <Redirect to='/login'/> : <Route component={PageNotFound} />}
         </Switch>
     </div>
