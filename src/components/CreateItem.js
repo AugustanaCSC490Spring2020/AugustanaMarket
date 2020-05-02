@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import * as sellActions from '../redux/actions/sellActions';
+import * as categoryActions from '../redux/actions/categoryActions';
 import { useSelector, useDispatch } from 'react-redux';
 import NavBar from './NavBar';
 import firebase from '../Firebase';
@@ -16,13 +16,17 @@ const CreateItem = ({ match, history }) => {
     const [ price, setPrice ] = useState('');
     const [ description, setDescription ] = useState('');
     const [ isbn, setIsbn ] = useState('');
-    const [images, setImages] = useState('');
-
-    // const item = useSelector((state) => state.createSell);
-    // const dispatch = useDispatch();
+    const [ images, setImages] = useState('');
+    const [ isValidCategory, setIsValidCategory ] = useState(false);
+    const categories = useSelector((state) => state.categories);
+    const dispatch = useDispatch();
     const createType = match.params.type;
+    console.log(isValidCategory)
 
     React.useEffect(() => {
+        if(!categories.loaded){
+            dispatch(categoryActions.loadClassCategories());
+        }
         resetState();
     }, []);
 
@@ -49,6 +53,9 @@ const CreateItem = ({ match, history }) => {
                 break;
 
             case 'changeClassCategory':
+                if(val !== ''){
+                   setIsValidCategory(categories.classCategories.includes(val.toLowerCase()))
+                }
                 setClassCategory(val);
                 break;
 
@@ -263,22 +270,26 @@ const CreateItem = ({ match, history }) => {
                                         Class Category
                                     </label>
                                     <div className='col-sm-10'>
-                                        <select
+                                        <input
+                                            type='text'
                                             name='changeClassCategory'
+                                            list='classes'
                                             className={'form-control'}
                                             defaultValue={classCategory}
                                             onChange={onChange}
                                             required
                                         >
-                                            <option value='' disabled hidden>
-                                                {' '}
-                                                -- select a category --{' '}
-                                            </option>
-                                            <option value='csc'>CSC</option>
-                                            <option value='math'>MATH</option>
-                                            <option value='span'>SPAN</option>
-                                            <option value='geog'>GEOG</option>
-                                        </select>
+                                        </input>
+                                        <datalist id='classes'>
+                                        {classCategory === '' ? null : (
+                                            <React.Fragment>
+                                                {categories.classCategories.map(category => {
+                                                    return (category.includes(classCategory.toLowerCase()) ? (<option key={category} value={category.toUpperCase()}>{category.toUpperCase}</option>) : null )
+                                                })}
+                                            </React.Fragment>
+                                        )}
+                                        
+                                        </datalist>
                                     </div>
                                 </div>
                                 <div className={'form-group row'}>
@@ -356,7 +367,6 @@ const CreateItem = ({ match, history }) => {
                                     </div>
                                 </div>
                                 <div className='form-group'>
-                                    <label htmlFor='exampleFormControlFile1'>Example file input</label>
                                     <input
                                         type='file'
                                         className='form-control-file'
@@ -369,7 +379,7 @@ const CreateItem = ({ match, history }) => {
                                 <input
                                     type='submit'
                                     className='btn btn-primary'
-                                    disabled={false}
+                                    disabled={(itemType === 'book' && !isValidCategory)}
                                     value='Submit'
                                     id={'submit-btn'}
                                 />
