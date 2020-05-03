@@ -23,12 +23,12 @@ const NavBar = () => {
                         <li className="nav-item dropdown">
                             <a data-toggle="dropdown" className="dropdown-toggle nav-link">Create</a>
                             <div className="dropdown-menu">
-                                <a className="dropdown-item" href="/create/sell">An item for sale</a>
-                                <a className="dropdown-item" href="/create/request">A request for an item</a>
+                                <a className="dropdown-item" href="/create/sell/new">An item for sale</a>
+                                <a className="dropdown-item" href="/create/request/new">A request for an item</a>
                             </div>
                         </li>
-                        <li className="nav-item"><a className="nav-link" href="/list/sell">View Listings</a></li>
-                        <li className="nav-item"><a className="nav-link" href="/list/request">Requests</a></li>
+                        <li className="nav-item"><a className="nav-link" href={`/list/sell/${firebase.auth().currentUser.uid}`}>View Listings</a></li>
+                        <li className="nav-item"><a className="nav-link" href={`/list/request/${firebase.auth().currentUser.uid}`}>Requests</a></li>
                     </ul>
                 </div><button id={"signout-btn"} type="button" onClick={handleSignout}>Sign Out</button>
             </div>
