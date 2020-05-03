@@ -3,9 +3,10 @@ import * as categoryActions from '../redux/actions/categoryActions';
 import * as itemActions from '../redux/actions/itemActions';
 import { useSelector, useDispatch } from 'react-redux';
 import NavBar from './NavBar';
-import {useFirebase} from 'react-redux-firebase';
+import { useFirebase } from 'react-redux-firebase';
 import './styles/CreateSellItem.css';
 import PageNotFound from './PageNotFound';
+import Axios from 'axios';
 
 const CreateItem = ({ match, history }) => {
     const [ itemType, setItemType ] = useState('');
@@ -17,7 +18,8 @@ const CreateItem = ({ match, history }) => {
     const [ price, setPrice ] = useState('');
     const [ description, setDescription ] = useState('');
     const [ isbn, setIsbn ] = useState('');
-    const [ images, setImages] = useState('');
+    const [ images, setImages ] = useState('');
+    const [ imageLinks, setImageLinks ] = useState('');
     const [ isValidCategory, setIsValidCategory ] = useState(false);
     const firebase = useFirebase();
     const selectedItem = useSelector((state) => state.item);
@@ -27,38 +29,60 @@ const CreateItem = ({ match, history }) => {
     const production = match.params.production;
     const createType = match.params.type;
     const item = match.params.item;
-    console.log(itemType)
+    const booksAPIKey = process.env.REACT_APP_GOOGLE_BOOKS_API_KEY;
+
+    console.log(itemType);
     React.useEffect(() => {
-        if(!categories.loaded){
+        if (!categories.loaded) {
             dispatch(categoryActions.loadClassCategories());
         }
         resetState();
-        dispatch(itemActions.resetState())
-        if(production === 'edit'){
+        dispatch(itemActions.resetState());
+        if (production === 'edit') {
             let contains = false;
-            for(let i = 0; i < items.length; i++){
-                if(items[i].id === item){
+            for (let i = 0; i < items.length; i++) {
+                if (items[i].id === item) {
                     contains = true;
-                    dispatch(itemActions.loadItemDetails(items[i]))
+                    dispatch(itemActions.loadItemDetails(items[i]));
                     break;
                 }
             }
-            if(!contains){
-                dispatch(itemActions.checkFirestore(item, createType))
+            if (!contains) {
+                dispatch(itemActions.checkFirestore(item, createType));
             }
-            if(selectedItem.item){
-                const actualItem = selectedItem.item
-                const isBook = actualItem.itemType === 'book'
-                setItemType(actualItem.itemType)
-                setDescription(actualItem.description)
-                setPrice(actualItem.price)
-                setTitle(actualItem.title)
-                setCondition(actualItem.condition)
-                setClassCategory(isBook ? actualItem.classCategory : '')
-                setIsbn(isBook ? actualItem.isbn : '')
-                setAuthor(isBook ? actualItem.author : '')
-                setCourseNum(isBook ? actualItem.courseNum : '')
-                setIsValidCategory(isBook ? true : false);
+            if (selectedItem.item) {
+                const actualItem = selectedItem.item;
+                const isBook = actualItem.itemType === 'book';
+                setItemType(actualItem.itemType);
+                setDescription(actualItem.description);
+                setPrice(actualItem.price);
+                setTitle(actualItem.title);
+                setCondition(actualItem.condition);
+                setClassCategory(
+
+                        isBook ? actualItem.classCategory :
+                        ''
+                );
+                setIsbn(
+
+                        isBook ? actualItem.isbn :
+                        ''
+                );
+                setAuthor(
+
+                        isBook ? actualItem.author :
+                        ''
+                );
+                setCourseNum(
+
+                        isBook ? actualItem.courseNum :
+                        ''
+                );
+                setIsValidCategory(
+
+                        isBook ? true :
+                        false
+                );
             }
         }
     }, []);
@@ -80,14 +104,13 @@ const CreateItem = ({ match, history }) => {
         const val = e.target.value;
         const name = e.target.name;
         switch (name) {
-
             case 'changeItemType':
                 setItemType(val);
                 break;
 
             case 'changeClassCategory':
-                if(val !== ''){
-                   setIsValidCategory(categories.classCategories.includes(val.toLowerCase()))
+                if (val !== '') {
+                    setIsValidCategory(categories.classCategories.includes(val.toLowerCase()));
                 }
                 setClassCategory(val);
                 break;
@@ -133,7 +156,7 @@ const CreateItem = ({ match, history }) => {
                         allImages = false;
                         break;
                     }
-                    imgArray.push(image)
+                    imgArray.push(image);
                 }
 
                 if (allImages) {
@@ -164,16 +187,16 @@ const CreateItem = ({ match, history }) => {
             condition,
             title,
             price,
-            description,
-        }
-        
+            description
+        };
+
         if (itemType === 'book') {
             data['isbn'] = isbn;
             data['author'] = author;
             data['courseNum'] = courseNum;
             data['classCategory'] = classCategory;
         }
-        if(images !== '') {
+        if (images !== '') {
             data['numImages'] = images.length + 1;
         }
         const email = firebase.auth().currentUser.email;
@@ -182,29 +205,44 @@ const CreateItem = ({ match, history }) => {
         data['displayName'] = displayName;
         data['uid'] = firebase.auth().currentUser.uid;
         data['timeOfCreation'] = firebase.firestore.Timestamp.now();
-        
-        if(production === 'create'){
-            firebase.firestore().collection(createType === 'sell' ? 'sell' : 'buy').add(data).then((doc) => {
-                if (images !== '') {
-                    for (let i = 0; i < images.length; i++){
-                        const imageType = images[i]['type'].substring(6);
-                        firebase.storage().ref(`images/${doc.id + i + '.' + imageType}`).put(images[i])
+
+        if (production === 'create') {
+            firebase
+                .firestore()
+                .collection(
+
+                        createType === 'sell' ? 'sell' :
+                        'buy'
+                )
+                .add(data)
+                .then((doc) => {
+                    if (images !== '') {
+                        for (let i = 0; i < images.length; i++) {
+                            const imageType = images[i]['type'].substring(6);
+                            firebase.storage().ref(`images/${doc.id + i + '.' + imageType}`).put(images[i]);
+                        }
                     }
-                }
-                resetState();
-            });
+                    resetState();
+                });
         } else {
-            firebase.firestore().collection(createType === 'sell' ? 'sell' : 'buy').update(data).then((doc) => {
-                if (images !== '') {
-                    for (let i = 0; i < images.length; i++){
-                        const imageType = images[i]['type'].substring(6);
-                        firebase.storage().ref(`images/${doc.id + i + '.' + imageType}`).put(images[i])
+            firebase
+                .firestore()
+                .collection(
+
+                        createType === 'sell' ? 'sell' :
+                        'buy'
+                )
+                .update(data)
+                .then((doc) => {
+                    if (images !== '') {
+                        for (let i = 0; i < images.length; i++) {
+                            const imageType = images[i]['type'].substring(6);
+                            firebase.storage().ref(`images/${doc.id + i + '.' + imageType}`).put(images[i]);
+                        }
                     }
-                }
-                resetState();
-            });
+                    resetState();
+                });
         }
-        
     };
 
     // from https://stackoverflow.com/questions/49443954/how-to-limit-the-text-filed-length-with-input-type-number-in-react-js-and-preven
@@ -217,12 +255,25 @@ const CreateItem = ({ match, history }) => {
     const handleReset = () => {
         document.getElementById('sell-form').reset();
     };
-    
+
+    const getBookData = () => {
+        Axios.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${booksAPIKey}`).then((response) => {
+            const book = response.data.items[0].volumeInfo;
+            setTitle(book.title);
+            setAuthor(book.authors[0]);
+            // Need to get image file from image link
+            setImageLinks([ book.imageLinks.smallThumbnail, book.imageLinks.thumbnail ]);
+            console.log(book);
+        });
+    };
+
     return (
         <div>
-            {((createType === 'request' || createType === 'sell') && (production === 'edit' || production === 'create')) ? (
-                ((selectedItem.item && selectedItem.item.uid === firebase.auth().currentUser.uid) || production === 'create') ? (
-                    <React.Fragment>
+            {
+                (createType === 'request' || createType === 'sell') &&
+                (production === 'edit' || production === 'create') ? (selectedItem.item &&
+                    selectedItem.item.uid === firebase.auth().currentUser.uid) ||
+                production === 'create' ? <React.Fragment>
                     <NavBar />
                     <form autoComplete='off' onLoadStart={handleReset} id='sell-form' onSubmit={onSubmit}>
                         <div className={'form-group row'}>
@@ -311,7 +362,7 @@ const CreateItem = ({ match, history }) => {
                                     </div>
                                 </div>
                             </React.Fragment>}
-        
+
                         {
                             itemType === 'book' ? <React.Fragment>
                                 <div className={'form-group row'}>
@@ -327,17 +378,22 @@ const CreateItem = ({ match, history }) => {
                                             defaultValue={classCategory}
                                             onChange={onChange}
                                             required
-                                        >
-                                        </input>
+                                        />
                                         <datalist id='classes'>
-                                        {classCategory === '' ? null : (
-                                            <React.Fragment>
-                                                {categories.classCategories.map(category => {
-                                                    return (category.includes(classCategory.toLowerCase()) ? (<option key={category} value={category.toUpperCase()}>{category.toUpperCase}</option>) : null )
-                                                })}
-                                            </React.Fragment>
-                                        )}
-                                        
+                                            {
+                                                classCategory === '' ? null :
+                                                <React.Fragment>
+                                                    {categories.classCategories.map((category) => {
+                                                        return(
+                                                            category.includes(classCategory.toLowerCase()) ? <option
+                                                                key={category}
+                                                                value={category.toUpperCase()}
+                                                            >
+                                                                {category.toUpperCase}
+                                                            </option> :
+                                                            null)
+                                                    })}
+                                                </React.Fragment>}
                                         </datalist>
                                     </div>
                                 </div>
@@ -362,6 +418,7 @@ const CreateItem = ({ match, history }) => {
                                             required
                                         />
                                     </div>
+                                    <button onClick={getBookData}>Autocomplete</button>
                                 </div>
                                 <div className={'form-group row'}>
                                     <label htmlFor='author' className={'col-sm-2 col-form-label required'}>
@@ -428,20 +485,18 @@ const CreateItem = ({ match, history }) => {
                                 <input
                                     type='submit'
                                     className='btn btn-primary'
-                                    disabled={(itemType === 'book' && !isValidCategory)}
+                                    disabled={itemType === 'book' && !isValidCategory}
                                     value='Submit'
                                     id={'submit-btn'}
                                 />
                             </React.Fragment>}
                     </form>
-                </React.Fragment>
-                ) : (
+                </React.Fragment> :
                 <React.Fragment>
-                    <NavBar/>
+                    <NavBar />
                     <div>Item Not Found</div>
-                </React.Fragment>)    
-            ) : (<PageNotFound/>)}
-            
+                </React.Fragment> :
+                <PageNotFound />}
         </div>
     );
 };

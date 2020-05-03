@@ -9,7 +9,7 @@ import PageNotFound from './PageNotFound'
 
 const ItemList = ({ match }) => {
     const itemList = useSelector((state) => state.list);
-    const firebase = useFirebase();
+    const firebase = useFirebase(); 
     const dispatch = useDispatch();
     const requestOrSell = match.params.type;
     const uid = match.params.uid;
