@@ -15,7 +15,7 @@ const NavBar = () => {
                 <button data-toggle="collapse" data-target="#navcol-1" className="navbar-toggler">
                     <span className="sr-only">Toggle navigation</span>
                     <span className="navbar-toggler-icon"></span></button>
-                <img src={"../textbook_2x.png"} id={"nav-img"}/>
+                <img src={"../../textbook_2x.png"} id={"nav-img"}/>
                 <a className="navbar-brand" id={"navbar-title"} href={'/'}>Augustana Marketplace</a>
                 <div className="collapse navbar-collapse mr-2"
                      id="navcol-1">
