@@ -1,8 +1,8 @@
 import React from 'react';
 import algoliasearch from 'algoliasearch/lite';
 import {InstantSearch, SearchBox, Hits, Pagination} from 'react-instantsearch-dom';
-import NavBar from './NavBar';
 import {Link} from 'react-router-dom';
+import NavBar from './NavBar';
 
 const searchClient = algoliasearch(
     process.env.REACT_APP_ALGOLIA_APPLICATION_ID, 
@@ -26,11 +26,12 @@ const Content = () => {
         </React.Fragment>
     )
 }
-const Search = () => {
+const Search = ({match}) => {
+    const requestOrSell = match.params.type
     return (
     <div>
         <InstantSearch
-            indexName='sell'
+            indexName={requestOrSell}
             searchClient={searchClient}
         >
             <SearchBox/>

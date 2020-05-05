@@ -6,11 +6,13 @@ import {useFirebase} from 'react-redux-firebase';
 import { Link } from 'react-router-dom';
 import './styles/ItemList.css';
 import PageNotFound from './PageNotFound'
+import Search from './Search'
 
 const ItemList = ({ match }) => {
     const itemList = useSelector((state) => state.list);
     const firebase = useFirebase();
     const dispatch = useDispatch();
+    const [option, updateOption] = React.useState('allListings');
     const requestOrSell = match.params.type;
     const uid = match.params.uid;
     React.useEffect(() => {
@@ -26,8 +28,17 @@ const ItemList = ({ match }) => {
             {(requestOrSell === 'request' || requestOrSell === 'sell') ? (
                 <React.Fragment>
                     <NavBar />
-
-                    <div id={"item-details-div"}>
+                    <Link onClick={() => updateOption('allListings')}>All Listings</Link>
+                    <Link onClick={() => updateOption('myListings')}>{uid === firebase.auth().currentUser.uid ? 'My Listings' : 'Their Listings'}</Link>
+                    {requestOrSell === 'sell' ? (
+                        <Link to={`/list/request/${uid}`}>See Items Being Requested</Link>
+                            ) : (
+                        <Link to={`/list/sell/${uid}`}>See Items Being Sold</Link>
+                    )}
+                    {option === 'allListings' ? (
+                        <Search match={match}/>
+                    ) : (
+                        <div id={"item-details-div"}>
                         <div className="container list-container">
                             <div className="row">
                             {
@@ -63,7 +74,9 @@ const ItemList = ({ match }) => {
                                         null}
                             </div>
                         </div>
-                    </div>
+                    </div>  
+                    )}
+                    
                 </React.Fragment>
             ) : (<PageNotFound/>)}
             
