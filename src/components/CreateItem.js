@@ -140,6 +140,7 @@ const CreateItem = ({ match, history }) => {
                     setImages(imgArray);
                 } else {
                     setImages('');
+                    e.target.value = null;
                     alert('One of the selected files was not a vaild file type');
                     // document.getElementById('exampleFormControlFile1').innerHTML = 'Invalid file type.';
                 }
@@ -423,6 +424,7 @@ const CreateItem = ({ match, history }) => {
                                         name='changeImage'
                                         multiple
                                         onChange={onChange}
+
                                     />
                                 </div>
                                 <input
