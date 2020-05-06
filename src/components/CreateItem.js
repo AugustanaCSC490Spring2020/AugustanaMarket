@@ -27,6 +27,8 @@ const CreateItem = ({ match, history }) => {
     const production = match.params.production;
     const createType = match.params.type;
     const item = match.params.item;
+    const fileSizeLimit = 5;    // Adjust this appropriately
+
     console.log(itemType)
     React.useEffect(() => {
         if(!categories.loaded){
@@ -122,10 +124,16 @@ const CreateItem = ({ match, history }) => {
 
             case 'changeImage':
                 const currentImages = e.target.files;
+                if (currentImages.length > 3) {
+                    alert('Limit: 3 images')
+                    e.target.value = null;
+                    return;
+                }
                 let allImages = true;
                 // state doesn't like FileList object, so convert to array
                 let imgArray = [];
-                const validImageTypes = [ 'image/gif', 'image/jpeg', 'image/png' ];
+                const validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
+                let sumFileSizes = 0;
                 for (let i = 0; i < currentImages.length; i++) {
                     let image = currentImages[i];
                     let imageType = image['type'];
@@ -133,15 +141,20 @@ const CreateItem = ({ match, history }) => {
                         allImages = false;
                         break;
                     }
-                    imgArray.push(image)
+                    sumFileSizes += (image.size / 1024 / 1024); // in MB 
+                    imgArray.push(image);
                 }
-
+                if (sumFileSizes > fileSizeLimit) {
+                    alert(`You have exceeded the ${fileSizeLimit}MB image size limit`)
+                    e.target.value = null;
+                    return;
+                }
                 if (allImages) {
                     setImages(imgArray);
                 } else {
+                    alert('One of the selected files was not a vaild file type');
                     setImages('');
                     e.target.value = null;
-                    alert('One of the selected files was not a vaild file type');
                     // document.getElementById('exampleFormControlFile1').innerHTML = 'Invalid file type.';
                 }
                 break;
