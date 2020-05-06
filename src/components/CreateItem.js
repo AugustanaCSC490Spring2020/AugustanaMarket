@@ -17,7 +17,7 @@ const CreateItem = ({ match, history }) => {
     const [ price, setPrice ] = useState('');
     const [ description, setDescription ] = useState('');
     const [ isbn, setIsbn ] = useState('');
-    const [ images, setImages] = useState('');
+    const [ images, setImages] = useState(null);
     const [ isValidCategory, setIsValidCategory ] = useState(false);
     const firebase = useFirebase();
     const selectedItem = useSelector((state) => state.item);
@@ -27,9 +27,8 @@ const CreateItem = ({ match, history }) => {
     const production = match.params.production;
     const createType = match.params.type;
     const item = match.params.item;
-    const fileSizeLimit = 5;    // Adjust this appropriately
+    const fileSizeLimit = 5;    // In MB. Adjust this appropriately
 
-    console.log(itemType)
     React.useEffect(() => {
         if(!categories.loaded){
             dispatch(categoryActions.loadClassCategories());
@@ -75,7 +74,7 @@ const CreateItem = ({ match, history }) => {
         setPrice('');
         setDescription('');
         setIsbn('');
-        setImages('');
+        setImages(null);
     };
 
     const onChange = (e) => {
@@ -125,7 +124,8 @@ const CreateItem = ({ match, history }) => {
             case 'changeImage':
                 const currentImages = e.target.files;
                 if (currentImages.length > 3) {
-                    alert('Limit: 3 images')
+                    alert('Limit: 3 images');
+                    setImages(null);
                     e.target.value = null;
                     return;
                 }
@@ -145,7 +145,8 @@ const CreateItem = ({ match, history }) => {
                     imgArray.push(image);
                 }
                 if (sumFileSizes > fileSizeLimit) {
-                    alert(`You have exceeded the ${fileSizeLimit}MB image size limit`)
+                    alert(`You have exceeded the ${fileSizeLimit}MB maximum image size.`)
+                    setImages(null);
                     e.target.value = null;
                     return;
                 }
@@ -153,7 +154,7 @@ const CreateItem = ({ match, history }) => {
                     setImages(imgArray);
                 } else {
                     alert('One of the selected files was not a vaild file type');
-                    setImages('');
+                    setImages(null);
                     e.target.value = null;
                     // document.getElementById('exampleFormControlFile1').innerHTML = 'Invalid file type.';
                 }
@@ -440,6 +441,13 @@ const CreateItem = ({ match, history }) => {
 
                                     />
                                 </div>
+                                        
+                                {images === null ? null : (
+                                    images.map((image) => {
+                                        return <img src={URL.createObjectURL(image)} alt='test' key='test'/>
+                                    })    
+                                )}  
+                                        
                                 <input
                                     type='submit'
                                     className='btn btn-primary'
