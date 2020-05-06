@@ -10,6 +10,7 @@ import HomePage from './components/HomePage';
 import Item from './components/Item'
 import PageNotFound from './components/PageNotFound'
 
+
 const PrivateRoute = ({ component: RouteComponent, ...rest }) => {
     const auth = useSelector((state) => state.firebase.auth);
     return (

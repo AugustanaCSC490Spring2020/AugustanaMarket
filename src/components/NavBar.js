@@ -10,12 +10,13 @@ const NavBar = () => {
         firebase.logout();
     };
     return (
-        <nav className="navbar navbar-expand-lg fixed-top navbar-div">
-            <form className="form-inline">
-                <img src={"../textbook_2x.png"} id={"nav-img"}/>
+        <nav className="navbar navbar-dark navbar-div navbar-expand-md navigation-clean">
+            <div className="container nav-container">
+                <button data-toggle="collapse" data-target="#navcol-1" className="navbar-toggler">
+                    <span className="sr-only">Toggle navigation</span>
+                    <span className="navbar-toggler-icon"></span></button>
+                <img src={"../../textbook_2x.png"} id={"nav-img"}/>
                 <a className="navbar-brand" id={"navbar-title"} href={'/'}>Augustana Marketplace</a>
-                {/*<input className="form-control mr-sm-2 form-inline" type="search" placeholder="Search" aria-label="Search"/>*/}
-                {/*<button className="btn btn-outline-success form-inline my-2 my-sm-0" type="submit">Search</button>*/}
                 <div className="collapse navbar-collapse mr-2"
                      id="navcol-1">
                     <ul className="nav navbar-nav ml-auto">
@@ -30,7 +31,7 @@ const NavBar = () => {
                         <li className="nav-item"><a className="nav-link" href={`/list/request/${firebase.auth().currentUser.uid}`}>Requests</a></li>
                     </ul>
                 </div><button id={"signout-btn"} type="button" onClick={handleSignout}>Sign Out</button>
-            </form>
+            </div>
 
         </nav>
     )
