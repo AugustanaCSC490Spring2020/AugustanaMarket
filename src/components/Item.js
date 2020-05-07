@@ -3,6 +3,7 @@ import NavBar from './NavBar';
 import {useSelector, useDispatch} from 'react-redux';
 import * as itemActions from '../redux/actions/itemActions';
 import './styles/Item.css';
+import { Link } from 'react-router-dom'
 
 const Item = ({match}) => {
     const items = useSelector(state => state.list.items);
@@ -12,7 +13,7 @@ const Item = ({match}) => {
         dispatch(itemActions.resetState());
     }, [])
     const itemID = match.params.item;
-    const buyOrSell = match.params.type;
+    const requestOrSell = match.params.type;
     if(!selectedItem.isLoaded){
         let contains = false;
         for(let i = 0; i < items.length; i++){
@@ -23,7 +24,7 @@ const Item = ({match}) => {
             }
         }
         if(!contains){
-            dispatch(itemActions.checkFirestore(itemID, buyOrSell))
+            dispatch(itemActions.checkFirestore(itemID, requestOrSell))
         }
     }
 
@@ -47,7 +48,7 @@ const Item = ({match}) => {
                                 <h3>ISBN #: {selectedItem.item.isbn}</h3>
                             </React.Fragment>
                         ) : null}
-                        
+                        <Link to={`/list/${requestOrSell}/${selectedItem.item.uid}`}>View User's Items</Link>
                     </div>
                 ) : <h1>Item not found</h1>
             ) : null}

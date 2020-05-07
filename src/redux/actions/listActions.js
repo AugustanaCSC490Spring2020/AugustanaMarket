@@ -1,8 +1,6 @@
-export const populate = (buyOrSell, uid) => (dispatch, getState, { getFirebase }) => {
+export const populate = (requestOrSell, uid) => (dispatch, getState, { getFirebase }) => {
     const firebase = getFirebase();
-    const itemsRef = firebase.firestore().collection(
-            buyOrSell === 'sell' ? 'sell' :'buy'
-    );
+    const itemsRef = firebase.firestore().collection(requestOrSell);
     itemsRef
         .where('uid', '==', uid)
         .get()

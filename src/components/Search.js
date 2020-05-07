@@ -26,12 +26,14 @@ const Content = () => {
         </React.Fragment>
     )
 }
-const Search = ({match}) => {
-    const requestOrSell = match.params.type
+const Search = () => {
+    const [isSell, updateIsSell] = React.useState(true)
     return (
     <div>
+        <NavBar/>
+        <Link onClick={() =>updateIsSell(!isSell)}>{isSell ? 'See Requests' : 'See Sellings'}</Link>
         <InstantSearch
-            indexName={requestOrSell}
+            indexName={isSell ? 'sell' : 'request'}
             searchClient={searchClient}
         >
             <SearchBox/>

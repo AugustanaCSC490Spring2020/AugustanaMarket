@@ -28,16 +28,6 @@ const ItemList = ({ match }) => {
             {(requestOrSell === 'request' || requestOrSell === 'sell') ? (
                 <React.Fragment>
                     <NavBar />
-                    <Link onClick={() => updateOption('allListings')}>All Listings</Link>
-                    <Link onClick={() => updateOption('myListings')}>{uid === firebase.auth().currentUser.uid ? 'My Listings' : 'Their Listings'}</Link>
-                    {requestOrSell === 'sell' ? (
-                        <Link to={`/list/request/${uid}`}>See Items Being Requested</Link>
-                            ) : (
-                        <Link to={`/list/sell/${uid}`}>See Items Being Sold</Link>
-                    )}
-                    {option === 'allListings' ? (
-                        <Search match={match}/>
-                    ) : (
                         <div id={"item-details-div"}>
                         <div className="container list-container">
                             <div className="row">
@@ -74,9 +64,7 @@ const ItemList = ({ match }) => {
                                         null}
                             </div>
                         </div>
-                    </div>  
-                    )}
-                    
+                    </div>                    
                 </React.Fragment>
             ) : (<PageNotFound/>)}
             

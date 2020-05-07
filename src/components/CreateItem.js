@@ -62,7 +62,7 @@ const CreateItem = ({ match, history }) => {
                 setIsValidCategory(isBook ? true : false);
             }
         }
-    }, []);
+    }, [selectedItem.item]);
 
     const resetState = () => {
         setItemType('');
@@ -169,7 +169,7 @@ const CreateItem = ({ match, history }) => {
         e.preventDefault();
         finishItem();
         document.getElementById('sell-form').reset();
-        history.push(`/list/${createType}`);
+        history.push(`/list/${createType}/${firebase.auth().currentUser.uid}`);
     };
 
     // modified createSellItem from sellActions
@@ -188,8 +188,8 @@ const CreateItem = ({ match, history }) => {
             data['courseNum'] = courseNum;
             data['classCategory'] = classCategory;
         }
-        if(images !== '') {
-            data['numImages'] = images.length + 1;
+        if(images) {
+            data['numImages'] = images.length;
         }
         const email = firebase.auth().currentUser.email;
         const displayName = firebase.auth().currentUser.displayName;
@@ -199,8 +199,8 @@ const CreateItem = ({ match, history }) => {
         data['timeOfCreation'] = firebase.firestore.Timestamp.now();
         
         if(production === 'create'){
-            firebase.firestore().collection(createType === 'sell' ? 'sell' : 'buy').add(data).then((doc) => {
-                if (images !== '') {
+            firebase.firestore().collection(createType).add(data).then((doc) => {
+                if (images) {
                     for (let i = 0; i < images.length; i++){
                         const imageType = images[i]['type'].substring(6);
                         firebase.storage().ref(`images/${doc.id + i + '.' + imageType}`).put(images[i])
@@ -209,8 +209,8 @@ const CreateItem = ({ match, history }) => {
                 resetState();
             });
         } else {
-            firebase.firestore().collection(createType === 'sell' ? 'sell' : 'buy').update(data).then((doc) => {
-                if (images !== '') {
+            firebase.firestore().collection(createType).update(data).then((doc) => {
+                if (images) {
                     for (let i = 0; i < images.length; i++){
                         const imageType = images[i]['type'].substring(6);
                         firebase.storage().ref(`images/${doc.id + i + '.' + imageType}`).put(images[i])
