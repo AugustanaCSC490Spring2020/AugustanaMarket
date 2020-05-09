@@ -6,13 +6,11 @@ import {useFirebase} from 'react-redux-firebase';
 import { Link } from 'react-router-dom';
 import './styles/ItemList.css';
 import PageNotFound from './PageNotFound'
-import Search from './Search'
 
 const ItemList = ({ match }) => {
     const itemList = useSelector((state) => state.list);
     const firebase = useFirebase();
     const dispatch = useDispatch();
-    const [option, updateOption] = React.useState('allListings');
     const requestOrSell = match.params.type;
     const uid = match.params.uid;
     React.useEffect(() => {
@@ -21,6 +19,11 @@ const ItemList = ({ match }) => {
 
     if (!itemList.isLoaded) {
         dispatch(listActions.populate(requestOrSell, uid));
+    }
+
+    const deleteItem = (e) => {
+        const itemID = e.target.name
+        dispatch(listActions.deleteItem(requestOrSell, itemID))
     }
 
     return (
@@ -34,7 +37,7 @@ const ItemList = ({ match }) => {
                             {
                                 itemList.isLoaded ? itemList.items.map((item) => {
                                     return (
-                                        <div className="col-md-3 col-sm-4 mb-3 mt-3">
+                                        <div key={item.id} className="col-md-3 col-sm-4 mb-3 mt-3">
                                             <div className="card rounded">
                                                 <div className={"container w-100 center-text"}>
                                                     <img className="card-img-top w-50 pt-2" src="../../textbook-example.png" alt="Card image cap" />
@@ -45,10 +48,11 @@ const ItemList = ({ match }) => {
                                                 </div>
                                                 {uid === firebase.auth().currentUser.uid ? (
                                                     <React.Fragment>
-                                                        <div class="d-inline p-2 bg-dark text-white">
+                                                        <div className="d-inline p-2 bg-dark text-white">
                                                             <Link className="text-decoration-none text-light" to={`/edit/${requestOrSell}/${item.id}`}>
                                                                 Edit<i className="ml-2 fas fa-pencil-alt"></i>
                                                             </Link>
+                                                            <Link to={`/list/${requestOrSell}/${uid}`} name={item.id} onClick={deleteItem}>Delete</Link>
                                                         </div>
                                                     </React.Fragment>
                                                 ) : null}

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import * as categoryActions from '../redux/actions/categoryActions';
 import * as itemActions from '../redux/actions/itemActions';
 import { useSelector, useDispatch } from 'react-redux';
 import NavBar from './NavBar';
@@ -30,9 +29,6 @@ const CreateItem = ({ match, history }) => {
     const fileSizeLimit = 5;    // In MB. Adjust this appropriately
 
     React.useEffect(() => {
-        if(!categories.loaded){
-            dispatch(categoryActions.loadClassCategories());
-        }
         resetState();
         dispatch(itemActions.resetState())
         if(production === 'edit'){

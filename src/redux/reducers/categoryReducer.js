@@ -1,17 +1,59 @@
 const initialState = {
-    classCategories : [],
-    loaded : false
+    classCategories : [
+        'acct',
+        'afsp',
+        'anth',
+        'arhi',
+        'art',
+        'astr',
+        'biol',
+        'busn',
+        'chem',
+        'chns',
+        'clas',
+        'comm',
+        'csc',
+        'csd',
+        'ctrk',
+        'data',
+        'econ',
+        'educ',
+        'engl',
+        'entm',
+        'envr',
+        'fren',
+        'fyi',
+        'geog',
+        'geol',
+        'grd',
+        'grmn',
+        'hepe',
+        'hist',
+        'honr',
+        'intr',
+        'jpn',
+        'ls',
+        'math',
+        'mjmc',
+        'musc',
+        'phil',
+        'phys',
+        'pols',
+        'psyc',
+        'pubh',
+        'relg',
+        'scan',
+        'soc',
+        'span',
+        'swed',
+        'thea',
+        'wgst',
+        'wlit'
+    ]
 };
 
 const createSellReducer = (state = initialState, action) => {
     switch (action.type) {
-        
-        case 'LOAD_CLASS_CATEGORIES':
-            return {
-                classCategories : action.payload,
-                loaded : true
-            }
-        
         default:
             return state;
     }

@@ -31,7 +31,7 @@ const Search = () => {
     return (
     <div>
         <NavBar/>
-        <Link onClick={() =>updateIsSell(!isSell)}>{isSell ? 'See Requests' : 'See Sellings'}</Link>
+        <Link to='/search'onClick={() =>updateIsSell(!isSell)}>{isSell ? 'See Requests' : 'See Sellings'}</Link>
         <InstantSearch
             indexName={isSell ? 'sell' : 'request'}
             searchClient={searchClient}
