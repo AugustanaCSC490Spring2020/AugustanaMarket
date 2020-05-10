@@ -3,6 +3,8 @@ import algoliasearch from 'algoliasearch/lite';
 import {InstantSearch, SearchBox, Hits, Pagination} from 'react-instantsearch-dom';
 import {Link} from 'react-router-dom';
 import NavBar from './NavBar';
+import {useSelector, useDispatch} from 'react-redux'
+import {switchSearch} from '../redux/actions'
 
 const searchClient = algoliasearch(
     process.env.REACT_APP_ALGOLIA_APPLICATION_ID, 
@@ -10,10 +12,11 @@ const searchClient = algoliasearch(
     );
 
 const HitComponent = ({hit}) => {
+    const requestOrSell = useSelector(state => state.categories.isSell)
     return (
        <div>
         <h4>{hit.title}</h4>
-        <Link to={`/view/${hit.objectID}/sell`}><button>View</button></Link>
+        <Link to={`/view/${hit.objectID}/${requestOrSell ? 'sell' : 'request'}`}><button>View</button></Link>
     </div> 
     )
 }
@@ -27,11 +30,12 @@ const Content = () => {
     )
 }
 const Search = () => {
-    const [isSell, updateIsSell] = React.useState(true)
+    const isSell = useSelector(state => state.categories.isSell)
+    const dispatch = useDispatch()
     return (
     <div>
         <NavBar/>
-        <Link to='/search'onClick={() =>updateIsSell(!isSell)}>{isSell ? 'See Requests' : 'See Sellings'}</Link>
+        <Link to='/search'onClick={() => dispatch(switchSearch())}>{isSell ? 'See Requests' : 'See Sellings'}</Link>
         <InstantSearch
             indexName={isSell ? 'sell' : 'request'}
             searchClient={searchClient}

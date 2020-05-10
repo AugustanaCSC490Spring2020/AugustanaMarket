@@ -49,11 +49,17 @@ const initialState = {
         'thea',
         'wgst',
         'wlit'
-    ]
+    ],
+    isSell : true
 };
 
 const createSellReducer = (state = initialState, action) => {
     switch (action.type) {
+        case 'SWITCH_SEARCH':
+            return {
+                ...state,
+                isSell : !state.isSell
+            }
         default:
             return state;
     }
