@@ -1,11 +1,9 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import {useFirebase} from 'react-redux-firebase';
 import './styles/NavBar.css';
 
 const NavBar = () => {
     const firebase = useFirebase();
-    const auth = useSelector((state) => state.firebase.auth);
     const handleSignout = () => {
         firebase.logout();
     };
@@ -27,6 +25,7 @@ const NavBar = () => {
                                 <a className="dropdown-item" href="/create/request/new">A request for an item</a>
                             </div>
                         </li>
+                        <li className="nav-item"><a className="nav-link" href={`/search`}>Search</a></li>
                         <li className="nav-item"><a className="nav-link" href={`/list/sell/${firebase.auth().currentUser.uid}`}>View Listings</a></li>
                         <li className="nav-item"><a className="nav-link" href={`/list/request/${firebase.auth().currentUser.uid}`}>Requests</a></li>
                     </ul>

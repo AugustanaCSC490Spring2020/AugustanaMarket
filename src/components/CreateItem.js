@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import * as categoryActions from '../redux/actions/categoryActions';
 import * as itemActions from '../redux/actions/itemActions';
 import { useSelector, useDispatch } from 'react-redux';
 import NavBar from './NavBar';
@@ -33,9 +32,6 @@ const CreateItem = ({ match, history }) => {
     const booksAPIKey = process.env.REACT_APP_GOOGLE_BOOKS_API_KEY;
 
     React.useEffect(() => {
-        if (!categories.loaded) {
-            dispatch(categoryActions.loadClassCategories());
-        }
         resetState();
         dispatch(itemActions.resetState());
         if (production === 'edit') {
@@ -85,7 +81,7 @@ const CreateItem = ({ match, history }) => {
                 );
             }
         }
-    }, []);
+    }, [selectedItem.item]);
 
     const resetState = () => {
         setItemType('');
@@ -191,7 +187,7 @@ const CreateItem = ({ match, history }) => {
         e.preventDefault();
         finishItem();
         document.getElementById('sell-form').reset();
-        history.push(`/list/${createType}`);
+        history.push(`/list/${createType}/${firebase.auth().currentUser.uid}`);
     };
 
     // modified createSellItem from sellActions
@@ -210,8 +206,8 @@ const CreateItem = ({ match, history }) => {
             data['courseNum'] = courseNum;
             data['classCategory'] = classCategory;
         }
-        if (images !== '') {
-            data['numImages'] = images.length + 1;
+        if(images) {
+            data['numImages'] = images.length;
         }
         const email = firebase.auth().currentUser.email;
         const displayName = firebase.auth().currentUser.displayName;
@@ -219,43 +215,27 @@ const CreateItem = ({ match, history }) => {
         data['displayName'] = displayName;
         data['uid'] = firebase.auth().currentUser.uid;
         data['timeOfCreation'] = firebase.firestore.Timestamp.now();
-
-        if (production === 'create') {
-            firebase
-                .firestore()
-                .collection(
-
-                        createType === 'sell' ? 'sell' :
-                        'buy'
-                )
-                .add(data)
-                .then((doc) => {
-                    if (images !== '') {
-                        for (let i = 0; i < images.length; i++) {
-                            const imageType = images[i]['type'].substring(6);
-                            firebase.storage().ref(`images/${doc.id + i + '.' + imageType}`).put(images[i]);
-                        }
+        
+        if(production === 'create'){
+            firebase.firestore().collection(createType).add(data).then((doc) => {
+                if (images) {
+                    for (let i = 0; i < images.length; i++) {
+                        const imageType = images[i]['type'].substring(6);
+                        firebase.storage().ref(`images/${doc.id + i + '.' + imageType}`).put(images[i])
                     }
                     resetState();
-                });
+                }
+            })
         } else {
-            firebase
-                .firestore()
-                .collection(
-
-                        createType === 'sell' ? 'sell' :
-                        'buy'
-                )
-                .update(data)
-                .then((doc) => {
-                    if (images !== '') {
-                        for (let i = 0; i < images.length; i++) {
-                            const imageType = images[i]['type'].substring(6);
-                            firebase.storage().ref(`images/${doc.id + i + '.' + imageType}`).put(images[i]);
-                        }
+            firebase.firestore().collection(createType).update(data).then((doc) => {
+                if (images) {
+                    for (let i = 0; i < images.length; i++) {
+                        const imageType = images[i]['type'].substring(6);
+                        firebase.storage().ref(`images/${doc.id + i + '.' + imageType}`).put(images[i])
                     }
                     resetState();
-                });
+                }
+            })
         }
     };
 

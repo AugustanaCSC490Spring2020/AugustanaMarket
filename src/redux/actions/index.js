@@ -1,3 +1,7 @@
 export * from './listActions'
-export * from './sellActions'
 export * from './itemActions';
+export const switchSearch = () => {
+    return {
+        type : 'SWITCH_SEARCH'
+    }
+}

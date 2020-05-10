@@ -11,12 +11,12 @@ export const resetState = () => {
     }
 }
 
-export const checkFirestore = (itemID, buyOrSell) => (
+export const checkFirestore = (itemID, requestOrSell) => (
     dispatch,
     getState,
     {getFirebase}) => {
         const firebase = getFirebase();
-        firebase.firestore().collection(buyOrSell === 'sell' ? 'sell' : 'buy').doc(itemID).get().then(doc => {
+        firebase.firestore().collection(requestOrSell).doc(itemID).get().then(doc => {
             if(doc.exists) {
                 const item = {...doc.data()}
                 dispatch({type: 'ITEM_LOADED', payload: item})

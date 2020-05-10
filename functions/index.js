@@ -6,7 +6,7 @@ const adminKey = functions.config().algolia.key;
 
 const client = algoliasearch(appID, adminKey);
 const sellIndex = client.initIndex('sell');
-const buyIndex = client.initIndex('buy');
+const requestIndex = client.initIndex('request');
 
 exports.addToSellIndex = functions.firestore.document('sell/{itemId}')
     .onCreate(snapshot => {
@@ -34,7 +34,7 @@ exports.updateSellIndex = functions.firestore.document('sell/{itemId}')
 exports.deleteFromSellIndex = functions.firestore.document('sell/{itemId}')
     .onDelete(snapshot => sellIndex.deleteObject(snapshot.id));
 
-exports.addToBuyIndex = functions.firestore.document('buy/{itemId}')
+exports.addToRequestIndex = functions.firestore.document('request/{itemId}')
     .onCreate(snapshot => {
         const data = {...snapshot.data()};
         delete data.condition;
@@ -42,11 +42,11 @@ exports.addToBuyIndex = functions.firestore.document('buy/{itemId}')
         delete data.email;
         const objectID = snapshot.id;
 
-        return buyIndex.saveObject({...data, objectID});
+        return requestIndex.saveObject({...data, objectID});
 
     });
 
-exports.updateBuyIndex = functions.firestore.document('buy/{itemId}')
+exports.updateRequestIndex = functions.firestore.document('request/{itemId}')
     .onUpdate(change => {
         const newData = {...change.after.data()};
         delete newData.condition;
@@ -54,8 +54,8 @@ exports.updateBuyIndex = functions.firestore.document('buy/{itemId}')
         delete newData.email;
         const objectID = change.after.id;
         
-        return buyIndex.saveObject({...newData, objectID});
+        return requestIndex.saveObject({...newData, objectID});
     });
 
-exports.deleteFromBuyIndex = functions.firestore.document('buy/{itemId}')
-    .onDelete(snapshot => buyIndex.deleteObject(snapshot.id));
+exports.deleteFromRequestIndex = functions.firestore.document('request/{itemId}')
+    .onDelete(snapshot => requestIndex.deleteObject(snapshot.id));

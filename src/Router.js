@@ -9,6 +9,7 @@ import CreateItem from './components/CreateItem';
 import HomePage from './components/HomePage';
 import Item from './components/Item'
 import PageNotFound from './components/PageNotFound'
+import Search from './components/Search'
 
 
 const PrivateRoute = ({ component: RouteComponent, ...rest }) => {
@@ -33,6 +34,7 @@ const Router = () => {
         <Switch>
             <PrivateRoute exact path="/" component={NavBar}/>
             <Route exact path='/login' component={Login}/>
+            <PrivateRoute exact path='/search' component={Search} />
             <PrivateRoute path="/list/:type/:uid" component={ItemList}/>
             <PrivateRoute path='/view/:item/:type' component={Item}/>
             <PrivateRoute path='/:production/:type/:item' component={CreateItem}/>
