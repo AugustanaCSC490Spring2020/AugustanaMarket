@@ -10,7 +10,7 @@ import Search from './Search'
 
 const ItemList = ({ match }) => {
     const itemList = useSelector((state) => state.list);
-    const firebase = useFirebase();
+    const firebase = useFirebase(); 
     const dispatch = useDispatch();
     const [option, updateOption] = React.useState('allListings');
     const requestOrSell = match.params.type;
