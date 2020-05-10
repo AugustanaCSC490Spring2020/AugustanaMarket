@@ -19,7 +19,7 @@ const CreateItem = ({ match, history }) => {
     const [ description, setDescription ] = useState('');
     const [ isbn, setIsbn ] = useState('');
     const [ images, setImages ] = useState('');
-    const [ imageLinks, setImageLinks ] = useState('');
+    const [ imageLinks, setImageLinks ] = useState(null);
     const [ isValidCategory, setIsValidCategory ] = useState(false);
     const firebase = useFirebase();
     const selectedItem = useSelector((state) => state.item);
@@ -31,7 +31,6 @@ const CreateItem = ({ match, history }) => {
     const item = match.params.item;
     const booksAPIKey = process.env.REACT_APP_GOOGLE_BOOKS_API_KEY;
 
-    console.log(itemType);
     React.useEffect(() => {
         if (!categories.loaded) {
             dispatch(categoryActions.loadClassCategories());
@@ -258,14 +257,24 @@ const CreateItem = ({ match, history }) => {
 
     const getBookData = () => {
         Axios.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${booksAPIKey}`).then((response) => {
-            const book = response.data.items[0].volumeInfo;
-            setTitle(book.title);
-            setAuthor(book.authors[0]);
-            // Need to get image file from image link
-            setImageLinks([ book.imageLinks.smallThumbnail, book.imageLinks.thumbnail ]);
-            console.log(book);
+            if (response.data.totalItems === 0) {
+                alert('ISBN not found. Please fill out data manually.');
+            } else {
+                const book = response.data.items[0].volumeInfo;
+                setTitle(book.title);
+                setAuthor(book.authors[0]);
+                // Need to get image file from image link
+                setImageLinks([book.imageLinks.smallThumbnail, book.imageLinks.thumbnail]);
+                
+            }
         });
     };
+
+    // const getBookImage = () => {
+    //     Axios.get('http://books.google.com/books/content?id=yxv1LK5gyV4C&printsec=frontcover&img=1&zoom=5&source=gbs_api').then((response) => {
+    //         console.log(response);
+    //     })
+    // }
 
     return (
         <div>
@@ -301,6 +310,31 @@ const CreateItem = ({ match, history }) => {
                         {
                             itemType === '' ? null :
                             <React.Fragment>
+                                {
+                                    itemType === 'book' ? <div className={'form-group row'}>
+                                        <label htmlFor='isbn' className={'col-sm-2 col-form-label required'}>
+                                            ISBN
+                                        </label>
+                                        <div className='col-sm-10'>
+                                            <input
+                                                // minLength='10'
+                                                // maxLength='10'
+                                                type='number'
+                                                className={'form-control'}
+                                                id='isbn'
+                                                maxLength='13'
+                                                onInput={maxLengthCheck}
+                                                max={9999999999999}
+                                                value={isbn}
+                                                name='changeIsbn'
+                                                onChange={onChange}
+                                                placeholder='1234567890'
+                                                required
+                                            />
+                                        </div>
+                                        <button onClick={getBookData}>Autocomplete</button>
+                                    </div> :
+                                    null}
                                 <div className={'form-group row'}>
                                     <label htmlFor='title' className={'col-sm-2 col-form-label required'}>
                                         Title
@@ -382,44 +416,23 @@ const CreateItem = ({ match, history }) => {
                                         <datalist id='classes'>
                                             {
                                                 classCategory === '' ? null :
-                                                <React.Fragment>
+                                                (<React.Fragment>
                                                     {categories.classCategories.map((category) => {
-                                                        return(
+                                                        return (
                                                             category.includes(classCategory.toLowerCase()) ? <option
                                                                 key={category}
                                                                 value={category.toUpperCase()}
                                                             >
                                                                 {category.toUpperCase}
                                                             </option> :
-                                                            null)
+                                                                null)
+                                                        
                                                     })}
-                                                </React.Fragment>}
+                                                </React.Fragment>)}
                                         </datalist>
                                     </div>
                                 </div>
-                                <div className={'form-group row'}>
-                                    <label htmlFor='isbn' className={'col-sm-2 col-form-label required'}>
-                                        ISBN
-                                    </label>
-                                    <div className='col-sm-10'>
-                                        <input
-                                            // minLength='10'
-                                            // maxLength='10'
-                                            type='number'
-                                            className={'form-control'}
-                                            id='isbn'
-                                            maxLength='13'
-                                            onInput={maxLengthCheck}
-                                            max={9999999999999}
-                                            value={isbn}
-                                            name='changeIsbn'
-                                            onChange={onChange}
-                                            placeholder='1234567890'
-                                            required
-                                        />
-                                    </div>
-                                    <button onClick={getBookData}>Autocomplete</button>
-                                </div>
+
                                 <div className={'form-group row'}>
                                     <label htmlFor='author' className={'col-sm-2 col-form-label required'}>
                                         Author
@@ -482,6 +495,7 @@ const CreateItem = ({ match, history }) => {
                                         onChange={onChange}
                                     />
                                 </div>
+                                            
                                 <input
                                     type='submit'
                                     className='btn btn-primary'
