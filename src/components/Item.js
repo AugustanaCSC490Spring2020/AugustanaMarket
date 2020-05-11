@@ -48,7 +48,7 @@ const Item = ({match}) => {
                                 <h3>ISBN #: {selectedItem.item.isbn}</h3>
                             </React.Fragment>
                         ) : null}
-                        <Link to={`/list/${requestOrSell}/${selectedItem.item.uid}`}>View User's Items</Link>
+                        <Link to={`/list/${requestOrSell}/${selectedItem.item.uid}`}>View User's {requestOrSell === 'sell' ? 'Items' : 'Requests'} </Link>
                     </div>
                 ) : <h1>Item not found</h1>
             ) : null}

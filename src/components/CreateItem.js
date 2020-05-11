@@ -17,7 +17,8 @@ const CreateItem = ({ match, history }) => {
     const [ price, setPrice ] = useState('');
     const [description, setDescription] = useState('');
     const [isbn, setIsbn] = useState('');
-    const [ images, setImages ] = useState(null);
+    const [images, setImages] = useState(null);
+    const [imageFiles, setImageFiles] = useState(null);
     const [ imageLinks, setImageLinks ] = useState(null);
     const [ isValidCategory, setIsValidCategory ] = useState(false);
     const firebase = useFirebase();
@@ -144,35 +145,43 @@ const CreateItem = ({ match, history }) => {
                 if (currentImages.length > 3) {
                     alert('Limit: 3 images');
                     setImages(null);
+                    setImageFiles(null)
                     e.target.value = null;
                     return;
                 }
                 let allImages = true;
                 // state doesn't like FileList object, so convert to array
-                let imgArray = [];
+                const imgArray = [];
+                const imgFileArray = [];
                 const validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
                 let sumFileSizes = 0;
                 for (let i = 0; i < currentImages.length; i++) {
-                    let image = currentImages[i];
-                    let imageType = image['type'];
+                    let imageFile = currentImages[i];
+                    const image = new Image();
+                    image.src = URL.createObjectURL(imageFile)
+                    let imageType = imageFile['type'];
                     if (!validImageTypes.includes(imageType)) {
                         allImages = false;
                         break;
                     }
                     sumFileSizes += (image.size / 1024 / 1024); // in MB 
                     imgArray.push(image);
+                    imgFileArray.push(imageFile);
                 }
                 if (sumFileSizes > fileSizeLimit) {
                     alert(`You have exceeded the ${fileSizeLimit}MB maximum image size.`)
                     setImages(null);
+                    setImageFiles(null)
                     e.target.value = null;
                     return;
                 }
                 if (allImages) {
                     setImages(imgArray);
+                    setImageFiles(imgFileArray)
                 } else {
                     alert('One of the selected files was not a vaild file type');
                     setImages(null);
+                    setImageFiles(null)
                     e.target.value = null;
                     // document.getElementById('exampleFormControlFile1').innerHTML = 'Invalid file type.';
                 }
@@ -217,22 +226,42 @@ const CreateItem = ({ match, history }) => {
         data['timeOfCreation'] = firebase.firestore.Timestamp.now();
         
         if(production === 'create'){
-            firebase.firestore().collection(createType).add(data).then((doc) => {
-                if (images) {
-                    for (let i = 0; i < images.length; i++) {
-                        const imageType = images[i]['type'].substring(6);
-                        firebase.storage().ref(`images/${doc.id + i + '.' + imageType}`).put(images[i])
+            firebase.firestore().collection(createType).add(data).then(async (doc) => {
+                if (images && imageFiles) {
+                    // const imageUrls = [];
+                    console.log(imageFiles.length);
+                    for (let i = 0; i < imageFiles.length; i++) {
+                        const imageType = imageFiles[i]['type'].substring(6);
+                        console.log('starting');
+                        await firebase.storage().ref(`${doc.id}/${i}`).put(imageFiles[i])
+                        console.log('Finished');
+                        // firebase.storage().ref(`${doc.id}/${i}`).getDownloadURL().then((url) => {
+                        //     const urlString = url.toString()
+                        //     imageUrls.push(urlString);
+                        //     return imageUrls;
+                        // })
                     }
+                    firebase.storage().ref(`${doc.id}/${0}`).getDownloadURL().then(async (url) => {
+                        const urlString = url.toString();
+                        await firebase.firestore().collection(createType).doc(doc.id).update({
+                            imageUrl: urlString
+                        })
+                    })
+                    // console.log(imageUrls);
+                    // await firebase.firestore().collection(createType).doc(doc.id).update({
+                    //     imageUrls: imageUrls
+                    // })
                     resetState();
                 }
             })
         } else {
-            firebase.firestore().collection(createType).update(data).then((doc) => {
-                if (images) {
+            firebase.firestore().collection(createType).update(data).then(async (doc) => {
+                if (images && imageFiles) {
                     for (let i = 0; i < images.length; i++) {
-                        const imageType = images[i]['type'].substring(6);
-                        firebase.storage().ref(`images/${doc.id + i + '.' + imageType}`).put(images[i])
+                        const imageType = imageFiles[i]['type'].substring(6);
+                        await firebase.storage().ref(`${doc.id}/${i}`).put(imageFiles[i])
                     }
+
                     resetState();
                 }
             })
@@ -260,6 +289,9 @@ const CreateItem = ({ match, history }) => {
                 setAuthor(book.authors[0]);
                 // Need to get image file from image link
                 setImageLinks([book.imageLinks.smallThumbnail, book.imageLinks.thumbnail]);
+                const img = new Image();
+                img.src = book.imageLinks.thumbnail
+                setImages([img]);
                 
             }
         });
@@ -354,6 +386,7 @@ const CreateItem = ({ match, history }) => {
                                                         placeholder='1234567890'
                                                         required
                                                     />
+                                                    <button onClick = {getBookData}>autoComplete</button>
                                                 </div>
                                             </div>
                                             <div className="form-row text-left">
@@ -461,8 +494,8 @@ const CreateItem = ({ match, history }) => {
                                 </div>
                                         
                                 {images === null ? null : (
-                                    images.map((image) => {
-                                        return <img src={URL.createObjectURL(image)} alt='test' key='test'/>
+                                    images.map((image) => {  
+                                        return <img src={image.src} key={image.src} />
                                     })    
                                 )}  
                                         
