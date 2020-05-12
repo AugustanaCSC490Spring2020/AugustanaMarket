@@ -38,9 +38,9 @@ const NavBar = () => {
                                 <a className="dropdown-item" href="/create/request/new">A request for an item</a>
                             </div>
                         </li>
-                        <li className="nav-item"><a className="nav-link" href={`/search`}>Search</a></li>
-                        <li className="nav-item"><a className="nav-link" href={`/list/sell/${firebase.auth().currentUser.uid}`}>My Listings</a></li>
-                        <li className="nav-item"><a className="nav-link" href={`/list/request/${firebase.auth().currentUser.uid}`}>My Requests</a></li>
+                        {/*<li className="nav-item"><a className="nav-link" href={`/search`}>Search</a></li>*/}
+                        <li className="nav-item"><a className="nav-link" href={`/search`}>Listings</a></li>
+                        <li className="nav-item"><a className="nav-link" href={`/list/request/${firebase.auth().currentUser.uid}`}>Requests</a></li>
                     </ul>
                 </div><button id={"signout-btn"} type="button" onClick={handleSignout}>Sign Out</button>
             </div>
