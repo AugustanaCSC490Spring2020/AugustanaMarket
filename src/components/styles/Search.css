@@ -1,0 +1,22 @@
+.ais-SearchBox-form{
+    width:70%;
+}
+
+.ais-SearchBox-form{
+    text-align:center;
+    margin:2%;
+}
+
+.ais-SearchBox-input{
+    border-radius:20px;
+}
+
+.ais-Hits-item{
+    border:0;
+    box-shadow:none;
+    padding:0;
+}
+
+.search-div{
+    padding-left:18%;
+}
