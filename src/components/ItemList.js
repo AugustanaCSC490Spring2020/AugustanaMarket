@@ -78,15 +78,18 @@ const ItemList = ({ match }) => {
                                                 editing and deletion.*/}
                                                 {uid === firebase.auth().currentUser.uid ? (
                                                     <React.Fragment>
-                                                        <div className="d-inline p-2 bg-dark text-white">
+                                                        <div className="container d-inline p-2 lower-opacity bg-dark text-white d-inline-block">
                                                             <Link className="text-decoration-none text-light" to={`/edit/${requestOrSell}/${item.id}`}>
                                                                 Edit<i className="ml-2 fas fa-pencil-alt"></i>
                                                             </Link>
-                                                            <Link to={`/list/${requestOrSell}/${uid}`} name={item.id} onClick={deleteItem}>Delete</Link>
+                                                            <p className={"d-inline-block mb-0 pb-0 ml-3 mr-3"}> | </p>
+                                                            <Link className="text-decoration-none text-light" to={`/list/${requestOrSell}/${uid}`} name={item.id} onClick={deleteItem}>
+                                                                Delete<i class="ml-2 fa fa-trash-o"></i>
+                                                            </Link>
                                                         </div>
                                                     </React.Fragment>
                                                 ) : null}
-                                                <div className="d-inline p-2 bg-primary text-white rounded-bottom">
+                                                <div className="d-inline p-2 bg-primary text-white rounded-bottom-less">
                                                     <Link className="text-decoration-none text-light" to={`/view/${item.id}/${requestOrSell}`}>
                                                         See more &#8594;
                                                     </Link>

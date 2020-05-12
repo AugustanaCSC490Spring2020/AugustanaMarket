@@ -6,6 +6,19 @@
     border-radius:6px;
 }
 
+.card:hover{
+   border:1px solid #999;
+}
+
+.lower-opacity{
+    opacity:90%;
+}
+
+.rounded-bottom-less{
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
 body{
     background-color:#f2f2f2;
 }

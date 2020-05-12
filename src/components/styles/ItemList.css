@@ -1,5 +1,16 @@
 body{
     background-color:#fafafa !important;
+    font-family: "PT Sans", "Helvetica", Arial, sans-serif;
+}
+
+.listings-link{
+    text-decoration:none !important;
+    font-size:1.8rem;
+    color:#262626;
+}
+
+.listings-link:hover{
+    color:#666;
 }
 
 .card-body{
@@ -9,9 +20,6 @@ body{
 #item-details-div{
     margin:3% 5% 5% 5%;
     padding:2%;
-    /*border-radius:10px;*/
-    /*text-align:left;*/
-    /*background-color:white;*/
 }
 
 .center-text{
