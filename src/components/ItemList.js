@@ -51,10 +51,6 @@ const ItemList = ({ match }) => {
         dispatch(listActions.deleteItem(requestOrSell, itemID))
     };
 
-    function switchToSearch() {
-        dispatch(switchSearch(requestOrSell));
-    }
-console.log(isSell);
     return (
         <div>
             {/*Since the url parameter could be anything, 
@@ -67,7 +63,7 @@ console.log(isSell);
                         <div id={"item-details-div"}>
                         <div className="container list-container">
                             <h4 className={"d-inline-block mr-3"}>
-                                <Link className="text-decoration-none text-muted" to={`/search`} onClick={() => dispatch(switchSearch(requestOrSell === 'sell' ? true : requestOrSell === 'request' ? false : null))}>All {requestOrSell === 'sell' ? 'Listings' : 'Requests'}</Link>
+                                <Link className="text-decoration-none text-muted" to={`/search`} onClick={() => dispatch(switchSearch(requestOrSell === 'sell'))}>All {requestOrSell === 'sell' ? 'Listings' : 'Requests'}</Link>
                             </h4>
                             <h4 className={"d-inline-block ml-3 border-bottom border-primary"}>
                                 {requestOrSell === 'sell' ?

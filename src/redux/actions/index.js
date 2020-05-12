@@ -8,8 +8,9 @@ export * from './itemActions';
  * This action is for the categoryReducer so that if the user switches
  * the type of search, the correct results occur
  */
-export const switchSearch = () => {
+export const switchSearch = (requestOrSell) => {
     return {
-        type : 'SWITCH_SEARCH'
+        type : 'SWITCH_SEARCH',
+        payload : requestOrSell
     }
 }

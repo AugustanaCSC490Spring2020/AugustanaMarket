@@ -45,8 +45,6 @@ const Content = () => {
 };
 const Search = () => {
     const isSell = useSelector(state => state.categories.isSell);
-    console.log(isSell);
-    const dispatch = useDispatch();
     const firebase = useFirebase();
     return (
     <div>
