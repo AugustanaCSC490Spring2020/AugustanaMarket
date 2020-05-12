@@ -17,13 +17,19 @@ const persistConfig = {
     blacklist : [ 'firebase', 'firestore' ]
 };
 
+// The persistor allows for redux state to be maintained when the page
+// is refreshed. This is done by have redux-persist storing the state
+// in local memory.  You can choose which states to persist and which
+// ones should in the configuration.
 const persistedReducer = persistReducer(persistConfig, allReducers);
 
+// This is the store or where all the states will be stored as global
+// variables.  We add the middleware thunk so that asyncronous functions
+// can be called before dispatching an action.
 const store = createStore(
     persistedReducer,
     compose(
-        applyMiddleware(thunk.withExtraArgument({ getFirebase })),
-        window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+        applyMiddleware(thunk.withExtraArgument({ getFirebase }))
     )
 );
 

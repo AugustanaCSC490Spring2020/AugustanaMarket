@@ -10,18 +10,26 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { ReactReduxFirebaseProvider } from 'react-redux-firebase';
 import store, { persistor } from './redux/store';
 
-
+// This is the react-redux-firebase configuration
+// you can have the firebase state in redux have
+// things such as user profile, online status, ect.
+// If you want to have firestore to make a document
+// for you user, you can.
 const rrfConfig = {
     userProfile            : 'users',
     useFirestoreForProfile : true
 };
 
+// this is adding the react-redux-firebase props to the store
 const rrfProps = {
     firebase,
     config   : rrfConfig,
     dispatch : store.dispatch
 };
 
+// in order to access the store (and include persist to the
+// state), use firebase, and use the react-router-dom, you
+// need to wrap them around your application
 ReactDOM.render(
     <Provider store={store}>
         <ReactReduxFirebaseProvider {...rrfProps}>

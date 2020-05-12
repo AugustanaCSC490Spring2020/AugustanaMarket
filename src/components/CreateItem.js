@@ -7,7 +7,21 @@ import './styles/CreateSellItem.css';
 import PageNotFound from './PageNotFound';
 import Axios from 'axios';
 
+/**
+ * This component allows the user to create an item to sell or
+ * request based on the type of item being created.  In addition
+ * to creation, since editing requires the same formatting, this
+ * component also deals with editing an item (if the item was created
+ * by the user). This allows the user to be able to use the isbn for a
+ * book to autocomplete the author, title, and give an image
+ * of the book. The user can add pictures that is used for displaying
+ * their items to other users.
+ * @param match the url parameters (see Router.js for connection)
+ * @param history the url history. This allows for changing
+ * the url of the application manually
+ */
 const CreateItem = ({ match, history }) => {
+    // component state of all the html documents
     const [ itemType, setItemType ] = useState('');
     const [ classCategory, setClassCategory ] = useState('');
     const [ condition, setCondition ] = useState('');
@@ -17,25 +31,48 @@ const CreateItem = ({ match, history }) => {
     const [ price, setPrice ] = useState('');
     const [description, setDescription] = useState('');
     const [isbn, setIsbn] = useState('');
+    
+    // In order to display an image file, we had to create
+    // an image object from the image file. So images is
+    // an array of image objects for displaying the image
+    // to the user when creating/editing
     const [images, setImages] = useState(null);
+    
+    // In order to store images into firebase storage, 
+    // the object have to either be file objects or blob
+    // objects. So image files and blobs are stored here
+    // for when we are adding the images to firebase storage
     const [imageFiles, setImageFiles] = useState(null);
     const [ imageLinks, setImageLinks ] = useState(null);
+
+    // This state of the component is for the class category.
+    // Since the user is typing the class category, we only
+    // want to allow the user to submit valid class categories.
     const [ isValidCategory, setIsValidCategory ] = useState(false);
     const firebase = useFirebase();
     const selectedItem = useSelector((state) => state.item);
     const items = useSelector((state) => state.list.items);
     const categories = useSelector((state) => state.categories);
     const dispatch = useDispatch();
+    
+    // url parameters
     const production = match.params.production;
     const createType = match.params.type;
     const item = match.params.item;
     const fileSizeLimit = 5;    // In MB. Adjust this appropriately
     const booksAPIKey = process.env.REACT_APP_GOOGLE_BOOKS_API_KEY;
 
+    // on initialization, reset item to not being loaded and 
+    // reset the state of the component
     React.useEffect(() => {
         resetState();
         dispatch(itemActions.resetState());
+        // if the user is editing an item,
+        // then we need to load the info about
+        // the item into itemReducer
         if (production === 'edit') {
+            // first check to see if the item is
+            // listReducer first
             let contains = false;
             for (let i = 0; i < items.length; i++) {
                 if (items[i].id === item) {
@@ -44,11 +81,18 @@ const CreateItem = ({ match, history }) => {
                     break;
                 }
             }
+
+            // if listReducer does not contain the item,
+            // check firestore for the item
             if (!contains) {
                 dispatch(itemActions.checkFirestore(item, createType));
             }
+
+            // if the item has been loaded, put the info of the item
+            // into the component state
             if (selectedItem.item) {
                 const actualItem = selectedItem.item;
+                // if the item is a book, then add the additional info
                 const isBook = actualItem.itemType === 'book';
                 setItemType(actualItem.itemType);
                 setDescription(actualItem.description);
@@ -84,6 +128,9 @@ const CreateItem = ({ match, history }) => {
         }
     }, [selectedItem.item]);
 
+    /**
+     * This method resets the state of the component
+     */
     const resetState = () => {
         setItemType('');
         setClassCategory('');
@@ -97,6 +144,11 @@ const CreateItem = ({ match, history }) => {
         setImages(null);
     };
 
+    /**
+     * This method changes the component state based off
+     * of which html document was changed
+     * @param e the change to an html document
+     */
     const onChange = (e) => {
         const val = e.target.value;
         const name = e.target.name;
@@ -141,6 +193,12 @@ const CreateItem = ({ match, history }) => {
                 break;
 
             case 'changeImage':
+                // There is a lot needed to deal with images
+                // we limit the user to 3 images and a certain
+                // amount of mb. If all the file are images and
+                // meets the requirements, then the files get 
+                // put in the state for when it gets uploaded
+                // and displayed to the user
                 const currentImages = e.target.files;
                 if (currentImages.length > 3) {
                     alert('Limit: 3 images');
@@ -192,6 +250,13 @@ const CreateItem = ({ match, history }) => {
         }
     };
 
+    /**
+     * This is when the user is sumbitting either the change
+     * to their already created item or creating a new item.
+     * Once that has occurred, the user gets directed to their
+     * lisitings
+     * @param e the submission of an item being modified or created
+     */
     const onSubmit = (e) => {
         e.preventDefault();
         finishItem();
@@ -199,7 +264,11 @@ const CreateItem = ({ match, history }) => {
         history.push(`/list/${createType}/${firebase.auth().currentUser.uid}`);
     };
 
-    // modified createSellItem from sellActions
+    /**
+     * This method finishes the creation/modification of an item where
+     * it gets added to firestore and the images get put into firebase
+     * storage
+     */
     const finishItem = () => {
         const data = {
             itemType,
@@ -225,6 +294,9 @@ const CreateItem = ({ match, history }) => {
         data['uid'] = firebase.auth().currentUser.uid;
         data['timeOfCreation'] = firebase.firestore.Timestamp.now();
         
+        // if the user is creating a new item, then we are adding and just
+        // uploading the images with it. If this was an edit, then we update
+        // the info and change the images accordingly
         if(production === 'create'){
             firebase.firestore().collection(createType).add(data).then(async (doc) => {
                 if (images && imageFiles) {
@@ -268,17 +340,33 @@ const CreateItem = ({ match, history }) => {
         }
     };
 
-    // from https://stackoverflow.com/questions/49443954/how-to-limit-the-text-filed-length-with-input-type-number-in-react-js-and-preven
+    /**
+     * This method checks to see if the isbn number is too long as
+     * we only want the maximum lenght of the number to be the same
+     * as the isbn
+     * @param e the change to the isbn html document
+     */    
     const maxLengthCheck = (e) => {
+        // from https://stackoverflow.com/questions/49443954/how-to-limit-the-text-filed-length-with-input-type-number-in-react-js-and-preven
         if (e.target.value.length > e.target.maxLength) {
             e.target.value = e.target.value.slice(0, e.target.maxLength);
         }
     };
 
+    /**
+     * This method reset the form of creating/editing so when the user
+     * creates a new item (or is editing an item), there is no leftover
+     * info from the previous submission
+     */
     const handleReset = () => {
         document.getElementById('sell-form').reset();
     };
 
+    /**
+     * This method uses the Google Books API to autocomplete the author,
+     * title, and provide an image of the book. If the isbn does not exist
+     * it informs the user.
+     */
     const getBookData = () => {
         Axios.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${booksAPIKey}`).then((response) => {
             if (response.data.totalItems === 0) {
@@ -305,6 +393,15 @@ const CreateItem = ({ match, history }) => {
 
     return (
         <div>
+            {/*Because the user can pass in any url parameters, we must check
+            to see if they are valid. The first one is if it is a valid collection
+            in firestore and if it is either editing or creating. If that is true,
+            then if there is an item and the uid matches the user's id (meaning it is
+            in edit) or it is in create, then shows the html that allows the user to
+            create or edit the item. If it does not pass the first turnary, then it gives
+            the PageNotFound component. If it passes the first turnary but not the second,
+            the user must have been trying to edit an item that either does not exist or
+            is not theirs.  For this condition, it returns a message saying item not found*/}
             {
                 (createType === 'request' || createType === 'sell') &&
                 (production === 'edit' || production === 'create') ? (selectedItem.item &&

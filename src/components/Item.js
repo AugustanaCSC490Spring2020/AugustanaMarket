@@ -5,16 +5,31 @@ import * as itemActions from '../redux/actions/itemActions';
 import './styles/Item.css';
 import { Link } from 'react-router-dom'
 
+/**
+ * This component is the display for a single item where
+ * all the general information is provided for the user
+ * and there is a link to look at that user's listings
+ * (either requests or sellings).
+ * @param match the parameters passed by the url (see
+ * Router.js for connection)
+ */
 const Item = ({match}) => {
     const items = useSelector(state => state.list.items);
     const selectedItem = useSelector(state => state.item);
     const dispatch = useDispatch();
+    // on initialization, reset to not being loaded
     React.useEffect(() => {
         dispatch(itemActions.resetState());
     }, [])
+    // url parameters
     const itemID = match.params.item;
     const requestOrSell = match.params.type;
+
+    // if the item has not been loaded, then load the item
     if(!selectedItem.isLoaded){
+        // First check to see if item was already in listReducer.
+        // If it is, then load the item info from redux since
+        // there is no need for an additional read in firestore.
         let contains = false;
         for(let i = 0; i < items.length; i++){
             if(items[i].id === itemID){
@@ -23,6 +38,9 @@ const Item = ({match}) => {
                 break;
             }
         }
+        // If listReducer did not have the item, then check to
+        // see if item is in firestore. If it is, then load it.
+        // Otherwise the item was not found.
         if(!contains){
             dispatch(itemActions.checkFirestore(itemID, requestOrSell))
         }
@@ -31,7 +49,12 @@ const Item = ({match}) => {
     return (
         <div>
             <NavBar/>
-
+            {/*If the item has not been loaded from listReducer
+            or has not been looked for in firebase, return nothing.
+            The second turnary is if the item has been loaded (meaning
+            that it has been found), load the item info. If the item
+            does not exist in firestore, the return a message saying
+            that the item was not found*/}
             {selectedItem.isLoaded ? (
                 selectedItem.item ? (
                     <div id={"item-div"}>

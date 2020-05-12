@@ -11,7 +11,17 @@ import Item from './components/Item'
 import PageNotFound from './components/PageNotFound'
 import Search from './components/Search'
 
-
+/**
+ * This component is a custom route (a route is basically url)
+ * for the react router where it makes it private. Being 
+ * private means that only users that are authenticated can 
+ * access the route and if the user is not authenticated, 
+ * they will be redirected to login to be authenticated. 
+ * This is so that if an unauthenticated user tries to go
+ * to a route that is private, they cannot.
+ * @param component the route that is being used. The variable
+ * is being called RouteComponent here. 
+ */
 const PrivateRoute = ({ component: RouteComponent, ...rest }) => {
     const auth = useSelector((state) => state.firebase.auth);
     return (
@@ -26,7 +36,19 @@ const PrivateRoute = ({ component: RouteComponent, ...rest }) => {
 };
 
 
-
+/**
+ * This component is the router which allows the user to use
+ * different urls to access different components. This is
+ * accomplished by using a switch statement where it will
+ * load the component that matches the first path (url). You
+ * can pass information through the url by doing :varName so that
+ * a more generalized url is allowable such as having the same
+ * component loaded but with slight differences. If the url
+ * does not match any of the possible paths, the last option
+ * catches all other urls. If the user is authenticated, then
+ * it will give the component for page not found, but if the
+ * user is not authenticated, then they are redirected to login.
+ */
 const Router = () => {
     const auth = useSelector((state) => state.firebase.auth);
     return (

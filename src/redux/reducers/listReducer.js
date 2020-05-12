@@ -5,7 +5,12 @@ const initialState = {
     isLoaded: false,
 }
 
-
+/**
+ * This reducer is the state for a listing of a user's items.
+ * This state represents the requests or sellings of a user
+ * @param state the current state of the reducer
+ * @param action the change to the state
+ */
 const listReducer = (state=initialState,action) => {
     switch (action.type) {
         case 'POPULATE_LIST':

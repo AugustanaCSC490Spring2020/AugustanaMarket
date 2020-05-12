@@ -2,8 +2,21 @@ import React from 'react';
 import {useFirebase} from 'react-redux-firebase';
 import './styles/NavBar.css';
 
+/**
+ * This component is the navigation bar where links to 
+ * other parts of the application are displayed. It also
+ * includes a way for the user to sign out. Thiscomponent
+ * is used in many different components so that it appears
+ * that the component never really "changed". This is only
+ * present in components with private routes.
+ */
 const NavBar = () => {
     const firebase = useFirebase();
+    /**
+     * This method signs the user out from firebase.
+     * This results in a redirect to login from the router
+     * since the user is not logged in
+     */
     const handleSignout = () => {
         firebase.logout();
     };

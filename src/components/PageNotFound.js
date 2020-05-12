@@ -1,5 +1,10 @@
 import React from 'react';
 
+/**
+ * This component is used to display that the url the user has
+ * entered does not exist where it gives the effect of a 404 error.
+ * The user can go back to the homepage by clicking on the button.
+ */
 const PageNotFound = () => {
     return <div class="error-container">
         <i>

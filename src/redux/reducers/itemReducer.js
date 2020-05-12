@@ -4,6 +4,14 @@ const initialState = {
     item: null
 }
 
+/**
+ * This reducer is the state for a single item to be 
+ * displayed. This is used so that if the item is 
+ * already in the state, then there is no need to 
+ * do another read to firestore.
+ * @param state the current state of the reducer
+ * @param action the change to the state 
+ */
 const itemReducer = (state=initialState, action) => {
     switch(action.type){
         case 'ITEM_LOADED':
