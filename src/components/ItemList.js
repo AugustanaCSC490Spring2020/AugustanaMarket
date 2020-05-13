@@ -5,7 +5,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import {useFirebase} from 'react-redux-firebase';
 import { Link } from 'react-router-dom';
 import './styles/ItemList.css';
-import PageNotFound from './PageNotFound'
+import PageNotFound from './PageNotFound';
+import {switchSearch} from '../redux/actions'
 
 /**
  * This component displays the items of a user's sellings
@@ -18,6 +19,7 @@ import PageNotFound from './PageNotFound'
  */
 const ItemList = ({ match }) => {
     const itemList = useSelector((state) => state.list);
+    const isSell = useSelector((state) => state.categories.isSell);
     const firebase = useFirebase(); 
     const dispatch = useDispatch();
     // url parameters
@@ -47,7 +49,7 @@ const ItemList = ({ match }) => {
         // document is used to set the document id
         const itemID = e.target.name
         dispatch(listActions.deleteItem(requestOrSell, itemID))
-    }
+    };
 
     return (
         <div>
@@ -60,6 +62,18 @@ const ItemList = ({ match }) => {
                     <NavBar />
                         <div id={"item-details-div"}>
                         <div className="container list-container">
+                            <h4 className={"d-inline-block mr-3"}>
+                                <Link className="text-decoration-none text-muted" to={`/search`} onClick={() => dispatch(switchSearch(requestOrSell === 'sell'))}>All {requestOrSell === 'sell' ? 'Listings' : 'Requests'}</Link>
+                            </h4>
+                            <h4 className={"d-inline-block ml-3 border-bottom border-primary"}>
+                                {requestOrSell === 'sell' ?
+                                    <Link className="text-decoration-none text-primary" to={`/list/sell/${firebase.auth().currentUser.uid}`}>My Listings</Link>
+                                :
+                                requestOrSell === 'request' ?
+                                    <Link className="text-decoration-none text-primary" to={`/list/request/${firebase.auth().currentUser.uid}`}>My Requests</Link>
+                                : null
+                                }
+                            </h4>
                             <div className="row">
                             {
                                 itemList.isLoaded ? itemList.items.map((item) => {

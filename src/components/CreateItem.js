@@ -435,6 +435,12 @@ const CreateItem = ({ match, history }) => {
                     selectedItem.item.uid === firebase.auth().currentUser.uid) ||
                 production === 'create' ? <React.Fragment>
                     <NavBar />
+                    <container className={"text-left"}>
+                        {createType === 'request' ?
+                            <h2 className={"mt-3 pb-0"}>Request an Item</h2> : null}
+                        {createType === 'sell' ?
+                            <h2 className={"mt-3 pb-0"}> Sell an Item</h2> : null}
+                    </container>
                     <form autoComplete='off' onLoadStart={handleReset} id='sell-form' onSubmit={onSubmit}>
                         <div className={'form-group text-left'}>
                             <label htmlFor='itemCategory'>

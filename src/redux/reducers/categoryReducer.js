@@ -67,7 +67,7 @@ const createSellReducer = (state = initialState, action) => {
         case 'SWITCH_SEARCH':
             return {
                 ...state,
-                isSell : !state.isSell
+                isSell : action.payload
             }
         default:
             return state;

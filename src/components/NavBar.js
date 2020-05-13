@@ -1,6 +1,9 @@
 import React from 'react';
 import {useFirebase} from 'react-redux-firebase';
 import './styles/NavBar.css';
+import {useDispatch} from 'react-redux'
+import {switchSearch} from '../redux/actions'
+
 
 /**
  * This component is the navigation bar where links to 
@@ -12,6 +15,7 @@ import './styles/NavBar.css';
  */
 const NavBar = () => {
     const firebase = useFirebase();
+    const dispatch = useDispatch();
     /**
      * This method signs the user out from firebase.
      * This results in a redirect to login from the router
@@ -38,9 +42,9 @@ const NavBar = () => {
                                 <a className="dropdown-item" href="/create/request/new">A request for an item</a>
                             </div>
                         </li>
-                        <li className="nav-item"><a className="nav-link" href={`/search`}>Search</a></li>
-                        <li className="nav-item"><a className="nav-link" href={`/list/sell/${firebase.auth().currentUser.uid}`}>My Listings</a></li>
-                        <li className="nav-item"><a className="nav-link" href={`/list/request/${firebase.auth().currentUser.uid}`}>My Requests</a></li>
+                        {/*<li className="nav-item"><a className="nav-link" href={`/search`}>Search</a></li>*/}
+                        <li className="nav-item"><a className="nav-link" onClick={() => dispatch(switchSearch(true))} href={`/search`}>Listings</a></li>
+                        <li className="nav-item"><a className="nav-link" onClick={() => dispatch(switchSearch(false))} href={`/search`}>Requests</a></li>
                     </ul>
                 </div><button id={"signout-btn"} type="button" onClick={handleSignout}>Sign Out</button>
             </div>

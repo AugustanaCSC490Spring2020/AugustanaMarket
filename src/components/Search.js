@@ -5,6 +5,7 @@ import {Link} from 'react-router-dom';
 import './styles/Search.css';
 import NavBar from './NavBar';
 import {useSelector, useDispatch} from 'react-redux'
+import {useFirebase} from 'react-redux-firebase';
 import {switchSearch} from '../redux/actions'
 
 const searchClient = algoliasearch(
@@ -44,11 +45,20 @@ const Content = () => {
 };
 const Search = () => {
     const isSell = useSelector(state => state.categories.isSell);
-    const dispatch = useDispatch();
+    const firebase = useFirebase();
     return (
     <div>
         <NavBar/>
-        <Link to='/search'onClick={() => dispatch(switchSearch())}>{isSell ? 'See Requests' : 'See Sellings'}</Link>
+        {/*<Link to='/search' onClick={() => dispatch(switchSearch())}>{isSell ? 'See Requests' : 'See Listings'}</Link>*/}
+        <br />
+        <div className={"pt-1"}>
+            <h4 className={"d-inline-block mr-3 border-bottom border-primary"}>
+                <Link className="text-decoration-none text-primary" to={`/search`}>All {isSell ? 'Listings' : 'Requests'}</Link>
+            </h4>
+            <h4 className={"d-inline-block ml-3"}>
+                <Link className="text-decoration-none text-muted" to={`/list/${isSell ? 'sell' : 'request'}/${firebase.auth().currentUser.uid}`}>My {isSell ? 'Listings' : 'Requests'}</Link>
+            </h4>
+        </div>
         <InstantSearch
             indexName={isSell ? 'sell' : 'request'}
             searchClient={searchClient}
