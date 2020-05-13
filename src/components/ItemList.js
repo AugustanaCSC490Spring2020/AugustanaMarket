@@ -48,6 +48,7 @@ const ItemList = ({ match }) => {
         // it was undefined. Instead the name of the html
         // document is used to set the document id
         const itemID = e.target.name
+        // console.log(itemID);
         dispatch(listActions.deleteItem(requestOrSell, itemID))
     };
 

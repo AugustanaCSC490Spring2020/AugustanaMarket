@@ -286,9 +286,10 @@ const CreateItem = ({ match, history }) => {
             data['courseNum'] = courseNum;
             data['classCategory'] = classCategory;
         }
-        if(images) {
-            data['numImages'] = images.length;
-        }
+        // if(images) {
+        //     data['numImages'] = (images ?images.length;
+        // } 
+        data['numImages'] = (images ? images.length : 0);
         const email = firebase.auth().currentUser.email;
         const displayName = firebase.auth().currentUser.displayName;
         data['email'] = email;
@@ -379,6 +380,7 @@ const CreateItem = ({ match, history }) => {
                 };
                 img.crossOrigin = "";              // if from different origin
                 // https://medium.com/@dtkatz/3-ways-to-fix-the-cors-error-and-how-access-control-allow-origin-works-d97d55946d9
+                // Source of issue above
                 img.src = 'https://cors-anywhere.herokuapp.com/' + book.imageLinks.thumbnail;
                 
             }
@@ -434,13 +436,13 @@ const CreateItem = ({ match, history }) => {
                 (production === 'edit' || production === 'create') ? (selectedItem.item &&
                     selectedItem.item.uid === firebase.auth().currentUser.uid) ||
                 production === 'create' ? <React.Fragment>
-                    <NavBar />
-                    <container className={"text-left"}>
-                        {createType === 'request' ?
-                            <h2 className={"mt-3 pb-0"}>Request an Item</h2> : null}
-                        {createType === 'sell' ?
-                            <h2 className={"mt-3 pb-0"}> Sell an Item</h2> : null}
-                    </container>
+                <NavBar />
+                <container className={"text-left"}>
+                    {createType === 'request' ?
+                        <h2 className={"mt-3 pb-0"}>Request an Item</h2> : null}
+                    {createType === 'sell' ?
+                        <h2 className={"mt-3 pb-0"}> Sell an Item</h2> : null}
+                </container>
                     <form autoComplete='off' onLoadStart={handleReset} id='sell-form' onSubmit={onSubmit}>
                         <div className={'form-group text-left'}>
                             <label htmlFor='itemCategory'>
