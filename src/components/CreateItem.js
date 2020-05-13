@@ -43,7 +43,8 @@ const CreateItem = ({ match, history }) => {
     // objects. So image files and blobs are stored here
     // for when we are adding the images to firebase storage
     const [imageFiles, setImageFiles] = useState(null);
-    const [ imageLinks, setImageLinks ] = useState(null);
+    const [blobTest, setBlobTest] = useState(null);
+
 
     // This state of the component is for the class category.
     // Since the user is typing the class category, we only
@@ -236,6 +237,7 @@ const CreateItem = ({ match, history }) => {
                 if (allImages) {
                     setImages(imgArray);
                     setImageFiles(imgFileArray)
+                    console.log(imgFileArray);
                 } else {
                     alert('One of the selected files was not a vaild file type');
                     setImages(null);
@@ -300,29 +302,16 @@ const CreateItem = ({ match, history }) => {
         if(production === 'create'){
             firebase.firestore().collection(createType).add(data).then(async (doc) => {
                 if (images && imageFiles) {
-                    // const imageUrls = [];
-                    console.log(imageFiles.length);
                     for (let i = 0; i < imageFiles.length; i++) {
-                        const imageType = imageFiles[i]['type'].substring(6);
-                        console.log('starting');
                         await firebase.storage().ref(`${doc.id}/${i}`).put(imageFiles[i])
-                        console.log('Finished');
-                        // firebase.storage().ref(`${doc.id}/${i}`).getDownloadURL().then((url) => {
-                        //     const urlString = url.toString()
-                        //     imageUrls.push(urlString);
-                        //     return imageUrls;
-                        // })
                     }
+
                     firebase.storage().ref(`${doc.id}/${0}`).getDownloadURL().then(async (url) => {
                         const urlString = url.toString();
                         await firebase.firestore().collection(createType).doc(doc.id).update({
                             imageUrl: urlString
                         })
                     })
-                    // console.log(imageUrls);
-                    // await firebase.firestore().collection(createType).doc(doc.id).update({
-                    //     imageUrls: imageUrls
-                    // })
                     resetState();
                 }
             })
@@ -371,19 +360,57 @@ const CreateItem = ({ match, history }) => {
         Axios.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${booksAPIKey}`).then((response) => {
             if (response.data.totalItems === 0) {
                 alert('ISBN not found. Please fill out data manually.');
-            } else {
+            } else if (isbn !== '') {
                 const book = response.data.items[0].volumeInfo;
                 setTitle(book.title);
                 setAuthor(book.authors[0]);
-                // Need to get image file from image link
-                setImageLinks([book.imageLinks.smallThumbnail, book.imageLinks.thumbnail]);
                 const img = new Image();
-                img.src = book.imageLinks.thumbnail
                 setImages([img]);
+                const c = document.createElement("canvas");
+                const ctx = c.getContext("2d");
+                
+                img.onload = () => {
+                    c.width = img.naturalWidth;     // update canvas size to match image
+                    c.height = img.naturalHeight;
+                    ctx.drawImage(img, 0, 0);       // draw in image
+                    c.toBlob((blob) => {        // get content as JPEG blob
+                        setImageFiles([blob])
+                    }, "image/jpeg", 0.75);
+                };
+                img.crossOrigin = "";              // if from different origin
+                // https://medium.com/@dtkatz/3-ways-to-fix-the-cors-error-and-how-access-control-allow-origin-works-d97d55946d9
+                img.src = 'https://cors-anywhere.herokuapp.com/' + book.imageLinks.thumbnail;
                 
             }
         });
     };
+
+    const changeCoverImage = (e) => {
+        const clickedSrc = e.target.src;
+        let imgIndex = -1;
+        for (let i = 0; i < images.length; i++) {
+            if (images[i].src === clickedSrc) {
+                imgIndex = i;
+                break;
+            }
+        }
+        if (imgIndex === 0) {
+            console.log('already cover image');
+            return;
+        }
+        const tempImg = images[0];
+        const tempFile = imageFiles[0];
+        const newImgArray = [...images];
+        const newFileArray = [...imageFiles];
+        newImgArray[0] = newImgArray[imgIndex];
+        newImgArray[imgIndex] = tempImg;
+        newFileArray[0] = newFileArray[imgIndex];
+        newFileArray[imgIndex] = tempFile;
+        setImages(newImgArray);
+        setImageFiles(newFileArray);
+        console.log('changed');
+    }
+    
 
     // const getBookImage = () => {
     //     Axios.get('http://books.google.com/books/content?id=yxv1LK5gyV4C&printsec=frontcover&img=1&zoom=5&source=gbs_api').then((response) => {
@@ -591,8 +618,10 @@ const CreateItem = ({ match, history }) => {
                                 </div>
                                         
                                 {images === null ? null : (
-                                    images.map((image) => {  
-                                        return <img src={image.src} key={image.src} />
+                                    images.map((image) => { 
+                                        return (
+                                            <img src={image.src} key={image.src} onClick={changeCoverImage} height='250' width='200'/>
+                                        )
                                     })    
                                 )}  
                                         

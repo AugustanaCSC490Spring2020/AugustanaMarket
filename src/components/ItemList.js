@@ -84,7 +84,7 @@ const ItemList = ({ match }) => {
                                                             </Link>
                                                             <p className={"d-inline-block mb-0 pb-0 ml-3 mr-3"}> | </p>
                                                             <Link className="text-decoration-none text-light" to={`/list/${requestOrSell}/${uid}`} name={item.id} onClick={deleteItem}>
-                                                                Delete<i class="ml-2 fa fa-trash-o"></i>
+                                                                Delete<i className="ml-2 fa fa-trash-o"></i>
                                                             </Link>
                                                         </div>
                                                     </React.Fragment>
