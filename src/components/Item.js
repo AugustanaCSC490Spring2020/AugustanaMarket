@@ -49,15 +49,20 @@ const Item = ({match}) => {
         }
     }
 
-    // if (selectedItem.Item) {
-    //     const imgArray = [];
-    //     for (let index = 0; index < selectedItem.item.numImage; index++) {
-    //         firebase.storage().ref(`${doc.id}/${index}`).getDownloadURL().then((url) => {
-    //             const urlString = url.toString();
-    //             imgArray.push(urlString);
-    //         })
-    //     }
-    // }
+    const loadImageUrls = async () => {
+        const imgArray = [];
+        for (let index = 0; index < selectedItem.item.numImages; index++) {
+            let imgUrl = await firebase.storage().ref(`${itemID}/${index}`).getDownloadURL()
+            imgUrl = imgUrl.toString()
+            imgArray.push(imgUrl)
+        }
+        changeImageUrls(imgArray)
+    }
+
+    if(selectedItem.item && imageUrls.length === 0){
+        loadImageUrls()
+    }
+
 
     return (
         <div>
@@ -84,6 +89,11 @@ const Item = ({match}) => {
                                 <h3>ISBN #: {selectedItem.item.isbn}</h3>
                             </React.Fragment>
                         ) : null}
+                        {imageUrls.map(url => {
+                            return (
+                            <img src={url} key={url} className={"w-25 pl-2 pr-2 non-thumbnail-img"}/>
+                            )
+                        })}
                         <Link to={`/list/${requestOrSell}/${selectedItem.item.uid}`}>View User's {requestOrSell === 'sell' ? 'Items' : 'Requests'} </Link>
                     </div>
                 ) : <h1>Item not found</h1>
