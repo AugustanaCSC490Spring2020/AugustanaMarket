@@ -4,6 +4,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import * as itemActions from '../redux/actions/itemActions';
 import './styles/Item.css';
 import { Link } from 'react-router-dom'
+import { useFirebase } from 'react-redux-firebase'
 
 /**
  * This component is the display for a single item where
@@ -16,6 +17,8 @@ import { Link } from 'react-router-dom'
 const Item = ({match}) => {
     const items = useSelector(state => state.list.items);
     const selectedItem = useSelector(state => state.item);
+    const [imageUrls, changeImageUrls] = React.useState([]);
+    const firebase = useFirebase();
     const dispatch = useDispatch();
     // on initialization, reset to not being loaded
     React.useEffect(() => {
@@ -45,6 +48,16 @@ const Item = ({match}) => {
             dispatch(itemActions.checkFirestore(itemID, requestOrSell))
         }
     }
+
+    // if (selectedItem.Item) {
+    //     const imgArray = [];
+    //     for (let index = 0; index < selectedItem.item.numImage; index++) {
+    //         firebase.storage().ref(`${doc.id}/${index}`).getDownloadURL().then((url) => {
+    //             const urlString = url.toString();
+    //             imgArray.push(urlString);
+    //         })
+    //     }
+    // }
 
     return (
         <div>
