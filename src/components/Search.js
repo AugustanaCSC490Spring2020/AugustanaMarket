@@ -15,6 +15,28 @@ const searchClient = algoliasearch(
 
 const HitComponent = ({hit}) => {
     const requestOrSell = useSelector(state => state.categories.isSell)
+    const firebase = useFirebase()
+    const [liked, changeLikeStatus] = React.useState(hit.usersLike.includes(firebase.auth().currentUser.uid))
+
+    const addToFavorites = () => {
+        changeLikeStatus(true)
+        firebase.firestore().collection(requestOrSell ? 'sell' : 'request').doc(hit.objectID).get().then(async (doc) => {
+            const data = {...doc.data()}
+            data.usersLike.push(firebase.auth().currentUser.uid)
+            await firebase.firestore().collection(requestOrSell ? 'sell' : 'request').doc(hit.objectID).update(data)
+            
+        })
+    }
+
+    const removeFromFavorites = () => {
+        changeLikeStatus(false)
+        firebase.firestore().collection(requestOrSell ? 'sell' : 'request').doc(hit.objectID).get().then(async (doc) => {
+            const data = {...doc.data()}
+            data.usersLike = data.usersLike.filter(user => user !== firebase.auth().currentUser.uid);
+            await firebase.firestore().collection(requestOrSell ? 'sell' : 'request').doc(hit.objectID).update(data)
+            
+        })
+    }
     return (
         <div className={"card"}>
             <div className={"container w-100 center-text"}>
@@ -23,6 +45,7 @@ const HitComponent = ({hit}) => {
             <div className="card-body text-left">
                 <b><h4 className="card-title">{hit.title}</h4></b>
                 <h5 className="card-text">${hit.price}</h5>
+                {hit.uid !== firebase.auth().currentUser.uid ? <button onClick={liked ? removeFromFavorites : addToFavorites}>{liked ? 'Unlike' : 'Like'}</button> : null}
             </div>
             <div className="d-inline p-2 bg-primary text-white rounded-bottom-less">
                 <Link className="text-decoration-none text-light" to={`/view/${hit.objectID}/${requestOrSell ? 'sell' : 'request'}`}>

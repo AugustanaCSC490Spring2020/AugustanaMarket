@@ -296,6 +296,7 @@ const CreateItem = ({ match, history }) => {
         data['displayName'] = displayName;
         data['uid'] = firebase.auth().currentUser.uid;
         data['timeOfCreation'] = firebase.firestore.Timestamp.now();
+        data['usersLike'] = []
         
         // if the user is creating a new item, then we are adding and just
         // uploading the images with it. If this was an edit, then we update
