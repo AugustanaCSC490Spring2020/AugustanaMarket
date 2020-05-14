@@ -18,7 +18,7 @@ const HitComponent = ({hit}) => {
     return (
         <div className={"card"}>
             <div className={"container w-100 center-text"}>
-                <img className="card-img-top w-50 pt-2" src="../../textbook-example.png" alt="Card image cap" />
+                <img className="card-img-top w-50 pt-2" src={hit.imageUrl} alt="Card image cap" />
             </div>
             <div className="card-body text-left">
                 <b><h4 className="card-title">{hit.title}</h4></b>
