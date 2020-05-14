@@ -61,7 +61,7 @@ const ItemList = ({ match }) => {
             {(requestOrSell === 'request' || requestOrSell === 'sell') ? (
                 <React.Fragment>
                     <NavBar />
-                        <div id={"item-details-div"}>
+                        <div id={"item-details-div"} className={"pt-4"}>
                         <div className="container list-container">
                             <h4 className={"d-inline-block mr-3"}>
                                 <Link className="text-decoration-none text-muted" to={`/search`} onClick={() => dispatch(switchSearch(requestOrSell === 'sell'))}>All {requestOrSell === 'sell' ? 'Listings' : 'Requests'}</Link>

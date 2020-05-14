@@ -1,6 +1,6 @@
 import React from 'react';
 import algoliasearch from 'algoliasearch/lite';
-import {InstantSearch, SearchBox, Hits, Pagination} from 'react-instantsearch-dom';
+import {InstantSearch, SearchBox, Hits, Pagination, RefinementList} from 'react-instantsearch-dom';
 import {Link} from 'react-router-dom';
 import './styles/Search.css';
 import NavBar from './NavBar';
@@ -33,6 +33,17 @@ const HitComponent = ({hit}) => {
     )
 };
 
+const Filters = () => {
+    return (
+        <React.Fragment>
+            <div className={"container"}>
+                <h5>Filters</h5>
+                <RefinementList classCategory={"price"} withSearchBox/>
+            </div>
+        </React.Fragment>
+    )
+};
+
 const Content = () => {
     return (
         <React.Fragment>
@@ -49,9 +60,7 @@ const Search = () => {
     return (
     <div>
         <NavBar/>
-        {/*<Link to='/search' onClick={() => dispatch(switchSearch())}>{isSell ? 'See Requests' : 'See Listings'}</Link>*/}
-        <br />
-        <div className={"pt-1"}>
+        <div className={"pt-4"}>
             <h4 className={"d-inline-block mr-3 border-bottom border-primary"}>
                 <Link className="text-decoration-none text-primary" to={`/search`}>All {isSell ? 'Listings' : 'Requests'}</Link>
             </h4>
@@ -66,6 +75,7 @@ const Search = () => {
             <div className={"search-div"}>
                 <SearchBox/>
             </div>
+            <Filters/>
             <Content/>
         </InstantSearch>
     </div>

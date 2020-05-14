@@ -412,6 +412,10 @@ const CreateItem = ({ match, history }) => {
         setImageFiles(newFileArray);
         console.log('changed');
     }
+
+    const imageSelect = () => {
+        document.getElementById('test').click();
+    };
     
 
     // const getBookImage = () => {
@@ -437,12 +441,12 @@ const CreateItem = ({ match, history }) => {
                     selectedItem.item.uid === firebase.auth().currentUser.uid) ||
                 production === 'create' ? <React.Fragment>
                 <NavBar />
-                <container className={"text-left"}>
+                <div className={"container text-left"}>
                     {createType === 'request' ?
                         <h2 className={"mt-3 pb-0"}>Request an Item</h2> : null}
                     {createType === 'sell' ?
                         <h2 className={"mt-3 pb-0"}> Sell an Item</h2> : null}
-                </container>
+                </div>
                     <form autoComplete='off' onLoadStart={handleReset} id='sell-form' onSubmit={onSubmit}>
                         <div className={'form-group text-left'}>
                             <label htmlFor='itemCategory'>
@@ -467,6 +471,30 @@ const CreateItem = ({ match, history }) => {
                         {
                             itemType === '' ? null :
                             <React.Fragment>
+                                {itemType === 'book' ?
+                                    <div className={'form-group text-left col-md-4'}>
+                                        <div className={"d-inline-block"}>
+                                            <label htmlFor='isbn' className={'required'}>
+                                                ISBN
+                                            </label>
+                                            <input
+                                                type='number'
+                                                className={'form-control'}
+                                                id='isbn'
+                                                maxLength='13'
+                                                onInput={maxLengthCheck}
+                                                max={9999999999999}
+                                                value={isbn}
+                                                name='changeIsbn'
+                                                onChange={onChange}
+                                                placeholder='1234567890'
+                                                required
+                                            />
+                                        </div>
+                                        <button className={"btn btn-primary d-inline-block"} onClick = {getBookData} name={"autocomplete"}>Auto-Complete</button>
+                                    </div>
+                                    : null }
+
                                 <div className="form-group text-left">
                                     <label htmlFor='title' className={'required'}>
                                         Title
@@ -500,25 +528,6 @@ const CreateItem = ({ match, history }) => {
                                                         required
                                                         placeholder={"ex: F. Scott Fitzgerald"}
                                                     />
-                                                </div>
-                                                <div className={'form-group col-md-6'}>
-                                                    <label htmlFor='isbn' className={'required'}>
-                                                        ISBN
-                                                    </label>
-                                                    <input
-                                                        type='number'
-                                                        className={'form-control'}
-                                                        id='isbn'
-                                                        maxLength='13'
-                                                        onInput={maxLengthCheck}
-                                                        max={9999999999999}
-                                                        value={isbn}
-                                                        name='changeIsbn'
-                                                        onChange={onChange}
-                                                        placeholder='1234567890'
-                                                        required
-                                                    />
-                                                    <button onClick = {getBookData}>autoComplete</button>
                                                 </div>
                                             </div>
                                             <div className="form-row text-left">
@@ -614,27 +623,52 @@ const CreateItem = ({ match, history }) => {
                                     />
                                 </div>
                                 <div className='form-group'>
-                                    <input
-                                        type='file'
-                                        className='form-control-file'
-                                        id='exampleFormControlFile1'
-                                        name='changeImage'
-                                        multiple
-                                        onChange={onChange}
-
-                                    />
+                                    <input type="file"
+                                           className='form-control-file d-none'
+                                           id='test'
+                                           name='changeImage'
+                                           multiple
+                                           onChange={onChange}/>
+                                    <input type="button" className="btn btn-primary" value="Browse..." onClick={imageSelect} />
+                                    {/*<input*/}
+                                        {/*type='file'*/}
+                                        {/*className='form-control-file'*/}
+                                        {/*id='exampleFormControlFile1'*/}
+                                        {/*name='changeImage'*/}
+                                        {/*multiple*/}
+                                        {/*onChange={onChange}*/}
+                                    {/*/>*/}
                                 </div>
                                         
                                 {images === null ? null : (
-                                    images.map((image) => { 
+                                    images.map((image) => {
                                         return (
-                                            <img src={image.src} key={image.src} onClick={changeCoverImage} height='250' width='200'/>
+                                            image === images[0] ?
+                                                <React.Fragment className={"d-inline-block"}>
+                                                    <div className={"container"}>
+                                                        <img src={image.src} key={image.src} onClick={changeCoverImage} className={"w-25 pl-2 pr-2"}/>
+                                                        <div>
+                                                            Thumbnail
+                                                        </div>
+                                                    </div>
+                                                </React.Fragment>
+                                                :
+                                                <React.Fragment className={"d-inline-block"}>
+                                                    <div className={"container"}>
+                                                        <img src={image.src} key={image.src} onClick={changeCoverImage} className={"w-25 pl-2 pr-2 non-thumbnail-img"}/>
+                                                        <div className="middle">
+                                                            <div className="text">Set as thumbnail</div>
+                                                        </div>
+                                                    </div>
+                                                </React.Fragment>
                                         )
-                                    })    
+                                    })
                                 )}  
-                                        
+
+                                <br />
                                 <input
                                     type='submit'
+                                    name={"submit"}
                                     className='btn btn-primary'
                                     disabled={itemType === 'book' && !isValidCategory}
                                     value='Submit'

@@ -6,12 +6,12 @@ import React from 'react';
  * The user can go back to the homepage by clicking on the button.
  */
 const PageNotFound = () => {
-    return <div class="error-container">
+    return <div className="error-container">
         <i>
-            <div class="glitch" data-text="404 ERROR">404</div>
-            <div class="glow">404 ERROR</div>
+            <div className="glitch" data-text="404 ERROR">404</div>
+            <div className="glow">404 ERROR</div>
         </i>
-        <p class="subtitle">Sorry, the page you were looking for cannot be found.</p>
+        <p className="subtitle">Sorry, the page you were looking for cannot be found.</p>
         <br />
         <a href='/' id="go-home-btn">GO HOME</a>
     </div>;
