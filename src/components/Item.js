@@ -15,11 +15,13 @@ import { useFirebase } from 'react-redux-firebase'
  * Router.js for connection)
  */
 const Item = ({match}) => {
+    const firebase = useFirebase();
+    const dispatch = useDispatch();
     const items = useSelector(state => state.list.items);
     const selectedItem = useSelector(state => state.item);
     const [imageUrls, changeImageUrls] = React.useState([]);
-    const firebase = useFirebase();
-    const dispatch = useDispatch();
+    const [liked, changeLikeStatus] = React.useState(null)
+    
     // on initialization, reset to not being loaded
     React.useEffect(() => {
         dispatch(itemActions.resetState());
@@ -63,6 +65,29 @@ const Item = ({match}) => {
         loadImageUrls()
     }
 
+    if(selectedItem.item && liked === null){
+        changeLikeStatus(selectedItem.item.usersLike.includes(firebase.auth().currentUser.uid))
+    }
+    
+    const addToFavorites = () => {
+        changeLikeStatus(true)
+        firebase.firestore().collection(requestOrSell ? 'sell' : 'request').doc(itemID).get().then(async (doc) => {
+            const data = {...doc.data()}
+            data.usersLike.push(firebase.auth().currentUser.uid)
+            await firebase.firestore().collection(requestOrSell ? 'sell' : 'request').doc(itemID).update(data)
+            
+        })
+    }
+
+    const removeFromFavorites = () => {
+        changeLikeStatus(false)
+        firebase.firestore().collection(requestOrSell ? 'sell' : 'request').doc(itemID).get().then(async (doc) => {
+            const data = {...doc.data()}
+            data.usersLike = data.usersLike.filter(user => user !== firebase.auth().currentUser.uid);
+            await firebase.firestore().collection(requestOrSell ? 'sell' : 'request').doc(itemID).update(data)
+            
+        })
+    }
 
     return (
         <div>
@@ -89,6 +114,7 @@ const Item = ({match}) => {
                                 <h3>ISBN #: {selectedItem.item.isbn}</h3>
                             </React.Fragment>
                         ) : null}
+                        {selectedItem.item.uid !== firebase.auth().currentUser.uid ? <button onClick={liked ? removeFromFavorites : addToFavorites}>{liked ? 'Unlike' : 'Like'}</button> : null}
                         {imageUrls.map(url => {
                             return (
                             <img src={url} key={url} className={"w-25 pl-2 pr-2 non-thumbnail-img"}/>

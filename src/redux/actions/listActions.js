@@ -23,6 +23,20 @@ export const populate = (requestOrSell, uid) => (dispatch, getState, { getFireba
         .then((items) => dispatch({ type: 'POPULATE_LIST', payload: items }));
 };
 
+export const loadFavorites = (requestOrSell) => (dispatch, getState, { getFirebase }) => {
+    const firebase = getFirebase();
+    const itemsRef = firebase.firestore().collection(requestOrSell);
+    itemsRef.where('usersLike', 'array-contains', firebase.auth().currentUser.uid).get().then(documentSnapshot => {
+        const items = []
+        documentSnapshot.forEach(doc => {
+            const item = {...doc.data()}
+            item['id'] = doc.id;
+            items.push(item)
+        })
+        return items;
+    }).then(items => dispatch({type: 'POPULATE_LIST', payload: items}))
+}
+
 /**
  * This action allows the user to delete an item (if it was created by them)
  * by changing the state in redux, but also deleting the document in firestore.
@@ -57,6 +71,28 @@ export const deleteItem = (requestOrSell, itemID) => async (dispatch, getState, 
     }
     dispatch({type: 'DELETE_ITEM', payload: updateItems});
 };
+
+export const removeFromFavorites = (requestOrSell, itemID) => (dispatch, getState, {getFirebase}) => {
+    const firebase = getFirebase()
+    const items = getState().list.items;
+    let index = 0;
+    const updateItems = []
+    for(let i = 0; i < items.length; i++){
+        if(items[i].id !== itemID){
+            updateItems.push(items[i])
+        } else {
+            index = i;
+        }
+    }
+    firebase.firestore().collection(requestOrSell ? 'sell' : 'request').doc(itemID).get().then(async (doc) => {
+        const data = {...doc.data()}
+        data.usersLike = data.usersLike.filter(user => user !== firebase.auth().currentUser.uid);
+        await firebase.firestore().collection(requestOrSell ? 'sell' : 'request').doc(itemID).update(data)
+        
+    })
+
+    dispatch({type : 'DELETE_ITEM', payload: updateItems})
+}
 
 /**
  * This action resets the state so that we can determine

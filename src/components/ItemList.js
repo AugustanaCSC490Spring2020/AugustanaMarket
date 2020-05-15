@@ -34,7 +34,11 @@ const ItemList = ({ match }) => {
     // id does not exist, then it will result in an empty
     // array (which shows nothing)
     if (!itemList.isLoaded) {
-        dispatch(listActions.populate(requestOrSell, uid));
+        if(uid === 'favorites'){
+            dispatch(listActions.loadFavorites(requestOrSell))
+        } else {
+            dispatch(listActions.populate(requestOrSell, uid));
+        }
     }
 
     /**
@@ -52,6 +56,11 @@ const ItemList = ({ match }) => {
         dispatch(listActions.deleteItem(requestOrSell, itemID))
     };
 
+    const removeFromFavorites = (e) => {
+        const itemID = e.target.name
+        dispatch(listActions.removeFromFavorites(requestOrSell, itemID))
+    }
+
     return (
         <div>
             {/*Since the url parameter could be anything, 
@@ -67,13 +76,10 @@ const ItemList = ({ match }) => {
                                 <Link className="text-decoration-none text-muted" to={`/search`} onClick={() => dispatch(switchSearch(requestOrSell === 'sell'))}>All {requestOrSell === 'sell' ? 'Listings' : 'Requests'}</Link>
                             </h4>
                             <h4 className={"d-inline-block ml-3 border-bottom border-primary"}>
-                                {requestOrSell === 'sell' ?
-                                    <Link className="text-decoration-none text-primary" to={`/list/sell/${firebase.auth().currentUser.uid}`}>My Listings</Link>
-                                :
-                                requestOrSell === 'request' ?
-                                    <Link className="text-decoration-none text-primary" to={`/list/request/${firebase.auth().currentUser.uid}`}>My Requests</Link>
-                                : null
-                                }
+                                <Link className="text-decoration-none text-primary" to={`/list/${requestOrSell === 'sell' ? 'sell' : 'request'}/${firebase.auth().currentUser.uid}`} onClick={() => dispatch(listActions.resetState())}>My {requestOrSell === 'sell' ? 'Listings' : 'Requests'}</Link>
+                            </h4>
+                            <h4 className={"d-inline-block mr-3"}>
+                                <Link className="text-decoration-none text-muted" to={`/list/${requestOrSell === 'sell' ? 'sell' : 'request'}/favorites`} onClick={() => dispatch(listActions.resetState())}>Favorite {requestOrSell === 'sell' ? 'Listings' : 'Requests'}</Link>
                             </h4>
                             <div className="row">
                             {
@@ -102,6 +108,10 @@ const ItemList = ({ match }) => {
                                                                 Delete<i className="ml-2 fa fa-trash-o"></i>
                                                             </Link>
                                                         </div>
+                                                    </React.Fragment>
+                                                ) : uid === 'favorites' ? (
+                                                    <React.Fragment>
+                                                        <button name={item.id} onClick={removeFromFavorites}>Unlike</button>
                                                     </React.Fragment>
                                                 ) : null}
                                                 <div className="d-inline p-2 bg-primary text-white rounded-bottom-less">
