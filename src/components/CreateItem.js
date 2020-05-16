@@ -442,11 +442,11 @@ const CreateItem = ({ match, history }) => {
                     selectedItem.item.uid === firebase.auth().currentUser.uid) ||
                 production === 'create' ? <React.Fragment>
                 <NavBar />
-                <div className={"container text-left"}>
+                <div className={"container text-left pt-4"} id={"title-container"}>
                     {createType === 'request' ?
-                        <h2 className={"mt-3 pb-0"}>Request an Item</h2> : null}
+                        <h1 className={""}>Request an Item</h1> : null}
                     {createType === 'sell' ?
-                        <h2 className={"mt-3 pb-0"}> Sell an Item</h2> : null}
+                        <h1 className={""}> Sell an Item</h1> : null}
                 </div>
                     <form autoComplete='off' onLoadStart={handleReset} id='sell-form' onSubmit={onSubmit}>
                         <div className={'form-group text-left'}>
@@ -473,8 +473,9 @@ const CreateItem = ({ match, history }) => {
                             itemType === '' ? null :
                             <React.Fragment>
                                 {itemType === 'book' ?
-                                    <div className={'form-group text-left col-md-4'}>
-                                        <div className={"d-inline-block"}>
+                                    <React.Fragment>
+                                    <div className="form-row text-left">
+                                        <div className={'form-group col-md-6'}>
                                             <label htmlFor='isbn' className={'required'}>
                                                 ISBN
                                             </label>
@@ -488,84 +489,97 @@ const CreateItem = ({ match, history }) => {
                                                 value={isbn}
                                                 name='changeIsbn'
                                                 onChange={onChange}
-                                                placeholder='1234567890'
+                                                placeholder='ex: 1234567890'
                                                 required
                                             />
                                         </div>
-                                        <button className={"btn btn-primary d-inline-block"} onClick = {getBookData} name={"autocomplete"}>Auto-Complete</button>
+                                        <div className={'form-group col-md-6 autocomplete-div pt-md-2'}>
+                                            <button className={"btn btn-outline-primary d-inline-block mt-md-4"} onClick = {getBookData} name={"autocomplete"}>Auto-Complete</button>
+                                        </div>
                                     </div>
-                                    : null }
+                                    <div className="form-row text-left">
+                                        <div className="form-group col-md-6">
+                                            <label htmlFor='title' className={'required'}>
+                                                Title
+                                            </label>
+                                            <input
+                                                type='text'
+                                                id='title'
+                                                className={'form-control'}
+                                                value={title}
+                                                name='changeTitle'
+                                                onChange={onChange}
+                                                required
+                                                placeholder={itemType === 'book' ? "ex: The Great Gatsby" : "ex: Wooden Desk Chair"}
+                                            />
+                                        </div>
+                                        <div className={'form-group col-md-6'}>
+                                            <label htmlFor='author' className={'required'}>
+                                                Author
+                                            </label>
+                                            <input
+                                                type='text'
+                                                id='author'
+                                                className={'form-control'}
+                                                value={author}
+                                                name='changeAuthor'
+                                                onChange={onChange}
+                                                required
+                                                placeholder={"ex: F. Scott Fitzgerald"}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="form-row text-left">
+                                        <div className="form-group col-md-6">
+                                            <label htmlFor='classCategory' className={'required'}>Class Category</label>
+                                            <input type='text'
+                                                   name='changeClassCategory'
+                                                   list='classes'
+                                                   className={'form-control'}
+                                                   defaultValue={classCategory}
+                                                   onChange={onChange}
+                                                   required
+                                                   placeholder="ex: BUSN"/>
+                                            <datalist id='classes'>
+                                                {classCategory === '' ? null : (
+                                                    <React.Fragment>
+                                                        {categories.classCategories.map(category => {
+                                                            return (category.includes(classCategory.toLowerCase()) ? (<option key={category} value={category.toUpperCase()}>{category.toUpperCase}</option>) : null )
+                                                        })}
+                                                    </React.Fragment>
+                                                )}
 
-                                <div className="form-group text-left">
-                                    <label htmlFor='title' className={'required'}>
-                                        Title
-                                    </label>
-                                    <input
-                                        type='text'
-                                        id='title'
-                                        className={'form-control'}
-                                        value={title}
-                                        name='changeTitle'
-                                        onChange={onChange}
-                                        required
-                                        placeholder={itemType === 'book' ? "ex: The Great Gatsby" : "ex: Wooden Desk Chair"}
-                                    />
-                                </div>
-                                {
-                                    itemType === 'book' ?
-                                        <React.Fragment>
-                                            <div className="form-row text-left">
-                                                <div className={'form-group col-md-6'}>
-                                                    <label htmlFor='author' className={'required'}>
-                                                        Author
-                                                    </label>
-                                                    <input
-                                                        type='text'
-                                                        id='author'
-                                                        className={'form-control'}
-                                                        value={author}
-                                                        name='changeAuthor'
-                                                        onChange={onChange}
-                                                        required
-                                                        placeholder={"ex: F. Scott Fitzgerald"}
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="form-row text-left">
-                                                <div className="form-group col-md-6">
-                                                    <label htmlFor='classCategory' className={'required'}>Class Category</label>
-                                                    <input type='text'
-                                                           name='changeClassCategory'
-                                                           list='classes'
-                                                           className={'form-control'}
-                                                           defaultValue={classCategory}
-                                                           onChange={onChange}
-                                                           required
-                                                           placeholder="ex: BUSN"/>
-                                                    <datalist id='classes'>
-                                                        {classCategory === '' ? null : (
-                                                            <React.Fragment>
-                                                                {categories.classCategories.map(category => {
-                                                                    return (category.includes(classCategory.toLowerCase()) ? (<option key={category} value={category.toUpperCase()}>{category.toUpperCase}</option>) : null )
-                                                                })}
-                                                            </React.Fragment>
-                                                        )}
+                                            </datalist>
+                                        </div>
+                                        <div className="form-group col-md-6">
+                                            <label htmlFor='courseNum'>Course Number</label>
+                                            <input type='number'
+                                                   id='courseNum'
+                                                   className={'form-control'}
+                                                   value={courseNum}
+                                                   name='changeCourseNum'
+                                                   onChange={onChange}
+                                                   placeholder="ex: 100"/>
+                                        </div>
+                                    </div>
+                                    </React.Fragment>
 
-                                                    </datalist>
-                                                </div>
-                                                <div className="form-group col-md-6">
-                                                    <label htmlFor='courseNum'>Course Number</label>
-                                                    <input type='number'
-                                                           id='courseNum'
-                                                           className={'form-control'}
-                                                           value={courseNum}
-                                                           name='changeCourseNum'
-                                                           onChange={onChange}
-                                                           placeholder="ex: 100"/>
-                                                </div>
-                                            </div>
-                                        </React.Fragment> :
-                                        null
+
+                                    : <div className="form-group text-left">
+                                        <label htmlFor='title' className={'required'}>
+                                            Title
+                                        </label>
+                                        <input
+                                            type='text'
+                                            id='title'
+                                            className={'form-control'}
+                                            value={title}
+                                            name='changeTitle'
+                                            onChange={onChange}
+                                            required
+                                            placeholder={itemType === 'book' ? "ex: The Great Gatsby" : "ex: Wooden Desk Chair"}
+                                        />
+                                    </div>
                                 }
                                 <div className="form-row text-left">
                                     <div className="form-group col-md-6">
@@ -623,22 +637,15 @@ const CreateItem = ({ match, history }) => {
                                         onChange={onChange}
                                     />
                                 </div>
-                                <div className='form-group'>
+                                <div className='form-group text-left'>
                                     <input type="file"
                                            className='form-control-file d-none'
                                            id='test'
                                            name='changeImage'
                                            multiple
                                            onChange={onChange}/>
-                                    <input type="button" className="btn btn-primary" value="Browse..." onClick={imageSelect} />
-                                    {/*<input*/}
-                                        {/*type='file'*/}
-                                        {/*className='form-control-file'*/}
-                                        {/*id='exampleFormControlFile1'*/}
-                                        {/*name='changeImage'*/}
-                                        {/*multiple*/}
-                                        {/*onChange={onChange}*/}
-                                    {/*/>*/}
+
+                                    <button type="button" className="btn btn-outline-primary" onClick={imageSelect}>Upload an Image<div className={"align-middle mr-2"}><i className="material-icons pl-1">add_a_photo</i></div></button>
                                 </div>
                                         
                                 {images === null ? null : (
@@ -647,16 +654,16 @@ const CreateItem = ({ match, history }) => {
                                             image === images[0] ?
                                                 <React.Fragment className={"d-inline-block"}>
                                                     <div className={"container"}>
-                                                        <img src={image.src} key={image.src} onClick={changeCoverImage} className={"w-25 pl-2 pr-2"}/>
-                                                        <div>
-                                                            Thumbnail
+                                                        <div className="text-block">
+                                                            <h4 className="mb-1">Thumbnail</h4>
                                                         </div>
+                                                        <img src={image.src} key={image.src} onClick={changeCoverImage} className={"w-25 px-1 py-1 border rounded"}/>
                                                     </div>
                                                 </React.Fragment>
                                                 :
                                                 <React.Fragment className={"d-inline-block"}>
-                                                    <div className={"container"}>
-                                                        <img src={image.src} key={image.src} onClick={changeCoverImage} className={"w-25 pl-2 pr-2 non-thumbnail-img"}/>
+                                                    <div className={"container mt-3"}>
+                                                        <img src={image.src} key={image.src} onClick={changeCoverImage} className={"w-25 px-1 py-1 border rounded non-thumbnail-img"}/>
                                                         <div className="middle">
                                                             <div className="text">Set as thumbnail</div>
                                                         </div>
