@@ -10,6 +10,7 @@ import HomePage from './components/HomePage';
 import Item from './components/Item'
 import PageNotFound from './components/PageNotFound'
 import Search from './components/Search'
+import About from './components/About';
 
 /**
  * This component is a custom route (a route is basically url)
@@ -60,6 +61,7 @@ const Router = () => {
             <PrivateRoute path="/list/:type/:uid" component={ItemList}/>
             <PrivateRoute path='/view/:item/:type' component={Item}/>
             <PrivateRoute path='/:production/:type/:item' component={CreateItem}/>
+            <PrivateRoute path="/about" component={About}/>
             
             {isEmpty(auth) ? <Redirect to='/login'/> : <Route component={PageNotFound} />}
         </Switch>
