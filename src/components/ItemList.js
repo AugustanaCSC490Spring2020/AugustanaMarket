@@ -87,12 +87,12 @@ const ItemList = ({ match }) => {
                                     return (
                                         <div key={item.id} className="col-md-3 col-sm-4 mb-3 mt-3">
                                             <div className="card rounded">
-                                                <div className={"container w-100 center-text"}>
-                                                    <img className="card-img-top w-50 pt-2" src={item.imageUrl} alt="Card image cap" />
+                                                <div className={"container center-text card-height-myl"}>
+                                                    <img className="card-img-top w-50 pt-2 image-sizing-myl" src={item.imageUrl} />
                                                 </div>
                                                 <div className="card-body text-left">
-                                                    <b><p className="card-title">{item.title}</p></b>
-                                                    <p className="card-text">${item.price}</p>
+                                                    <h4 className="card-title text-dark mb-0">{item.title}</h4>
+                                                    <h5 className="card-text py-1 text-muted">${item.price}</h5>
                                                 </div>
                                                 {/*This checks to see if url parameter for which user's
                                                 lising is the current users. If it is, then allow for
