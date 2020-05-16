@@ -19,6 +19,11 @@ const listReducer = (state=initialState,action) => {
                 isLoaded: true,
             }
         
+        case 'UPDATE_ITEMS':
+            return {
+                ...state,
+                items : action.payload
+            }
         case 'DELETE_ITEM':
             return {
                 items: action.payload,
