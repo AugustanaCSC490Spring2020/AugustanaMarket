@@ -10,6 +10,7 @@ import HomePage from './components/HomePage';
 import Item from './components/Item'
 import PageNotFound from './components/PageNotFound'
 import Search from './components/Search'
+import About from './components/About';
 
 /**
  * This component is a custom route (a route is basically url)
@@ -23,6 +24,7 @@ import Search from './components/Search'
  * is being called RouteComponent here. 
  */
 const PrivateRoute = ({ component: RouteComponent, ...rest }) => {
+    // source http://react-redux-firebase.com/docs/recipes/auth.html
     const auth = useSelector((state) => state.firebase.auth);
     return (
         <Route
@@ -35,6 +37,17 @@ const PrivateRoute = ({ component: RouteComponent, ...rest }) => {
     );
 };
 
+const OnlyPublicRoute = ({component: RouteComponent, ...rest}) => {
+    const auth = useSelector(state => state.firebase.auth);
+    return (
+        <Route
+            {...rest}
+            render={(routeProps) => 
+                isLoaded(auth) && isEmpty(auth) ? <RouteComponent {...routeProps}/> :
+                <Redirect to='/' />}
+        />
+    )
+}
 
 /**
  * This component is the router which allows the user to use
@@ -54,12 +67,13 @@ const Router = () => {
     return (
     <div className="appDisplay">
         <Switch>
-            <PrivateRoute exact path="/" component={NavBar}/>
-            <Route exact path='/login' component={Login}/>
+            <PrivateRoute exact path="/" component={Search}/>
+            <OnlyPublicRoute exact path='/login' component={Login}/>
             <PrivateRoute exact path='/search' component={Search} />
             <PrivateRoute path="/list/:type/:uid" component={ItemList}/>
             <PrivateRoute path='/view/:item/:type' component={Item}/>
             <PrivateRoute path='/:production/:type/:item' component={CreateItem}/>
+            <PrivateRoute path="/about" component={About}/>
             
             {isEmpty(auth) ? <Redirect to='/login'/> : <Route component={PageNotFound} />}
         </Switch>
