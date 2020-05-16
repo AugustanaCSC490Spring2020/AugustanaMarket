@@ -38,3 +38,13 @@ body{
 ul{
     list-style-type:none;
 }
+@media (min-width: 575px) {
+    .image-sizing-myl{
+        max-height:13vw;
+    }
+    .card-height-myl{
+        height:13vw;
+    }
+}
+
+

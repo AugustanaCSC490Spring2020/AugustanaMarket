@@ -20,3 +20,11 @@
 .search-div{
     padding-left:18%;
 }
+
+.image-sizing{
+    max-height:13vw;
+}
+
+.card-height{
+    height:13vw !important;
+}

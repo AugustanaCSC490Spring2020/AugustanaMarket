@@ -16,13 +16,13 @@ const searchClient = algoliasearch(
 const HitComponent = ({hit}) => {
     const requestOrSell = useSelector(state => state.categories.isSell)
     return (
-        <div className={"card"}>
-            <div className={"container w-100 center-text"}>
-                <img className="card-img-top w-50 pt-2" src={hit.imageUrl} alt="Card image cap" />
+        <div className={"card card-rounded"}>
+            <div className={"container center-text card-height"}>
+                <img className="card-img-top w-50 pt-2 image-sizing" src={hit.imageUrl} />
             </div>
             <div className="card-body text-left">
-                <b><h4 className="card-title">{hit.title}</h4></b>
-                <h5 className="card-text">${hit.price}</h5>
+                <h4 className="card-title text-dark mb-0">{hit.title}</h4>
+                <h5 className="card-text py-1 text-muted">${hit.price}</h5>
             </div>
             <div className="d-inline p-2 bg-primary text-white rounded-bottom-less">
                 <Link className="text-decoration-none text-light" to={`/view/${hit.objectID}/${requestOrSell ? 'sell' : 'request'}`}>
@@ -75,7 +75,6 @@ const Search = () => {
             <div className={"search-div"}>
                 <SearchBox/>
             </div>
-            <Filters/>
             <Content/>
         </InstantSearch>
     </div>
