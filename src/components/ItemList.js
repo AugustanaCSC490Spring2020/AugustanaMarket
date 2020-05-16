@@ -6,6 +6,7 @@ import {useFirebase} from 'react-redux-firebase';
 import { Link } from 'react-router-dom';
 import './styles/ItemList.css';
 import PageNotFound from './PageNotFound';
+import Footer from './Footer';
 import {switchSearch} from '../redux/actions'
 
 /**
@@ -126,7 +127,8 @@ const ItemList = ({ match }) => {
                                         null}
                             </div>
                         </div>
-                    </div>                    
+                    </div>  
+                    <Footer/>                  
                 </React.Fragment>
             ) : (<PageNotFound/>)}
             
