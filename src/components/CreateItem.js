@@ -31,6 +31,7 @@ const CreateItem = ({ match, history }) => {
     const [ price, setPrice ] = useState('');
     const [description, setDescription] = useState('');
     const [isbn, setIsbn] = useState('');
+    const [testImage, updateTestImage] = useState(null)
     
     // In order to display an image file, we had to create
     // an image object from the image file. So images is
@@ -60,6 +61,7 @@ const CreateItem = ({ match, history }) => {
     const production = match.params.production;
     const createType = match.params.type;
     const item = match.params.item;
+
     const fileSizeLimit = 5;    // In MB. Adjust this appropriately
     const booksAPIKey = process.env.REACT_APP_GOOGLE_BOOKS_API_KEY;
 
@@ -125,9 +127,40 @@ const CreateItem = ({ match, history }) => {
                         isBook ? true :
                         false
                 );
+                loadImages(actualItem);
             }
         }
     }, [selectedItem.item]);
+
+    const loadImages = async (itemRef) => {
+        const loadedImages = []
+            for(let i = 0; i < itemRef.numImages; i++){
+                const url = await firebase.storage().ref(`${item}/${i}`).getDownloadURL()
+                const urlString = url.toString()
+                const newImage = new Image()
+                newImage.src = urlString;
+                loadedImages.push(newImage)
+                const c = document.createElement("canvas");
+                const ctx = c.getContext("2d");
+
+                const newImage1 = new Image()
+                newImage1.src = 'https://cors-anywhere.herokuapp.com/' + urlString
+                
+                
+                newImage1.onload = () => {
+                    c.width = newImage1.naturalWidth;     // update canvas size to match image
+                    c.height = newImage1.naturalHeight;
+                    ctx.drawImage(newImage1, 0, 0);       // draw in image
+                    c.toBlob((blob) => {      // get content as JPEG blob
+                        updateTestImage(blob)
+                    }, "image/jpeg", 0.75);
+                };
+                //newImage.crossOrigin = "";
+                
+            }
+            
+            setImages(loadedImages)
+    }
 
     /**
      * This method resets the state of the component
@@ -259,9 +292,9 @@ const CreateItem = ({ match, history }) => {
      * lisitings
      * @param e the submission of an item being modified or created
      */
-    const onSubmit = (e) => {
+    const onSubmit = async (e) => {
         e.preventDefault();
-        finishItem();
+        await finishItem();
         document.getElementById('sell-form').reset();
         history.push(`/list/${createType}/${firebase.auth().currentUser.uid}`);
     };
@@ -271,7 +304,7 @@ const CreateItem = ({ match, history }) => {
      * it gets added to firestore and the images get put into firebase
      * storage
      */
-    const finishItem = () => {
+    const finishItem = async () => {
         const data = {
             itemType,
             condition,
@@ -442,6 +475,7 @@ const CreateItem = ({ match, history }) => {
                     selectedItem.item.uid === firebase.auth().currentUser.uid) ||
                 production === 'create' ? <React.Fragment>
                 <NavBar />
+                {testImage ? <img src={testImage.src} onLoad={() => console.log('loaded')} /> : null}
                 <div className={"container text-left pt-4"} id={"title-container"}>
                     {createType === 'request' ?
                         <h1 className={""}>Request an Item</h1> : null}
@@ -652,23 +686,23 @@ const CreateItem = ({ match, history }) => {
                                     images.map((image) => {
                                         return (
                                             image === images[0] ?
-                                                <React.Fragment className={"d-inline-block"}>
+                                                <div className={"d-inline-block"} key={image.src}>
                                                     <div className={"container"}>
                                                         <div className="text-block">
                                                             <h4 className="mb-1">Thumbnail</h4>
                                                         </div>
                                                         <img src={image.src} key={image.src} onClick={changeCoverImage} className={"w-25 px-1 py-1 border rounded"}/>
                                                     </div>
-                                                </React.Fragment>
+                                                </div>
                                                 :
-                                                <React.Fragment className={"d-inline-block"}>
+                                                <div className={"d-inline-block"} key={image.src + '0'}>
                                                     <div className={"container mt-3"}>
                                                         <img src={image.src} key={image.src} onClick={changeCoverImage} className={"w-25 px-1 py-1 border rounded non-thumbnail-img"}/>
                                                         <div className="middle">
                                                             <div className="text">Set as thumbnail</div>
                                                         </div>
                                                     </div>
-                                                </React.Fragment>
+                                                </div>
                                         )
                                     })
                                 )}  
