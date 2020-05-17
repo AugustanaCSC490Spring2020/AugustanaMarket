@@ -292,19 +292,6 @@ const CreateItem = ({ match, history }) => {
             data['courseNum'] = courseNum;
             data['classCategory'] = classCategory;
         }
-        
-        // If the user has not selected an image for
-        // creating an item, then add a default image
-        if ((!images || images.length === 0) && production === 'create') {
-            //deal with adding file to imageFiles and also in images for specified item
-            if (itemType === 'furniture'){
-
-            } else if (itemType === 'book'){
-
-            } else {
-
-            }
-        }
 
         // If the user is editing an item, then check to
         // see if they have changed images. If they have,
@@ -319,7 +306,11 @@ const CreateItem = ({ match, history }) => {
                 }
             }      
         }
-        data['numImages'] = ((production === 'edit' && (!images || images.length === 0)) ? selectedItem.item.numImages : images.length);
+        if (production === 'edit') {
+            data['numImages'] = (!images || images.length === 0) ? selectedItem.item.numImages : images.length;
+        } else {
+            data['numImages'] = (!images) ? 0 : images.length;
+        }
         const email = firebase.auth().currentUser.email;
         const displayName = firebase.auth().currentUser.displayName;
         data['email'] = email;
@@ -333,7 +324,7 @@ const CreateItem = ({ match, history }) => {
         // the info and change the images accordingly
         if(production === 'create'){
             firebase.firestore().collection(createType).add(data).then(async (doc) => {
-                if (images && imageFiles) {
+                if (images && images.length !==0 && imageFiles) {
                     for (let i = 0; i < imageFiles.length; i++) {
                         await firebase.storage().ref(`${doc.id}/${i}`).put(imageFiles[i])
                     }
@@ -344,8 +335,15 @@ const CreateItem = ({ match, history }) => {
                             imageUrl: urlString
                         })
                     })
-                    resetState();
+                } else {
+                    firebase.storage().ref(itemType + '.png').getDownloadURL().then(async (url) => {
+                        const urlString = url.toString();
+                        await firebase.firestore().collection(createType).doc(doc.id).update({
+                            imageUrl: urlString
+                        })
+                    })
                 }
+                resetState();
             })
         } else {
             firebase.firestore().collection(createType).doc(item).update(data).then((doc) => {
