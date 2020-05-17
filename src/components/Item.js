@@ -1,5 +1,6 @@
 import React from 'react';
 import NavBar from './NavBar';
+import Footer from './Footer';
 import {useSelector, useDispatch} from 'react-redux';
 import * as itemActions from '../redux/actions/itemActions';
 import './styles/Item.css';
@@ -133,6 +134,7 @@ const Item = ({match}) => {
                     </div>
                 ) : <h1>Item not found</h1>
             ) : null}
+            <Footer/>
         </div>
     )
 }

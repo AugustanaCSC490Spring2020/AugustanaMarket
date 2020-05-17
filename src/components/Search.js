@@ -4,6 +4,7 @@ import {InstantSearch, SearchBox, Hits, Pagination, RefinementList} from 'react-
 import {Link} from 'react-router-dom';
 import './styles/Search.css';
 import NavBar from './NavBar';
+import Footer from './Footer';
 import {useSelector, useDispatch} from 'react-redux'
 import {useFirebase} from 'react-redux-firebase';
 import {switchSearch} from '../redux/actions'
@@ -80,6 +81,7 @@ const Search = () => {
             </div>
             <Content/>
         </InstantSearch>
+        <Footer/>
     </div>
     );
 };
