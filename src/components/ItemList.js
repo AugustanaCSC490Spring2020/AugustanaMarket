@@ -15,8 +15,6 @@ import {switchSearch} from '../redux/actions'
  * This allows the user to other listings a user has. If
  * the items were created by the user, then the option
  * to edit and delete the items are present here.
- * @param match the parameters passed by the url (see in
- * Router.js to see connection)
  */
 const ItemList = () => {
     const itemList = useSelector((state) => state.list);

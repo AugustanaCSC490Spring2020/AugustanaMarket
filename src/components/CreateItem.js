@@ -6,6 +6,7 @@ import { useFirebase } from 'react-redux-firebase';
 import './styles/CreateSellItem.css';
 import PageNotFound from './PageNotFound';
 import Axios from 'axios';
+import { useParams } from 'react-router-dom'
 
 /**
  * This component allows the user to create an item to sell or
@@ -16,11 +17,10 @@ import Axios from 'axios';
  * book to autocomplete the author, title, and give an image
  * of the book. The user can add pictures that is used for displaying
  * their items to other users.
- * @param match the url parameters (see Router.js for connection)
  * @param history the url history. This allows for changing
  * the url of the application manually
  */
-const CreateItem = ({ match, history }) => {
+const CreateItem = ({ history }) => {
     // component state of all the html documents
     const [ itemType, setItemType ] = useState('');
     const [ classCategory, setClassCategory ] = useState('');
@@ -57,9 +57,7 @@ const CreateItem = ({ match, history }) => {
     const dispatch = useDispatch();
     
     // url parameters
-    const production = match.params.production;
-    const createType = match.params.type;
-    const item = match.params.item;
+    const {production, type : createType, item} = useParams()
 
     const fileSizeLimit = 5;    // In MB. Adjust this appropriately
     const booksAPIKey = process.env.REACT_APP_GOOGLE_BOOKS_API_KEY;
@@ -304,9 +302,10 @@ const CreateItem = ({ match, history }) => {
                 for(let i = 0; i < selectedItem.item.numImages; i++){
                     await firebase.storage().ref(item + '/' + i).delete();
                 }
-                for(let i = 0; i < images.length; i++){
-                    await firebase.storage().ref(item + '/' + i).put(imageFiles[i])
-                }
+                await Promise.all(imageFiles.map((file, i) => firebase.storage().ref(`${item}` + '/' + `${i}`).put(file)));
+                let newImageUrl = await firebase.storage().ref(`${item}` + '/' + `0`).getDownloadURL()
+                newImageUrl = newImageUrl.toString()
+                data['imageUrl'] = newImageUrl
             }      
         }
         if (production === 'edit') {
@@ -514,7 +513,7 @@ const CreateItem = ({ match, history }) => {
                                     </div>
                                     <div className="form-row text-left">
                                         <div className={'form-group col-md-6'}>
-                                            <label htmlFor='isbn' className={'required'}>
+                                            <label htmlFor='isbn'>
                                                 ISBN
                                             </label>
                                             <input
@@ -528,7 +527,6 @@ const CreateItem = ({ match, history }) => {
                                                 name='changeIsbn'
                                                 onChange={onChange}
                                                 placeholder='ex: 1234567890'
-                                                required
                                             />
                                         </div>
                                         <div className={'form-group col-md-6 autocomplete-div pt-md-2'}>
@@ -688,6 +686,7 @@ const CreateItem = ({ match, history }) => {
                                            onChange={onChange}/>
 
                                     <button type="button" className="btn btn-outline-primary" onClick={imageSelect}>Upload an Image<div className={"align-middle mr-2"}><i className="material-icons pl-1">add_a_photo</i></div></button>
+                                    {production === 'edit' ? <p>If you select new images, the old ones will be replaced</p> : null}
                                 </div>
                                         
                                 {images === null ? null : (
@@ -719,7 +718,7 @@ const CreateItem = ({ match, history }) => {
                                     type='submit'
                                     name={"submit"}
                                     className='btn btn-primary mt-3'
-                                    disabled={itemType === 'book' && !isValidCategory}
+                                    disabled={itemType === 'book' && forSchool && !isValidCategory}
                                     value='Submit'
                                     id={'submit-btn'}
                                 />

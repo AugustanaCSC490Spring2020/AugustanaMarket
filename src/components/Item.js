@@ -4,7 +4,7 @@ import Footer from './Footer';
 import {useSelector, useDispatch} from 'react-redux';
 import * as itemActions from '../redux/actions/itemActions';
 import './styles/Item.css';
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { useFirebase } from 'react-redux-firebase'
 
 /**
@@ -15,7 +15,7 @@ import { useFirebase } from 'react-redux-firebase'
  * @param match the parameters passed by the url (see
  * Router.js for connection)
  */
-const Item = ({match}) => {
+const Item = () => {
     const firebase = useFirebase();
     const dispatch = useDispatch();
     const items = useSelector(state => state.list.items);
@@ -29,8 +29,7 @@ const Item = ({match}) => {
         changeImageUrls([]);
     }, [])
     // url parameters
-    const itemID = match.params.item;
-    const requestOrSell = match.params.type;
+    const {item : itemID, type: requestOrSell} = useParams()
 
     // if the item has not been loaded, then load the item
     if(!selectedItem.isLoaded){
