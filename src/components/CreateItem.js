@@ -262,13 +262,16 @@ const CreateItem = ({ match, history }) => {
      * to their already created item or creating a new item.
      * Once that has occurred, the user gets directed to their
      * lisitings
+     * Assistance: Minh Ta: adding the .then so everything is correct
      * @param e the submission of an item being modified or created
      */
     const onSubmit = (e) => {
         e.preventDefault();
-        finishItem();
-        document.getElementById('sell-form').reset();
-        history.push(`/list/${createType}/${firebase.auth().currentUser.uid}`);
+        finishItem().then(() => {
+            document.getElementById('sell-form').reset();
+            history.push(`/list/${createType}/${firebase.auth().currentUser.uid}`);
+        });
+        
     };
 
     /**
@@ -322,33 +325,28 @@ const CreateItem = ({ match, history }) => {
         // if the user is creating a new item, then we are adding and just
         // uploading the images with it. If this was an edit, then we update
         // the info and change the images accordingly
+        // Assistance from Minh Ta: helped with dealing with promises correctly
         if(production === 'create'){
-            firebase.firestore().collection(createType).add(data).then(async (doc) => {
-                if (images && images.length !==0 && imageFiles) {
-                    for (let i = 0; i < imageFiles.length; i++) {
-                        await firebase.storage().ref(`${doc.id}/${i}`).put(imageFiles[i])
-                    }
-
-                    firebase.storage().ref(`${doc.id}/${0}`).getDownloadURL().then(async (url) => {
-                        const urlString = url.toString();
-                        await firebase.firestore().collection(createType).doc(doc.id).update({
-                            imageUrl: urlString
-                        })
+            const doc = await firebase.firestore().collection(createType).add(data)
+            if (images && images.length !==0 && imageFiles) {
+                await Promise.all(imageFiles.map((file, i) => firebase.storage().ref(`${doc.id}` + '/' + `${i}`).put(file)));
+            const url = await firebase.storage().ref(`${doc.id}/${0}`).getDownloadURL()
+                    const urlString = url.toString();
+                    await firebase.firestore().collection(createType).doc(doc.id).update({
+                        imageUrl: urlString
                     })
-                } else {
-                    firebase.storage().ref(itemType + '.png').getDownloadURL().then(async (url) => {
-                        const urlString = url.toString();
-                        await firebase.firestore().collection(createType).doc(doc.id).update({
-                            imageUrl: urlString
-                        })
-                    })
-                }
-                resetState();
-            })
+            } else {
+                const url = await firebase.storage().ref(itemType + '.png').getDownloadURL()
+                const urlString = url.toString();
+                await firebase.firestore().collection(createType).doc(doc.id).update({
+                    imageUrl: urlString
+                })
+            }
+            resetState();
+        
         } else {
-            firebase.firestore().collection(createType).doc(item).update(data).then((doc) => {
-                resetState();
-            })
+            await firebase.firestore().collection(createType).doc(item).update(data)
+            resetState();
         }
     };
 
