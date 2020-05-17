@@ -26,6 +26,7 @@ const Item = ({match}) => {
     // on initialization, reset to not being loaded
     React.useEffect(() => {
         dispatch(itemActions.resetState());
+        changeImageUrls([]);
     }, [])
     // url parameters
     const itemID = match.params.item;
