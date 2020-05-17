@@ -3,7 +3,7 @@ import NavBar from './NavBar';
 import * as listActions from '../redux/actions/listActions';
 import { useSelector, useDispatch } from 'react-redux';
 import {useFirebase} from 'react-redux-firebase';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import './styles/ItemList.css';
 import PageNotFound from './PageNotFound';
 import Footer from './Footer';
@@ -18,14 +18,13 @@ import {switchSearch} from '../redux/actions'
  * @param match the parameters passed by the url (see in
  * Router.js to see connection)
  */
-const ItemList = ({ match }) => {
+const ItemList = () => {
     const itemList = useSelector((state) => state.list);
     const isSell = useSelector((state) => state.categories.isSell);
     const firebase = useFirebase(); 
     const dispatch = useDispatch();
     // url parameters
-    const requestOrSell = match.params.type;
-    const uid = match.params.uid;
+    const { type: requestOrSell, uid } = useParams()
     // on initialization, reset to not being loaded
     React.useEffect(() => {
         dispatch(listActions.resetState());
