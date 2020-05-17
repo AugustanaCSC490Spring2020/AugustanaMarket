@@ -109,6 +109,9 @@ const Item = ({match}) => {
     return (
         <div>
             <NavBar/>
+            <div className={"text-left"}>
+                <h4 className={"mt-4 ml-4"}><Link to={`/search`} className={"text-decoration-none"}>&larr; Back</Link></h4>
+            </div>
             {/*If the item has not been loaded from listReducer
             or has not been looked for in firebase, return nothing.
             The second turnary is if the item has been loaded (meaning
@@ -151,7 +154,7 @@ const Item = ({match}) => {
                             <div className={"col-sm text-right"}>
                                 {imageUrls.map(url => {
                                     return (
-                                        <img src={url} key={url} className={"mx-2 my-2 px-1 py-1 border rounded width-40"}/>
+                                        <img src={url} key={url} className={"mx-2 my-2 border rounded width-40 zoom-on-hover"}/>
                                     )
                                 })}
                             </div>
