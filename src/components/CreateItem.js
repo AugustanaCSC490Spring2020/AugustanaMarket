@@ -707,7 +707,7 @@ const CreateItem = ({ match, history }) => {
                                                 :
                                                 <div className={"d-inline-block"} key={image.src + '0'}>
                                                     <div className={"container mt-3"}>
-                                                        <img src={image.src} key={image.src} onClick={changeCoverImage} className={"w-25 px-1 py-1 border rounded non-thumbnail-img"}/>
+                                                        <img src={image.src} key={image.src} onClick={changeCoverImage} className={"w-25 px-1 py-1 border rounded non-thumbnail-img thumbnail-image-width"}/>
                                                         <div className="middle">
                                                             <div className="text">Set as thumbnail</div>
                                                         </div>
