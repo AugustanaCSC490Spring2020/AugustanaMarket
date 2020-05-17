@@ -42,7 +42,6 @@ const NavBar = () => {
                                 <a className="dropdown-item" href="/create/request/new">A request for an item</a>
                             </div>
                         </li>
-                        {/*<li className="nav-item"><a className="nav-link" href={`/search`}>Search</a></li>*/}
                         <li className="nav-item"><a className="nav-link" onClick={() => dispatch(switchSearch(true))} href={`/search`}>Listings</a></li>
                         <li className="nav-item"><a className="nav-link" onClick={() => dispatch(switchSearch(false))} href={`/search`}>Requests</a></li>
                     </ul>

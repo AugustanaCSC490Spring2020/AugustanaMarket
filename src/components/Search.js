@@ -64,8 +64,11 @@ const Search = () => {
             <h4 className={"d-inline-block mr-3 border-bottom border-primary"}>
                 <Link className="text-decoration-none text-primary" to={`/search`}>All {isSell ? 'Listings' : 'Requests'}</Link>
             </h4>
-            <h4 className={"d-inline-block ml-3"}>
+            <h4 className={"d-inline-block mr-3"}>
                 <Link className="text-decoration-none text-muted" to={`/list/${isSell ? 'sell' : 'request'}/${firebase.auth().currentUser.uid}`}>My {isSell ? 'Listings' : 'Requests'}</Link>
+            </h4>
+            <h4 className={"d-inline-block mr-3"}>
+                <Link className={"text-decoration-none text-muted"} to={`/list/${isSell ? 'sell' : 'request'}/favorites`}>Favorite {isSell ? 'Listings' : 'Requests'}</Link>
             </h4>
         </div>
         <InstantSearch

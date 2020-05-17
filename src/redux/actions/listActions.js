@@ -2,7 +2,7 @@
  * This action allows for the population of items from a user's
  * set of sellings or requests into redux
  * @param requestOrSell the collection from firestore
- * @param {*} uid the user that is being referenced
+ * @param uid the user that is being referenced
  */
 export const populate = (requestOrSell, uid) => (dispatch, getState, { getFirebase }) => {
     const firebase = getFirebase();
@@ -23,6 +23,10 @@ export const populate = (requestOrSell, uid) => (dispatch, getState, { getFireba
         .then((items) => dispatch({ type: 'POPULATE_LIST', payload: items }));
 };
 
+/**
+ * This action allows for the user's favorite items to be loaded
+ * @param requestOrSell the collection from firestore
+ */
 export const loadFavorites = (requestOrSell) => (dispatch, getState, { getFirebase }) => {
     const firebase = getFirebase();
     const itemsRef = firebase.firestore().collection(requestOrSell);
@@ -42,7 +46,7 @@ export const loadFavorites = (requestOrSell) => (dispatch, getState, { getFireba
  * by changing the state in redux, but also deleting the document in firestore.
  * This also involves deleting any pictures in firebase storage that were associated
  * with the specific item
- * @param requestOrSell the collection form firestore
+ * @param requestOrSell the collection in firestore
  * @param itemID the item that is being deleted
  */
 export const deleteItem = (requestOrSell, itemID) => async (dispatch, getState, {getFirebase}) => {
@@ -72,6 +76,12 @@ export const deleteItem = (requestOrSell, itemID) => async (dispatch, getState, 
     dispatch({type: 'DELETE_ITEM', payload: updateItems});
 };
 
+/**
+ * This method removes an item that the user has favorited from their
+ * favorites. This is done in redux as well as firebase
+ * @param requestOrSell the collection in firestore
+ * @param itemID the item being removed 
+ */
 export const removeFromFavorites = (requestOrSell, itemID) => (dispatch, getState, {getFirebase}) => {
     const firebase = getFirebase()
     const items = getState().list.items;

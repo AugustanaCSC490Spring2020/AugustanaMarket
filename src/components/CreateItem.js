@@ -31,7 +31,7 @@ const CreateItem = ({ match, history }) => {
     const [ price, setPrice ] = useState('');
     const [description, setDescription] = useState('');
     const [isbn, setIsbn] = useState('');
-    const [testImage, updateTestImage] = useState(null)
+    const [forSchool, setForSchool] = useState(true)
     
     // In order to display an image file, we had to create
     // an image object from the image file. So images is
@@ -44,7 +44,6 @@ const CreateItem = ({ match, history }) => {
     // objects. So image files and blobs are stored here
     // for when we are adding the images to firebase storage
     const [imageFiles, setImageFiles] = useState(null);
-    const [blobTest, setBlobTest] = useState(null);
 
 
     // This state of the component is for the class category.
@@ -102,6 +101,7 @@ const CreateItem = ({ match, history }) => {
                 setPrice(actualItem.price);
                 setTitle(actualItem.title);
                 setCondition(actualItem.condition);
+                setForSchool(actualItem.forSchool)
                 setClassCategory(
 
                         isBook ? actualItem.classCategory :
@@ -132,6 +132,10 @@ const CreateItem = ({ match, history }) => {
         }
     }, [selectedItem.item]);
 
+    /**
+     * This method loads the images for editing
+     * @param itemRef the item being referenced
+     */
     const loadImages = async (itemRef) => {
         const loadedImages = []
             for(let i = 0; i < itemRef.numImages; i++){
@@ -152,7 +156,7 @@ const CreateItem = ({ match, history }) => {
                     c.height = newImage1.naturalHeight;
                     ctx.drawImage(newImage1, 0, 0);       // draw in image
                     c.toBlob((blob) => {      // get content as JPEG blob
-                        updateTestImage(blob)
+                        //updateTestImage(blob)
                     }, "image/jpeg", 0.75);
                 };
                 //newImage.crossOrigin = "";
@@ -225,7 +229,10 @@ const CreateItem = ({ match, history }) => {
             case 'changeDescription':
                 setDescription(val);
                 break;
-
+            
+            case 'changeForSchool':
+                setForSchool(val === 'For School')
+                break;
             case 'changeImage':
                 // There is a lot needed to deal with images
                 // we limit the user to 3 images and a certain
@@ -310,7 +317,8 @@ const CreateItem = ({ match, history }) => {
             condition,
             title,
             price,
-            description
+            description,
+            forSchool
         };
 
         if (itemType === 'book') {
@@ -421,6 +429,11 @@ const CreateItem = ({ match, history }) => {
         });
     };
 
+    /**
+     * This method changes which image will be used for as the
+     * cover image when viewed in listings
+     * @param e the image clicked
+     */
     const changeCoverImage = (e) => {
         const clickedSrc = e.target.src;
         let imgIndex = -1;
@@ -447,16 +460,14 @@ const CreateItem = ({ match, history }) => {
         console.log('changed');
     }
 
+    /**
+     * This is for having a button that acts as an input of file type
+     * without having the display of a that html document. This allows
+     * the button to have a more custom look
+     */
     const imageSelect = () => {
         document.getElementById('test').click();
     };
-    
-
-    // const getBookImage = () => {
-    //     Axios.get('http://books.google.com/books/content?id=yxv1LK5gyV4C&printsec=frontcover&img=1&zoom=5&source=gbs_api').then((response) => {
-    //         console.log(response);
-    //     })
-    // }
 
     return (
         <div>
@@ -475,7 +486,6 @@ const CreateItem = ({ match, history }) => {
                     selectedItem.item.uid === firebase.auth().currentUser.uid) ||
                 production === 'create' ? <React.Fragment>
                 <NavBar />
-                {testImage ? <img src={testImage.src} onLoad={() => console.log('loaded')} /> : null}
                 <div className={"container text-left pt-4"} id={"title-container"}>
                     {createType === 'request' ?
                         <h1 className={""}>Request an Item</h1> : null}
@@ -501,6 +511,7 @@ const CreateItem = ({ match, history }) => {
                                 </option>
                                 <option value='book'>Book</option>
                                 <option value='furniture'>Furniture</option>
+                                <option value='other'>Other</option>
                             </select>
                         </div>
                         {
@@ -508,6 +519,19 @@ const CreateItem = ({ match, history }) => {
                             <React.Fragment>
                                 {itemType === 'book' ?
                                     <React.Fragment>
+                                        <label htmlFor='forSchool'>
+                                            Book Type
+                                        </label>
+                                    <select
+                                        id='forSchool'
+                                        className='form-control'
+                                        name='changeForSchool'
+                                        value={forSchool ? 'For School' : 'Not For School'}
+                                        onChange={onChange}
+                                    >
+                                        <option>For School</option>
+                                        <option>Not For School</option>
+                                    </select>
                                     <div className="form-row text-left">
                                         <div className={'form-group col-md-6'}>
                                             <label htmlFor='isbn' className={'required'}>
@@ -563,39 +587,42 @@ const CreateItem = ({ match, history }) => {
                                             />
                                         </div>
                                     </div>
-                                    <div className="form-row text-left">
-                                        <div className="form-group col-md-6">
-                                            <label htmlFor='classCategory' className={'required'}>Class Category</label>
-                                            <input type='text'
-                                                   name='changeClassCategory'
-                                                   list='classes'
-                                                   className={'form-control'}
-                                                   defaultValue={classCategory}
-                                                   onChange={onChange}
-                                                   required
-                                                   placeholder="ex: BUSN"/>
-                                            <datalist id='classes'>
-                                                {classCategory === '' ? null : (
-                                                    <React.Fragment>
-                                                        {categories.classCategories.map(category => {
-                                                            return (category.includes(classCategory.toLowerCase()) ? (<option key={category} value={category.toUpperCase()}>{category.toUpperCase}</option>) : null )
-                                                        })}
-                                                    </React.Fragment>
-                                                )}
+                                    {forSchool ? (
+                                        <div className="form-row text-left">
+                                            <div className="form-group col-md-6">
+                                                <label htmlFor='classCategory' className={'required'}>Class Category</label>
+                                                <input type='text'
+                                                    name='changeClassCategory'
+                                                    list='classes'
+                                                    className={'form-control'}
+                                                    defaultValue={classCategory}
+                                                    onChange={onChange}
+                                                    required
+                                                    placeholder="ex: BUSN"/>
+                                                <datalist id='classes'>
+                                                    {classCategory === '' ? null : (
+                                                        <React.Fragment>
+                                                            {categories.classCategories.map(category => {
+                                                                return (category.includes(classCategory.toLowerCase()) ? (<option key={category} value={category.toUpperCase()}>{category.toUpperCase}</option>) : null )
+                                                            })}
+                                                        </React.Fragment>
+                                                    )}
 
-                                            </datalist>
+                                                </datalist>
+                                            </div>
+                                            <div className="form-group col-md-6">
+                                                <label htmlFor='courseNum'>Course Number</label>
+                                                <input type='number'
+                                                    id='courseNum'
+                                                    className={'form-control'}
+                                                    value={courseNum}
+                                                    name='changeCourseNum'
+                                                    onChange={onChange}
+                                                    placeholder="ex: 100"/>
+                                            </div>
                                         </div>
-                                        <div className="form-group col-md-6">
-                                            <label htmlFor='courseNum'>Course Number</label>
-                                            <input type='number'
-                                                   id='courseNum'
-                                                   className={'form-control'}
-                                                   value={courseNum}
-                                                   name='changeCourseNum'
-                                                   onChange={onChange}
-                                                   placeholder="ex: 100"/>
-                                        </div>
-                                    </div>
+                                    ) : null}
+                                    
                                     </React.Fragment>
 
 

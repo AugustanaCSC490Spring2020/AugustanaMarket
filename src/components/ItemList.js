@@ -56,6 +56,10 @@ const ItemList = ({ match }) => {
         dispatch(listActions.deleteItem(requestOrSell, itemID))
     };
 
+    /**
+     * This method removes an item from the user's favorites
+     * @param e the button being clicked 
+     */
     const removeFromFavorites = (e) => {
         const itemID = e.target.name
         dispatch(listActions.removeFromFavorites(requestOrSell, itemID))
@@ -75,11 +79,11 @@ const ItemList = ({ match }) => {
                             <h4 className={"d-inline-block mr-3"}>
                                 <Link className="text-decoration-none text-muted" to={`/search`} onClick={() => dispatch(switchSearch(requestOrSell === 'sell'))}>All {requestOrSell === 'sell' ? 'Listings' : 'Requests'}</Link>
                             </h4>
-                            <h4 className={"d-inline-block ml-3 border-bottom border-primary"}>
-                                <Link className="text-decoration-none text-primary" to={`/list/${requestOrSell === 'sell' ? 'sell' : 'request'}/${firebase.auth().currentUser.uid}`} onClick={() => dispatch(listActions.resetState())}>My {requestOrSell === 'sell' ? 'Listings' : 'Requests'}</Link>
+                            <h4 className={uid === 'favorites' ? "d-inline-block mr-3" : "d-inline-block mr-3 border-bottom border-primary"}>
+                                <Link className={uid === 'favorites' ? "text-decoration-none text-muted" : "text-decoration-none text-primary"} to={`/list/${requestOrSell === 'sell' ? 'sell' : 'request'}/${uid === 'favorites' ? firebase.auth().currentUser.uid : uid}`} onClick={() => dispatch(listActions.resetState())}>{uid === firebase.auth().currentUser.uid || uid === 'favorites' ? 'My' : itemList && itemList.items.length !== 0 ? itemList.items[0].displayName + "'s" : null} {requestOrSell === 'sell' ? 'Listings' : 'Requests'}</Link>
                             </h4>
-                            <h4 className={"d-inline-block mr-3"}>
-                                <Link className="text-decoration-none text-muted" to={`/list/${requestOrSell === 'sell' ? 'sell' : 'request'}/favorites`} onClick={() => dispatch(listActions.resetState())}>Favorite {requestOrSell === 'sell' ? 'Listings' : 'Requests'}</Link>
+                            <h4 className={uid === 'favorites' ? "d-inline-block mr-3 border-bottom border-primary" : "d-inline-block mr-3"}>
+                                <Link className={uid === 'favorites' ? "text-decoration-none text-primary" : "text-decoration-none text-muted"} to={`/list/${requestOrSell === 'sell' ? 'sell' : 'request'}/favorites`} onClick={() => dispatch(listActions.resetState())}>Favorite {requestOrSell === 'sell' ? 'Listings' : 'Requests'}</Link>
                             </h4>
                             <div className="row">
                             {

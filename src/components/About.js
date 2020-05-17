@@ -1,5 +1,9 @@
 import React from 'react'
 
+/**
+ * This component is a very basic component for displaying what the 
+ * application is and who made it
+ */
 const About = () => {
     return (
         <div>

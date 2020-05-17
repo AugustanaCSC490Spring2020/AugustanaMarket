@@ -17,6 +17,7 @@ const persistConfig = {
     blacklist : [ 'firebase', 'firestore' ]
 };
 
+// https://github.com/rt2zz/redux-persist
 // The persistor allows for redux state to be maintained when the page
 // is refreshed. This is done by have redux-persist storing the state
 // in local memory.  You can choose which states to persist and which

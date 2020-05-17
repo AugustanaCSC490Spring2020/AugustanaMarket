@@ -51,6 +51,9 @@ const Item = ({match}) => {
         }
     }
 
+    /**
+     * This method loads the image urls from firebase storage
+     */
     const loadImageUrls = async () => {
         const imgArray = [];
         for (let index = 0; index < selectedItem.item.numImages; index++) {
@@ -69,6 +72,9 @@ const Item = ({match}) => {
         changeLikeStatus(selectedItem.item.usersLike.includes(firebase.auth().currentUser.uid))
     }
     
+    /**
+     * This method adds the item to the user's favorites
+     */
     const addToFavorites = () => {
         changeLikeStatus(true)
         firebase.firestore().collection(requestOrSell ? 'sell' : 'request').doc(itemID).get().then(async (doc) => {
@@ -79,6 +85,9 @@ const Item = ({match}) => {
         })
     }
 
+    /**
+     * This method removes the item from the user's favorites
+     */
     const removeFromFavorites = () => {
         changeLikeStatus(false)
         firebase.firestore().collection(requestOrSell ? 'sell' : 'request').doc(itemID).get().then(async (doc) => {
