@@ -327,7 +327,6 @@ const CreateItem = ({ match, history }) => {
         // the info and change the images accordingly
         // Assistance from Minh Ta: helped with dealing with promises correctly
         if(production === 'create'){
-<<<<<<< HEAD
             const doc = await firebase.firestore().collection(createType).add(data)
             if (images && images.length !==0 && imageFiles) {
                 await Promise.all(imageFiles.map((file, i) => firebase.storage().ref(`${doc.id}` + '/' + `${i}`).put(file)));
@@ -345,38 +344,6 @@ const CreateItem = ({ match, history }) => {
             }
             resetState();
         
-=======
-            firebase.firestore().collection(createType).add(data).then(async (doc) => {
-                if (images && images.length !== 0 && imageFiles) {
-                    firebase.storage().ref(`${doc.id}/${0}`).put(imageFiles[0]).then((snapshot) => {
-                        firebase.storage().ref(`${doc.id}/${0}`).getDownloadURL().then(async (url) => {
-                            const urlString = url.toString();
-                            await firebase.firestore().collection(createType).doc(doc.id).update({
-                                imageUrl: urlString
-                            })
-                        })
-                    })
-                    for (let i = 1; i < imageFiles.length; i++) {
-                        await firebase.storage().ref(`${doc.id}/${i}`).put(imageFiles[i])
-                    }
-
-                    // firebase.storage().ref(`${doc.id}/${0}`).getDownloadURL().then(async (url) => {
-                    //     const urlString = url.toString();
-                    //     await firebase.firestore().collection(createType).doc(doc.id).update({
-                    //         imageUrl: urlString
-                    //     })
-                    // })
-                } else {
-                    firebase.storage().ref(itemType + '.png').getDownloadURL().then(async (url) => {
-                        const urlString = url.toString();
-                        await firebase.firestore().collection(createType).doc(doc.id).update({
-                            imageUrl: urlString
-                        })
-                    })
-                }
-                resetState();
-            })
->>>>>>> 6290e4f4da765bf2b3fd4a4ef0fbb9b273e8b550
         } else {
             await firebase.firestore().collection(createType).doc(item).update(data)
             resetState();
