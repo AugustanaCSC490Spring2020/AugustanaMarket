@@ -41,26 +41,18 @@
     margin-left:10px;
 }
 
-#signout-btn {
-    cursor: pointer;
-    background: transparent;
-    font-size: 16px;
-    border-radius: 50px;
-    margin-left:1%;
-    color: white;
-    border: 1px solid white;
-    padding: 0.25em 1em;
-    transition: 0.5s all ease-out;
-}
-
-#signout-btn:hover {
-    background-color: white;
-    color: #2D5775;
-}
-
 form input{
 }
 
 .right-div{
     margin-left:5%;
+}
+
+.profile-img{
+    width:33px;
+    border-radius:20px;
+}
+
+.hover-link:hover{
+    opacity:0.5;
 }

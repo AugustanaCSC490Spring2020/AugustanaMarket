@@ -327,6 +327,7 @@ const CreateItem = ({ match, history }) => {
         // the info and change the images accordingly
         // Assistance from Minh Ta: helped with dealing with promises correctly
         if(production === 'create'){
+<<<<<<< HEAD
             const doc = await firebase.firestore().collection(createType).add(data)
             if (images && images.length !==0 && imageFiles) {
                 await Promise.all(imageFiles.map((file, i) => firebase.storage().ref(`${doc.id}` + '/' + `${i}`).put(file)));
@@ -344,6 +345,38 @@ const CreateItem = ({ match, history }) => {
             }
             resetState();
         
+=======
+            firebase.firestore().collection(createType).add(data).then(async (doc) => {
+                if (images && images.length !== 0 && imageFiles) {
+                    firebase.storage().ref(`${doc.id}/${0}`).put(imageFiles[0]).then((snapshot) => {
+                        firebase.storage().ref(`${doc.id}/${0}`).getDownloadURL().then(async (url) => {
+                            const urlString = url.toString();
+                            await firebase.firestore().collection(createType).doc(doc.id).update({
+                                imageUrl: urlString
+                            })
+                        })
+                    })
+                    for (let i = 1; i < imageFiles.length; i++) {
+                        await firebase.storage().ref(`${doc.id}/${i}`).put(imageFiles[i])
+                    }
+
+                    // firebase.storage().ref(`${doc.id}/${0}`).getDownloadURL().then(async (url) => {
+                    //     const urlString = url.toString();
+                    //     await firebase.firestore().collection(createType).doc(doc.id).update({
+                    //         imageUrl: urlString
+                    //     })
+                    // })
+                } else {
+                    firebase.storage().ref(itemType + '.png').getDownloadURL().then(async (url) => {
+                        const urlString = url.toString();
+                        await firebase.firestore().collection(createType).doc(doc.id).update({
+                            imageUrl: urlString
+                        })
+                    })
+                }
+                resetState();
+            })
+>>>>>>> 6290e4f4da765bf2b3fd4a4ef0fbb9b273e8b550
         } else {
             await firebase.firestore().collection(createType).doc(item).update(data)
             resetState();
@@ -497,19 +530,21 @@ const CreateItem = ({ match, history }) => {
                             <React.Fragment>
                                 {itemType === 'book' ?
                                     <React.Fragment>
+                                    <div className={'form-group text-left'}>
                                         <label htmlFor='forSchool'>
                                             Book Type
                                         </label>
-                                    <select
-                                        id='forSchool'
-                                        className='form-control'
-                                        name='changeForSchool'
-                                        value={forSchool ? 'For School' : 'Not For School'}
-                                        onChange={onChange}
-                                    >
-                                        <option>For School</option>
-                                        <option>Not For School</option>
-                                    </select>
+                                        <select
+                                            id='forSchool'
+                                            className='form-control'
+                                            name='changeForSchool'
+                                            value={forSchool ? 'For School' : 'Not For School'}
+                                            onChange={onChange}
+                                        >
+                                            <option>For School</option>
+                                            <option>Not For School</option>
+                                        </select>
+                                    </div>
                                     <div className="form-row text-left">
                                         <div className={'form-group col-md-6'}>
                                             <label htmlFor='isbn' className={'required'}>
@@ -693,17 +728,17 @@ const CreateItem = ({ match, history }) => {
                                         return (
                                             image === images[0] ?
                                                 <div className={"d-inline-block"} key={image.src}>
-                                                    <div className={"container"}>
-                                                        <div className="text-block">
-                                                            <h4 className="mb-1">Thumbnail</h4>
+                                                    <div className={"container center-text"}>
+                                                        <div className="text-block mt-1">
+                                                            <h6><u>Thumbnail</u></h6>
                                                         </div>
-                                                        <img src={image.src} key={image.src} onClick={changeCoverImage} className={"w-25 px-1 py-1 border rounded"}/>
+                                                        <img src={image.src} key={image.src} onClick={changeCoverImage} className={"thumbnail-image-width px-1 py-1 border rounded"}/>
                                                     </div>
                                                 </div>
                                                 :
                                                 <div className={"d-inline-block"} key={image.src + '0'}>
                                                     <div className={"container mt-3"}>
-                                                        <img src={image.src} key={image.src} onClick={changeCoverImage} className={"w-25 px-1 py-1 border rounded non-thumbnail-img"}/>
+                                                        <img src={image.src} key={image.src} onClick={changeCoverImage} className={"w-25 px-1 py-1 border rounded non-thumbnail-img thumbnail-image-width"}/>
                                                         <div className="middle">
                                                             <div className="text">Set as thumbnail</div>
                                                         </div>
@@ -711,13 +746,12 @@ const CreateItem = ({ match, history }) => {
                                                 </div>
                                         )
                                     })
-                                )}  
-
+                                )}
                                 <br />
                                 <input
                                     type='submit'
                                     name={"submit"}
-                                    className='btn btn-primary'
+                                    className='btn btn-primary mt-3'
                                     disabled={itemType === 'book' && !isValidCategory}
                                     value='Submit'
                                     id={'submit-btn'}
