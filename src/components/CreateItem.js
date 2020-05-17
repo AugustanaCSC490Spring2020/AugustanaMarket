@@ -644,7 +644,7 @@ const CreateItem = ({ history }) => {
                                         </select>
                                     </div>
                                     <div className="form-group col-md-6">
-                                        <label htmlFor='price' className={"required"}>Price</label>
+                                    <label htmlFor='price' className={"required"}>{createType === 'request' ? 'Asking ' : null}Price</label>
                                         <div className='input-group'>
                                             <span className='input-group-addon'>$</span>
                                             <input type='number'
@@ -656,7 +656,7 @@ const CreateItem = ({ history }) => {
                                                    name='changePrice'
                                                    onChange={onChange}
                                                    required
-                                                   placeholder="10"/>
+                                                   placeholder="ex: 10"/>
                                         </div>
                                     </div>
                                 </div>

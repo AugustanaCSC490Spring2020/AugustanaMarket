@@ -54,15 +54,6 @@ const ItemList = () => {
         dispatch(listActions.deleteItem(requestOrSell, itemID))
     };
 
-    /**
-     * This method removes an item from the user's favorites
-     * @param e the button being clicked 
-     */
-    const removeFromFavorites = (e) => {
-        const itemID = e.target.name
-        dispatch(listActions.removeFromFavorites(requestOrSell, itemID))
-    }
-
     return (
         <div>
             {/*Since the url parameter could be anything, 
@@ -95,7 +86,7 @@ const ItemList = () => {
                                                 </div>
                                                 <div className="card-body text-left">
                                                     <h4 className="card-title text-dark mb-0">{item.title}</h4>
-                                                    <h5 className="card-text py-1 text-muted">${item.price}</h5>
+                                                    <h5 className="card-text py-1 text-muted">{requestOrSell === 'sell' ? null : 'Asking Price: '}${item.price}</h5>
                                                 </div>
                                                 {/*This checks to see if url parameter for which user's
                                                 lising is the current users. If it is, then allow for
@@ -116,7 +107,7 @@ const ItemList = () => {
                                                     <React.Fragment>
                                                         <div className={"pt-2 pr-2 position-absolute right-0"}>
                                                             <div className={"px-1 py-1"}>
-                                                                <button name={item.id} onClick={removeFromFavorites} className={"border rounded-circle outline-none border-grey like-btn"}>
+                                                                <button name={item.id} onClick={() => dispatch(listActions.removeFromFavorites(requestOrSell, item.id))} className={"border rounded-circle outline-none border-grey like-btn"}>
                                                                     <h5 className={"m-0 pt-small"}>
                                                                         <i className="fa fa-heart color-red"></i>
                                                                     </h5>

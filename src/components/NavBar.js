@@ -56,7 +56,11 @@ const NavBar = () => {
                             <h5 className={"mb-2"}>{profile.displayName}</h5>
                             <div className={"mb-1 hover-link"}>
                                 <i className="fa fa-heart-o pr-1"></i>
-                                <a href={"/list/sell/favorites"} className={"text-decoration-none text-dark mt-5 like-btn"}>My Favorites</a>
+                                <a href={"/list/sell/favorites"} className={"text-decoration-none text-dark mt-5 like-btn"}>Favorite Listings</a>
+                            </div>
+                            <div className={"mb-1 hover-link"}>
+                                <i className="fa fa-heart-o pr-1"></i>
+                                <a href={"/list/request/favorites"} className={"text-decoration-none text-dark mt-5 like-btn"}>Favorite Requests</a>
                             </div>
                             <div className={"mb-0 pb-0 hover-link"}>
                                 <i className="fa fa-sign-out d-inline-block pr-1"></i>

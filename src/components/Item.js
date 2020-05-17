@@ -12,8 +12,6 @@ import { useFirebase } from 'react-redux-firebase'
  * all the general information is provided for the user
  * and there is a link to look at that user's listings
  * (either requests or sellings).
- * @param match the parameters passed by the url (see
- * Router.js for connection)
  */
 const Item = () => {
     const firebase = useFirebase();

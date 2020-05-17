@@ -5,9 +5,8 @@ import {Link} from 'react-router-dom';
 import './styles/Search.css';
 import NavBar from './NavBar';
 import Footer from './Footer';
-import {useSelector, useDispatch} from 'react-redux'
+import {useSelector} from 'react-redux'
 import {useFirebase} from 'react-redux-firebase';
-import {switchSearch} from '../redux/actions'
 
 const searchClient = algoliasearch(
     process.env.REACT_APP_ALGOLIA_APPLICATION_ID, 
@@ -17,24 +16,25 @@ const searchClient = algoliasearch(
 const HitComponent = ({hit}) => {
     const firebase = useFirebase();
     const [liked, changeLikeStatus] = React.useState(hit.usersLike.includes(firebase.auth().currentUser.uid));
+    const isSell = useSelector(state => state.categories.isSell)
 
     const addToFavorites = () => {
-        changeLikeStatus(true);
+        
         firebase.firestore().collection(requestOrSell ? 'sell' : 'request').doc(hit.objectID).get().then(async (doc) => {
             const data = {...doc.data()};
             data.usersLike.push(firebase.auth().currentUser.uid);
             await firebase.firestore().collection(requestOrSell ? 'sell' : 'request').doc(hit.objectID).update(data)
-
+            changeLikeStatus(true);
         })
     };
 
     const removeFromFavorites = () => {
-        changeLikeStatus(false);
+        
         firebase.firestore().collection(requestOrSell ? 'sell' : 'request').doc(hit.objectID).get().then(async (doc) => {
             const data = {...doc.data()};
             data.usersLike = data.usersLike.filter(user => user !== firebase.auth().currentUser.uid);
             await firebase.firestore().collection(requestOrSell ? 'sell' : 'request').doc(hit.objectID).update(data)
-
+            changeLikeStatus(false);
         })
     };
     const requestOrSell = useSelector(state => state.categories.isSell);
@@ -61,7 +61,7 @@ const HitComponent = ({hit}) => {
             </div>
             <div className="card-body text-left">
                 <h4 className="card-title text-dark mb-0">{hit.title}</h4>
-                <h5 className="card-text py-1 text-muted">${hit.price}</h5>
+                <h5 className="card-text py-1 text-muted">{isSell ? null : 'Asking Price: '}${hit.price}</h5>
             </div>
             <div className="d-inline p-2 bg-primary text-white rounded-bottom-less">
                 <Link className="text-decoration-none text-light" to={`/view/${hit.objectID}/${requestOrSell ? 'sell' : 'request'}`}>
