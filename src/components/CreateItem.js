@@ -324,17 +324,25 @@ const CreateItem = ({ match, history }) => {
         // the info and change the images accordingly
         if(production === 'create'){
             firebase.firestore().collection(createType).add(data).then(async (doc) => {
-                if (images && images.length !==0 && imageFiles) {
-                    for (let i = 0; i < imageFiles.length; i++) {
+                if (images && images.length !== 0 && imageFiles) {
+                    firebase.storage().ref(`${doc.id}/${0}`).put(imageFiles[0]).then((snapshot) => {
+                        firebase.storage().ref(`${doc.id}/${0}`).getDownloadURL().then(async (url) => {
+                            const urlString = url.toString();
+                            await firebase.firestore().collection(createType).doc(doc.id).update({
+                                imageUrl: urlString
+                            })
+                        })
+                    })
+                    for (let i = 1; i < imageFiles.length; i++) {
                         await firebase.storage().ref(`${doc.id}/${i}`).put(imageFiles[i])
                     }
 
-                    firebase.storage().ref(`${doc.id}/${0}`).getDownloadURL().then(async (url) => {
-                        const urlString = url.toString();
-                        await firebase.firestore().collection(createType).doc(doc.id).update({
-                            imageUrl: urlString
-                        })
-                    })
+                    // firebase.storage().ref(`${doc.id}/${0}`).getDownloadURL().then(async (url) => {
+                    //     const urlString = url.toString();
+                    //     await firebase.firestore().collection(createType).doc(doc.id).update({
+                    //         imageUrl: urlString
+                    //     })
+                    // })
                 } else {
                     firebase.storage().ref(itemType + '.png').getDownloadURL().then(async (url) => {
                         const urlString = url.toString();
