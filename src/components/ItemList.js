@@ -74,13 +74,13 @@ const ItemList = () => {
                     <NavBar />
                         <div id={"item-details-div"} className={"pt-4"}>
                         <div className="container list-container">
-                            <h4 className={"d-inline-block mr-3"}>
+                            <h4 className={"d-inline-block mr-4"}>
                                 <Link className="text-decoration-none text-muted" to={`/search`} onClick={() => dispatch(switchSearch(requestOrSell === 'sell'))}>All {requestOrSell === 'sell' ? 'Listings' : 'Requests'}</Link>
                             </h4>
-                            <h4 className={uid === 'favorites' ? "d-inline-block mr-3" : "d-inline-block mr-3 border-bottom border-primary"}>
+                            <h4 className={uid === 'favorites' ? "d-inline-block mr-4" : "d-inline-block mr-4 border-bottom border-primary"}>
                                 <Link className={uid === 'favorites' ? "text-decoration-none text-muted" : "text-decoration-none text-primary"} to={`/list/${requestOrSell === 'sell' ? 'sell' : 'request'}/${uid === 'favorites' ? firebase.auth().currentUser.uid : uid}`} onClick={() => dispatch(listActions.resetState())}>{uid === firebase.auth().currentUser.uid || uid === 'favorites' ? 'My' : itemList && itemList.items.length !== 0 ? itemList.items[0].displayName + "'s" : null} {requestOrSell === 'sell' ? 'Listings' : 'Requests'}</Link>
                             </h4>
-                            <h4 className={uid === 'favorites' ? "d-inline-block mr-3 border-bottom border-primary" : "d-inline-block mr-3"}>
+                            <h4 className={uid === 'favorites' ? "d-inline-block mr-4 border-bottom border-primary" : "d-inline-block mr-4"}>
                                 <Link className={uid === 'favorites' ? "text-decoration-none text-primary" : "text-decoration-none text-muted"} to={`/list/${requestOrSell === 'sell' ? 'sell' : 'request'}/favorites`} onClick={() => dispatch(listActions.resetState())}>Favorite {requestOrSell === 'sell' ? 'Listings' : 'Requests'}</Link>
                             </h4>
                             <div className="row">
@@ -89,6 +89,7 @@ const ItemList = () => {
                                     return (
                                         <div key={item.id} className="col-md-3 col-sm-4 mb-3 mt-3">
                                             <div className="card rounded">
+
                                                 <div className={"container center-text card-height-myl"}>
                                                     <img className="card-img-top w-50 pt-2 image-sizing-myl" src={item.imageUrl} />
                                                 </div>
@@ -113,7 +114,15 @@ const ItemList = () => {
                                                     </React.Fragment>
                                                 ) : uid === 'favorites' ? (
                                                     <React.Fragment>
-                                                        <button name={item.id} onClick={removeFromFavorites}>Unlike</button>
+                                                        <div className={"pt-2 pr-2 position-absolute right-0"}>
+                                                            <div className={"px-1 py-1"}>
+                                                                <button name={item.id} onClick={removeFromFavorites} className={"border rounded-circle outline-none border-grey like-btn"}>
+                                                                    <h5 className={"m-0 pt-small"}>
+                                                                        <i className="fa fa-heart color-red"></i>
+                                                                    </h5>
+                                                                </button>
+                                                            </div>
+                                                        </div>
                                                     </React.Fragment>
                                                 ) : null}
                                                 <div className="d-inline p-2 bg-primary text-white rounded-bottom-less">
