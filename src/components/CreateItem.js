@@ -127,44 +127,9 @@ const CreateItem = ({ match, history }) => {
                         isBook ? true :
                         false
                 );
-                loadImages(actualItem);
             }
         }
     }, [selectedItem.item]);
-
-    /**
-     * This method loads the images for editing
-     * @param itemRef the item being referenced
-     */
-    const loadImages = async (itemRef) => {
-        const loadedImages = []
-            for(let i = 0; i < itemRef.numImages; i++){
-                const url = await firebase.storage().ref(`${item}/${i}`).getDownloadURL()
-                const urlString = url.toString()
-                const newImage = new Image()
-                newImage.src = urlString;
-                loadedImages.push(newImage)
-                const c = document.createElement("canvas");
-                const ctx = c.getContext("2d");
-
-                const newImage1 = new Image()
-                newImage1.src = 'https://cors-anywhere.herokuapp.com/' + urlString
-                
-                
-                newImage1.onload = () => {
-                    c.width = newImage1.naturalWidth;     // update canvas size to match image
-                    c.height = newImage1.naturalHeight;
-                    ctx.drawImage(newImage1, 0, 0);       // draw in image
-                    c.toBlob((blob) => {      // get content as JPEG blob
-                        //updateTestImage(blob)
-                    }, "image/jpeg", 0.75);
-                };
-                //newImage.crossOrigin = "";
-                
-            }
-            
-            setImages(loadedImages)
-    }
 
     /**
      * This method resets the state of the component
@@ -299,9 +264,9 @@ const CreateItem = ({ match, history }) => {
      * lisitings
      * @param e the submission of an item being modified or created
      */
-    const onSubmit = async (e) => {
+    const onSubmit = (e) => {
         e.preventDefault();
-        await finishItem();
+        finishItem();
         document.getElementById('sell-form').reset();
         history.push(`/list/${createType}/${firebase.auth().currentUser.uid}`);
     };
@@ -327,10 +292,34 @@ const CreateItem = ({ match, history }) => {
             data['courseNum'] = courseNum;
             data['classCategory'] = classCategory;
         }
-        // if(images) {
-        //     data['numImages'] = (images ?images.length;
-        // } 
-        data['numImages'] = (images ? images.length : 0);
+        
+        // If the user has not selected an image for
+        // creating an item, then add a default image
+        if ((!images || images.length === 0) && production === 'create') {
+            //deal with adding file to imageFiles and also in images for specified item
+            if (itemType === 'furniture'){
+
+            } else if (itemType === 'book'){
+
+            } else {
+
+            }
+        }
+
+        // If the user is editing an item, then check to
+        // see if they have changed images. If they have,
+        // then the images will be changed in firebase storage
+        if (production === 'edit') {
+            if(images && images.length !== 0){
+                for(let i = 0; i < selectedItem.item.numImages; i++){
+                    await firebase.storage().ref(item + '/' + i).delete();
+                }
+                for(let i = 0; i < images.length; i++){
+                    await firebase.storage().ref(item + '/' + i).put(imageFiles[i])
+                }
+            }      
+        }
+        data['numImages'] = ((production === 'edit' && (!images || images.length === 0)) ? selectedItem.item.numImages : images.length);
         const email = firebase.auth().currentUser.email;
         const displayName = firebase.auth().currentUser.displayName;
         data['email'] = email;
@@ -359,15 +348,8 @@ const CreateItem = ({ match, history }) => {
                 }
             })
         } else {
-            firebase.firestore().collection(createType).update(data).then(async (doc) => {
-                if (images && imageFiles) {
-                    for (let i = 0; i < images.length; i++) {
-                        const imageType = imageFiles[i]['type'].substring(6);
-                        await firebase.storage().ref(`${doc.id}/${i}`).put(imageFiles[i])
-                    }
-
-                    resetState();
-                }
+            firebase.firestore().collection(createType).doc(item).update(data).then((doc) => {
+                resetState();
             })
         }
     };
@@ -650,6 +632,7 @@ const CreateItem = ({ match, history }) => {
                                             className={'form-control'}
                                             name='changeCondition'
                                             defaultValue={condition}
+                                            value={condition}
                                             onChange={onChange}
                                             required
                                         >
@@ -657,11 +640,11 @@ const CreateItem = ({ match, history }) => {
                                                 {' '}
                                                 -- select a condition --{' '}
                                             </option>
-                                            <option value='likeNew'>Like New</option>
-                                            <option value='veryGood'>Very Good</option>
-                                            <option value='good'>Good</option>
-                                            <option value='decent'>Decent</option>
-                                            <option value='poor'>Poor</option>
+                                            <option value='Like New'>Like New</option>
+                                            <option value='Very Good'>Very Good</option>
+                                            <option value='Good'>Good</option>
+                                            <option value='Decent'>Decent</option>
+                                            <option value='Poor'>Poor</option>
                                         </select>
                                     </div>
                                     <div className="form-group col-md-6">
