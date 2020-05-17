@@ -117,27 +117,45 @@ const Item = ({match}) => {
             that the item was not found*/}
             {selectedItem.isLoaded ? (
                 selectedItem.item ? (
-                    <div id={"item-div"}>
-                        <h1>{selectedItem.item.title}</h1>
-                        <h2>Creator of post: {selectedItem.item.displayName}</h2>
-                        <h2>Contact info: {selectedItem.item.email}</h2>
-                        <h2>Price: ${selectedItem.item.price}</h2>
-                        {selectedItem.item.description === '' ? null : <h4>Details: {selectedItem.item.description}</h4>}
-                        <h2>Condition: {selectedItem.item.condition}</h2>
-                        {selectedItem.item.itemType === 'book' ? (
-                            <React.Fragment>
-                                <h3>Category: {selectedItem.item.classCategory.toUpperCase()}</h3>
-                                <h3>Course #: {selectedItem.item.courseNum}</h3>
-                                <h3>ISBN #: {selectedItem.item.isbn}</h3>
-                            </React.Fragment>
-                        ) : null}
-                        {selectedItem.item.uid !== firebase.auth().currentUser.uid ? <button onClick={liked ? removeFromFavorites : addToFavorites}>{liked ? 'Unlike' : 'Like'}</button> : null}
-                        {imageUrls.map(url => {
-                            return (
-                            <img src={url} key={url} className={"w-25 pl-2 pr-2 non-thumbnail-img"}/>
-                            )
-                        })}
-                        <Link to={`/list/${requestOrSell}/${selectedItem.item.uid}`}>View User's {requestOrSell === 'sell' ? 'Items' : 'Requests'} </Link>
+                    <div className={"container text-left mt-4 w-75"} id={"item-div"}>
+                        <div className="row">
+                            <div className={"col-sm"}>
+                                <h1>{selectedItem.item.title}</h1>
+                            </div>
+                            <div className={"col-sm text-right"}>
+                                <Link to={`/list/${requestOrSell}/${selectedItem.item.uid}`} className={"btn btn-outline-primary rounded-pill mb-2 mr-2"}>
+                                    View User's {requestOrSell === 'sell' ? 'Items' : 'Requests'}
+                                </Link>
+                                {selectedItem.item.uid !== firebase.auth().currentUser.uid ?
+                                    <button onClick={liked ? removeFromFavorites : addToFavorites} className={"border rounded-circle outline-none border-grey"}>
+                                        <div className={"px-1 py-1"}>{liked ? <h5 className={"m-0 pt-small"}><i className="fa fa-heart color-red"></i></h5>
+                                            : <h5 className={"m-0 pt-small"}><i className="fa fa-heart-o" aria-hidden="true"></i></h5>}
+                                        </div>
+                                    </button> : null}
+                            </div>
+                        </div>
+                        <div className="row mt-2">
+                            <div className={"col-sm"}>
+                                <h4>Creator of Post: {selectedItem.item.displayName}</h4>
+                                <h4>Contact Info: {selectedItem.item.email}</h4>
+                                <h4>Price: ${selectedItem.item.price}</h4>
+                                {selectedItem.item.description === '' ? null : <h4>Details: {selectedItem.item.description}</h4>}
+                                <h4>Condition: {selectedItem.item.condition}</h4>
+                                {selectedItem.item.itemType === 'book' ? (
+                                    <React.Fragment>
+                                        <h4>Course: {selectedItem.item.classCategory.toUpperCase()} {selectedItem.item.courseNum}</h4>
+                                        <h4>ISBN: {selectedItem.item.isbn}</h4>
+                                    </React.Fragment>
+                                ) : null}
+                            </div>
+                            <div className={"col-sm text-right"}>
+                                {imageUrls.map(url => {
+                                    return (
+                                        <img src={url} key={url} className={"mx-2 my-2 px-1 py-1 border rounded width-40"}/>
+                                    )
+                                })}
+                            </div>
+                        </div>
                     </div>
                 ) : <h1>Item not found</h1>
             ) : null}
