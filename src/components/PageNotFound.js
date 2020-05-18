@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 /**
  * This component is used to display that the url the user has
  * entered does not exist where it gives the effect of a 404 error.
