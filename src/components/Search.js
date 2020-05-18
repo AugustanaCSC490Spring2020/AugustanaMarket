@@ -13,11 +13,19 @@ const searchClient = algoliasearch(
     process.env.REACT_APP_ALGOLIA_SEARCH_ONLY_API_KEY
     );
 
+/**
+ * This is the hit component which displays one item/result from
+ * algolia
+ * @param hit the result from algolia 
+ */
 const HitComponent = ({hit}) => {
     const firebase = useFirebase();
     const [liked, changeLikeStatus] = React.useState(hit.usersLike.includes(firebase.auth().currentUser.uid));
     const isSell = useSelector(state => state.categories.isSell)
 
+    /**
+     * This method adds an itmem to the user's favorites
+     */
     const addToFavorites = () => {
         
         firebase.firestore().collection(requestOrSell ? 'sell' : 'request').doc(hit.objectID).get().then(async (doc) => {
@@ -28,6 +36,9 @@ const HitComponent = ({hit}) => {
         })
     };
 
+    /**
+     * This method removes an item from the user's favorites
+     */
     const removeFromFavorites = () => {
         
         firebase.firestore().collection(requestOrSell ? 'sell' : 'request').doc(hit.objectID).get().then(async (doc) => {
@@ -60,7 +71,7 @@ const HitComponent = ({hit}) => {
                 <img className="card-img-top w-50 pt-2 image-sizing" src={hit.imageUrl} />
             </div>
             <div className="card-body text-left">
-                <h4 className="card-title text-dark mb-0">{hit.title}</h4>
+                <h4 className="card-title text-dark mb-0">{hit.title.length > 18 ? hit.title.substring(0, 18) + '...' : hit.title}</h4>
                 <h5 className="card-text py-1 text-muted">{isSell ? null : 'Asking Price: '}${hit.price}</h5>
             </div>
             <div className="d-inline p-2 bg-primary text-white rounded-bottom-less">
@@ -72,6 +83,10 @@ const HitComponent = ({hit}) => {
     )
 };
 
+/**
+ * This sub-component deals with making the hits displayed in
+ * one area and also includes the pagination of the results
+ */
 const Content = () => {
     return (
         <React.Fragment>
@@ -82,6 +97,11 @@ const Content = () => {
         </React.Fragment>
     )
 };
+
+/**
+ * This is the main component where the user can use
+ * algolia's instant search
+ */
 const Search = () => {
     const isSell = useSelector(state => state.categories.isSell);
     const firebase = useFirebase();

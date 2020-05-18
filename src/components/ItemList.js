@@ -85,7 +85,7 @@ const ItemList = () => {
                                                     <img className="card-img-top w-50 pt-2 image-sizing-myl" src={item.imageUrl} />
                                                 </div>
                                                 <div className="card-body text-left">
-                                                    <h4 className="card-title text-dark mb-0">{item.title}</h4>
+                                                    <h4 className="card-title text-dark mb-0">{item.title.length > 18 ? item.title.substring(0, 15) + '...' : item.title}</h4>
                                                     <h5 className="card-text py-1 text-muted">{requestOrSell === 'sell' ? null : 'Asking Price: '}${item.price}</h5>
                                                 </div>
                                                 {/*This checks to see if url parameter for which user's
