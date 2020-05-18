@@ -3,7 +3,6 @@ import {useFirebase} from 'react-redux-firebase';
 import './styles/NavBar.css';
 import {useDispatch, useSelector} from 'react-redux';
 import {switchSearch} from '../redux/actions';
-import {Link} from 'react-router-dom';
 
 
 /**

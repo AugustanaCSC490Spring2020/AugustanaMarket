@@ -240,7 +240,6 @@ const CreateItem = ({ history }) => {
                 if (allImages) {
                     setImages(imgArray);
                     setImageFiles(imgFileArray)
-                    console.log(imgFileArray);
                 } else {
                     alert('One of the selected files was not a vaild file type');
                     setImages(null);
@@ -383,7 +382,6 @@ const CreateItem = ({ history }) => {
             } else if (isbn !== '') {
                 const book = response.data.items[0].volumeInfo;
                 setTitle(book.title);
-                console.log(book);
                 if (book.authors !== undefined) setAuthor(book.authors[0]);
                 if (book.imageLinks !== undefined) {
                     const img = new Image();
@@ -424,7 +422,6 @@ const CreateItem = ({ history }) => {
             }
         }
         if (imgIndex === 0) {
-            console.log('already cover image');
             return;
         }
         const tempImg = images[0];
@@ -437,7 +434,6 @@ const CreateItem = ({ history }) => {
         newFileArray[imgIndex] = tempFile;
         setImages(newImgArray);
         setImageFiles(newFileArray);
-        console.log('changed');
     }
 
     /**
