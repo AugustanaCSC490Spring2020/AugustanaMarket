@@ -82,7 +82,7 @@ export const deleteItem = (requestOrSell, itemID) => async (dispatch, getState, 
  * @param requestOrSell the collection in firestore
  * @param itemID the item being removed 
  */
-export const removeFromFavorites = (requestOrSell, itemID) => (dispatch, getState, {getFirebase}) => {
+export const removeFromFavorites = (requestOrSell, itemID) => async (dispatch, getState, {getFirebase}) => {
     const firebase = getFirebase()
     const items = getState().list.items;
     let index = 0;
@@ -94,12 +94,10 @@ export const removeFromFavorites = (requestOrSell, itemID) => (dispatch, getStat
             index = i;
         }
     }
-    firebase.firestore().collection(requestOrSell ? 'sell' : 'request').doc(itemID).get().then(async (doc) => {
-        const data = {...doc.data()}
-        data.usersLike = data.usersLike.filter(user => user !== firebase.auth().currentUser.uid);
-        await firebase.firestore().collection(requestOrSell ? 'sell' : 'request').doc(itemID).update(data)
-        
-    })
+    const doc = await firebase.firestore().collection(requestOrSell ? 'sell' : 'request').doc(itemID).get()
+    const data = {...doc.data()}
+    data.usersLike = data.usersLike.filter(user => user !== firebase.auth().currentUser.uid);
+    await firebase.firestore().collection(requestOrSell ? 'sell' : 'request').doc(itemID).update(data)
 
     dispatch({type : 'DELETE_ITEM', payload: updateItems})
 }
