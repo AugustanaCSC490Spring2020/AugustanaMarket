@@ -8,7 +8,12 @@ const Footer = () => {
             <p className={"inline-block d-inline-block pr-2"}>Team Quail &copy; 2020</p>
             |
             <Link to="/about" className={"text-decoration-none d-inline-block pl-2"}>
-                About
+                About 
+            </Link>
+            &nbsp;
+            |
+            <Link to="/FAQ" className={"text-decoration-none d-inline-block pl-2"}>
+                FAQ
             </Link>
         </div>
     )
