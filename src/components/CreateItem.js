@@ -686,7 +686,7 @@ const CreateItem = ({ history }) => {
                                            onChange={onChange}/>
 
                                     <button type="button" className="btn btn-outline-primary" onClick={imageSelect}>Upload an Image<div className={"align-middle mr-2"}><i className="material-icons pl-1">add_a_photo</i></div></button>
-                                    {production === 'edit' ? <p>If you select new images, the old ones will be replaced</p> : null}
+                                    {production === 'edit' ? <p className={"pt-2 mb-0"}>Note: If you select new images, the old ones will be replaced</p> : null}
                                 </div>
                                         
                                 {images === null ? null : (

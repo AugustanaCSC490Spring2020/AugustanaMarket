@@ -47,25 +47,25 @@ const NavBar = () => {
                         <li className="nav-item"><a className="nav-link" onClick={() => dispatch(switchSearch(true))} href={`/search`}>Listings</a></li>
                         <li className="nav-item"><a className="nav-link" onClick={() => dispatch(switchSearch(false))} href={`/search`}>Requests</a></li>
                     </ul>
-                    <div className="dropdown ml-3">
-                        <a className="dropdown-toggle text-decoration-none text-light" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                </div>
+                <div className="dropdown ml-3">
+                    <a className="dropdown-toggle text-decoration-none text-light" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <img src={profile.avatarUrl} className={"profile-img"}></img>
-                        </a>
+                    </a>
 
-                        <div className="dropdown-menu dropdown-menu-right text-left pl-3" aria-labelledby="dropdownMenuLink">
-                            <h5 className={"mb-2"}>{profile.displayName}</h5>
-                            <div className={"mb-1 hover-link"}>
-                                <i className="fa fa-heart-o pr-1"></i>
-                                <a href={"/list/sell/favorites"} className={"text-decoration-none text-dark mt-5 like-btn"}>Favorite Listings</a>
-                            </div>
-                            <div className={"mb-1 hover-link"}>
-                                <i className="fa fa-heart-o pr-1"></i>
-                                <a href={"/list/request/favorites"} className={"text-decoration-none text-dark mt-5 like-btn"}>Favorite Requests</a>
-                            </div>
-                            <div className={"mb-0 pb-0 hover-link"}>
-                                <i className="fa fa-sign-out d-inline-block pr-1"></i>
-                                <a className="d-inline-block mb-0" onClick={handleSignout}>Sign Out</a>
-                            </div>
+                    <div className="dropdown-menu dropdown-menu-right text-left pl-2" aria-labelledby="dropdownMenuLink">
+                        <h5 className={"mb-2"}>{profile.displayName}</h5>
+                        <div className={"mb-1 hover-link pr-2"}>
+                            <i className="fa fa-heart-o pr-1"></i>
+                            <a href={"/list/sell/favorites"} className={"text-decoration-none text-dark mt-5"}>Favorite Listings</a>
+                        </div>
+                        <div className={"mb-1 hover-link pr-2"}>
+                            <i className="fa fa-heart-o pr-1"></i>
+                            <a href={"/list/request/favorites"} className={"text-decoration-none text-dark mt-5"}>Favorite Requests</a>
+                        </div>
+                        <div className={"mb-0 pb-0 hover-link"}>
+                            <i className="fa fa-sign-out d-inline-block pr-1"></i>
+                            <a className="d-inline-block mb-0" onClick={handleSignout}>Sign Out</a>
                         </div>
                     </div>
                 </div>
