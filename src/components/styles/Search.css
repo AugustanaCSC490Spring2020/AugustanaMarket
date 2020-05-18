@@ -18,7 +18,7 @@
 }
 
 .search-div{
-    padding-left:19%;
+    margin-left:19%;
 }
 
 .image-sizing{
@@ -76,4 +76,43 @@
     white-space: normal;
     width: auto;
     /*position: absolute;*/
+}
+
+.margin-stats-text{
+    margin-left:23%;
+}
+.tooltip-hover {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip-hover .tooltiptext {
+    font-family: "PT Sans", sans-serif;
+    visibility: hidden;
+    width: 200px;
+    background-color: #212529;
+    opacity:0.8;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    bottom: 150%;
+    left: 50%;
+    margin-left: -100px;
+}
+
+.tooltip-hover .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: black transparent transparent transparent;
+}
+
+.tooltip-hover:hover .tooltiptext {
+    visibility: visible;
 }

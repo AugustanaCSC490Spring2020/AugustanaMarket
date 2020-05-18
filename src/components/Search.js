@@ -74,7 +74,6 @@ const HitComponent = ({hit}) => {
             </div>
             <div className="card-body text-left">
                 <h4 className="card-title text-dark mb-0 card-image-overflow">{hit.title}</h4>
-                {/*<h4 className="card-title text-dark mb-0">{hit.title.length > 18 ? hit.title.substring(0, 18) + '...' : hit.title}</h4>*/}
                 <h5 className="card-text py-1 text-muted">{isSell ? null : 'Asking Price: '}${hit.price}</h5>
             </div>
             <div className="d-inline p-2 bg-primary text-white rounded-bottom-less">
@@ -127,10 +126,13 @@ const Search = () => {
             indexName={isSell ? 'sell' : 'request'}
             searchClient={searchClient}
         >
-            <div className={"text-center mt-2"}>
-                <p className={"ais-Stats-text mb-1"}>Search for: Titles, ISBN #'s, Authors, Class Categories, Item Types</p>
-            </div>
             <div className={"search-div"}>
+                <div className={"text-right w-75 pr-5"}>
+                    <p className={"ais-Stats-text mb-1 tooltip-hover"}>Help <i class="fas fa-question-circle">
+                        <span className="tooltiptext">Search for: Titles, ISBN #'s, Authors, Class Categories, Item Types</span>
+                    </i>
+                    </p>
+                </div>
                 <SearchBox />
             </div>
             <div className={"mt-2 mb-3"}>
