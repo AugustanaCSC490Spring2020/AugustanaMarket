@@ -19,6 +19,7 @@ body{
 
 #item-details-div{
     margin:0% 5% 5% 5%;
+    min-height:75vh;
 }
 
 .center-text{

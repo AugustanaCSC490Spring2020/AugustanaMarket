@@ -103,9 +103,13 @@ const Search = () => {
             indexName={isSell ? 'sell' : 'request'}
             searchClient={searchClient}
         >
+            <div className={"text-center mt-2"}>
+                <p className={"ais-Stats-text mb-1"}>Search for: Titles, ISBN #'s, Authors, Class Categories, Item Types</p>
+            </div>
             <div className={"search-div"}>
-                <p>Searchable things: Titles, ISBN #s, Authors, Class Categories, Item Type</p>
-                <SearchBox/>
+                <SearchBox />
+            </div>
+            <div className={"mt-2 mb-3"}>
                 <Stats/>
             </div>
             <Content/>
