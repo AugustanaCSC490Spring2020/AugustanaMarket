@@ -383,24 +383,27 @@ const CreateItem = ({ history }) => {
             } else if (isbn !== '') {
                 const book = response.data.items[0].volumeInfo;
                 setTitle(book.title);
-                setAuthor(book.authors[0]);
-                const img = new Image();
-                setImages([img]);
-                const c = document.createElement("canvas");
-                const ctx = c.getContext("2d");
-                
-                img.onload = () => {
-                    c.width = img.naturalWidth;     // update canvas size to match image
-                    c.height = img.naturalHeight;
-                    ctx.drawImage(img, 0, 0);       // draw in image
-                    c.toBlob((blob) => {        // get content as JPEG blob
-                        setImageFiles([blob])
-                    }, "image/jpeg", 0.75);
-                };
-                img.crossOrigin = "";              // if from different origin
-                // https://medium.com/@dtkatz/3-ways-to-fix-the-cors-error-and-how-access-control-allow-origin-works-d97d55946d9
-                // Source of issue above
-                img.src = 'https://cors-anywhere.herokuapp.com/' + book.imageLinks.thumbnail;
+                console.log(book);
+                if (book.authors !== undefined) setAuthor(book.authors[0]);
+                if (book.imageLinks !== undefined) {
+                    const img = new Image();
+                    setImages([img]);
+                    const c = document.createElement("canvas");
+                    const ctx = c.getContext("2d");
+                    
+                    img.onload = () => {
+                        c.width = img.naturalWidth;     // update canvas size to match image
+                        c.height = img.naturalHeight;
+                        ctx.drawImage(img, 0, 0);       // draw in image
+                        c.toBlob((blob) => {        // get content as JPEG blob
+                            setImageFiles([blob])
+                        }, "image/jpeg", 0.75);
+                    };
+                    img.crossOrigin = "";              // if from different origin
+                    // https://medium.com/@dtkatz/3-ways-to-fix-the-cors-error-and-how-access-control-allow-origin-works-d97d55946d9
+                    // Source of issue above
+                    img.src = 'https://cors-anywhere.herokuapp.com/' + book.imageLinks.thumbnail;
+                }
                 
             }
         });
