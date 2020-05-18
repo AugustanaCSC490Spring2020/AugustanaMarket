@@ -1,6 +1,6 @@
 import React from 'react';
 import NavBar from './NavBar';
-
+import Footer from './Footer'
 /**
  * This component is a very basic component for displaying what the 
  * application is and who made it
@@ -25,6 +25,7 @@ const About = () => {
                   Users can rest assured knowing that only people with an Augustana email address can see listing and other students’ information.
                   With that, we hope this app helps the Augustana community. Go Vikings!</h5>
             </div>
+            <Footer/>
         </React.Fragment>
     )
 }
