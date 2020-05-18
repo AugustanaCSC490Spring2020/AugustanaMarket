@@ -2,7 +2,6 @@ import React from 'react';
 import { Route, Redirect, Switch } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { isLoaded, isEmpty } from 'react-redux-firebase';
-import NavBar from './components/NavBar';
 import Login from './components/Login';
 import ItemList from './components/ItemList';
 import CreateItem from './components/CreateItem';
@@ -10,7 +9,6 @@ import Item from './components/Item';
 import PageNotFound from './components/PageNotFound';
 import Search from './components/Search';
 import About from './components/About';
-import Footer from './components/Footer';
 import FAQ from './components/FAQ';
 
 /**
