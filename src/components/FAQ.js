@@ -10,13 +10,15 @@ const FAQ = () => {
     return (
         <React.Fragment>
             <NavBar />
-            <div className={"container mt-4"}>
-                <h3 className={"d-inline-block mx-3"}>FAQ</h3>
-                <h5 className={"text-left mt-2"}> Why is my image not displaying?
-                </h5>
-                <h5>If your listing's item is not displaying properly, try editing the listing and resubmitting it without changing anything.</h5>
-                <Footer/>
+            <div className={"main-content-div"}>
+                <div className={"container mt-4"}>
+                    <h3 className={"d-inline-block mx-3"}>FAQ</h3>
+                    <h5 className={"text-left mt-2"}> Why is my image not displaying?
+                    </h5>
+                    <h5>If your listing's item is not displaying properly, try editing the listing and resubmitting it without changing anything.</h5>
+                </div>
             </div>
+            <Footer/>
         </React.Fragment>
     )
 }
