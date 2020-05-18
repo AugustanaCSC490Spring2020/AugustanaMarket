@@ -80,27 +80,25 @@ const Item = () => {
     /**
      * This method adds the item to the user's favorites
      */
-    const addToFavorites = () => {
+    const addToFavorites = async () => {
+        const doc = await firebase.firestore().collection(requestOrSell ? 'sell' : 'request').doc(itemID).get()
+        const data = {...doc.data()}
+        data.usersLike.push(firebase.auth().currentUser.uid)
+        await firebase.firestore().collection(requestOrSell ? 'sell' : 'request').doc(itemID).update(data)
         changeLikeStatus(true)
-        firebase.firestore().collection(requestOrSell ? 'sell' : 'request').doc(itemID).get().then(async (doc) => {
-            const data = {...doc.data()}
-            data.usersLike.push(firebase.auth().currentUser.uid)
-            await firebase.firestore().collection(requestOrSell ? 'sell' : 'request').doc(itemID).update(data)
-            
-        })
     }
 
     /**
      * This method removes the item from the user's favorites
      */
-    const removeFromFavorites = () => {
-        changeLikeStatus(false)
-        firebase.firestore().collection(requestOrSell ? 'sell' : 'request').doc(itemID).get().then(async (doc) => {
-            const data = {...doc.data()}
-            data.usersLike = data.usersLike.filter(user => user !== firebase.auth().currentUser.uid);
-            await firebase.firestore().collection(requestOrSell ? 'sell' : 'request').doc(itemID).update(data)
+    const removeFromFavorites = async () => {
+        
+        const doc = await firebase.firestore().collection(requestOrSell ? 'sell' : 'request').doc(itemID).get()
+        const data = {...doc.data()}
+        data.usersLike = data.usersLike.filter(user => user !== firebase.auth().currentUser.uid);
+        await firebase.firestore().collection(requestOrSell ? 'sell' : 'request').doc(itemID).update(data)
             
-        })
+        changeLikeStatus(false)
     }
 
     return (
