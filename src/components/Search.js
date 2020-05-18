@@ -68,10 +68,13 @@ const HitComponent = ({hit}) => {
                 : null}
 
             <div className={"container center-text card-height"}>
-                <img className="card-img-top w-50 pt-2 image-sizing" src={hit.imageUrl} />
+                <div className={"inner-div"}>
+                    <img className="card-img-top w-50 pt-2 image-sizing" src={hit.imageUrl} />
+                </div>
             </div>
             <div className="card-body text-left">
-                <h4 className="card-title text-dark mb-0">{hit.title.length > 18 ? hit.title.substring(0, 18) + '...' : hit.title}</h4>
+                <h4 className="card-title text-dark mb-0 card-image-overflow">{hit.title}</h4>
+                {/*<h4 className="card-title text-dark mb-0">{hit.title.length > 18 ? hit.title.substring(0, 18) + '...' : hit.title}</h4>*/}
                 <h5 className="card-text py-1 text-muted">{isSell ? null : 'Asking Price: '}${hit.price}</h5>
             </div>
             <div className="d-inline p-2 bg-primary text-white rounded-bottom-less">

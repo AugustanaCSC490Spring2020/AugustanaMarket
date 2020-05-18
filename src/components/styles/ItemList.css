@@ -45,6 +45,7 @@ ul{
     }
     .card-height-myl{
         height:13vw;
+        display:table;
     }
 }
 

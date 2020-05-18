@@ -27,6 +27,12 @@
 
 .card-height{
     height:13vw !important;
+    display:table;
+}
+
+.inner-div{
+    display: table-cell;
+    vertical-align: middle !important;
 }
 
 .ais-SearchBox-input{
@@ -57,4 +63,17 @@
 
 .main-content{
     min-height:81.5vh;
+}
+
+.card-image-overflow{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.card-image-overflow:hover{
+    overflow: visible;
+    white-space: normal;
+    width: auto;
+    /*position: absolute;*/
 }

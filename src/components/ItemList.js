@@ -82,7 +82,9 @@ const ItemList = () => {
                                             <div className="card rounded">
 
                                                 <div className={"container center-text card-height-myl"}>
-                                                    <img className="card-img-top w-50 pt-2 image-sizing-myl" src={item.imageUrl} />
+                                                    <div className={"inner-div"}>
+                                                        <img className="card-img-top w-50 pt-2 image-sizing-myl" src={item.imageUrl} />
+                                                    </div>
                                                 </div>
                                                 <div className="card-body text-left">
                                                     <h4 className="card-title text-dark mb-0">{item.title.length > 18 ? item.title.substring(0, 15) + '...' : item.title}</h4>
