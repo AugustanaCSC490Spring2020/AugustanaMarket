@@ -88,6 +88,7 @@ const Search = () => {
     return (
     <div>
         <NavBar/>
+        <div className={"main-content"}>
         <div className={"pt-4"}>
             <h4 className={"d-inline-block mr-4 border-bottom border-primary"}>
                 <Link className="text-decoration-none text-primary" to={`/search`}>All {isSell ? 'Listings' : 'Requests'}</Link>
@@ -114,6 +115,7 @@ const Search = () => {
             </div>
             <Content/>
         </InstantSearch>
+        </div>
         <Footer/>
     </div>
     );

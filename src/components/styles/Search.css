@@ -54,3 +54,7 @@
 .fa-question-circle{
     color:#666;
 }
+
+.main-content{
+    min-height:81.5vh;
+}

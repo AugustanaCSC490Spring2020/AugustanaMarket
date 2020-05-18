@@ -104,6 +104,7 @@ const Item = () => {
     return (
         <div>
             <NavBar/>
+            <div className={"main-content-div"}>
             <div className={"text-left"}>
                 <h4 className={"mt-4 ml-4"}><Link to={`/search`} className={"text-decoration-none"}>&larr; Back</Link></h4>
             </div>
@@ -157,6 +158,7 @@ const Item = () => {
                     </div>
                 ) : <h1>Item not found</h1>
             ) : null}
+            </div>
             <Footer/>
         </div>
     )
